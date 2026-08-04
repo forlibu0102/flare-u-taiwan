@@ -1,0 +1,97 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Guides" description="FLARE U 投票、應援與新手實用指南">
+  <section class="page-hero">
+    <div class="page-inner">
+      <p class="eyebrow">FAN GUIDES</p>
+      <h1>Know How.<br />Support<br />Better.</h1>
+      <p class="lead">從第一次認識 FLARE U，到完成每一次投票與影音應援，把需要的步驟整理得簡單好懂。</p>
+    </div>
+  </section>
+
+  <section class="featured-section">
+    <div class="page-inner">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">START HERE</p>
+          <h2>新手從這裡開始</h2>
+        </div>
+      </div>
+
+      <article class="featured-card">
+        <div class="featured-number">01</div>
+        <div class="featured-copy">
+          <p>BEGINNER GUIDE</p>
+          <h3>FLARE U Taiwan 新手指南</h3>
+          <span>快速了解網站內容、投票資訊與常用應援資源。</span>
+        </div>
+        <div class="arrow" aria-hidden="true">↗</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="guide-section">
+    <div class="page-inner">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">ALL GUIDES</p>
+          <h2>實用指南</h2>
+        </div>
+      </div>
+
+      <div class="guide-grid">
+        <article class="blue">
+          <div class="card-top"><span>01</span><div class="icon">✓</div></div>
+          <h3>Voting Guide</h3>
+          <p>投票平台、帳號準備與操作步驟。</p>
+          <small>內容準備中</small>
+        </article>
+        <article class="aqua">
+          <div class="card-top"><span>02</span><div class="icon">▷</div></div>
+          <h3>Streaming Guide</h3>
+          <p>官方影音觀看與正確應援方式。</p>
+          <small>內容準備中</small>
+        </article>
+        <article class="violet">
+          <div class="card-top"><span>03</span><div class="icon">☆</div></div>
+          <h3>Fan Support</h3>
+          <p>活動參與、應援禮儀與注意事項。</p>
+          <small>內容準備中</small>
+        </article>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  :global(*) { box-sizing:border-box; }
+  :global(body) { margin:0; color:#0d1b3d; font-family:Inter,"Noto Sans TC",system-ui,sans-serif; }
+  .page-inner { width:min(1200px,100%); margin:0 auto; }
+  .page-hero { padding:104px 24px 116px; background:radial-gradient(circle at 84% 13%,rgba(67,143,233,.18),transparent 29%),radial-gradient(circle at 8% 88%,rgba(32,199,201,.12),transparent 30%),#fafcff; }
+  .eyebrow { margin:0; color:#438fe9; font-size:.75rem; font-weight:750; letter-spacing:.18em; }
+  h1 { max-width:800px; margin:22px 0 26px; font-size:clamp(4rem,9vw,7.8rem); line-height:.84; letter-spacing:-.07em; }
+  .lead { max-width:650px; margin:0; color:#667085; font-size:1.06rem; line-height:1.8; }
+  .featured-section,.guide-section { padding:96px 24px; }
+  .guide-section { background:linear-gradient(180deg,#fff 0%,#f7faff 100%); }
+  .section-heading { margin-bottom:32px; }
+  h2 { margin:10px 0 0; font-size:clamp(2.4rem,5vw,4.2rem); letter-spacing:-.05em; }
+  .featured-card { display:grid; grid-template-columns:110px 1fr auto; align-items:center; gap:30px; min-height:230px; padding:34px; overflow:hidden; border:1px solid #dfe6f0; border-radius:28px; background:radial-gradient(circle at 82% 20%,rgba(32,199,201,.14),transparent 28%),#fff; box-shadow:0 20px 55px rgba(13,27,61,.07); }
+  .featured-number { display:grid; width:88px; height:88px; place-items:center; border-radius:27px; background:#eef6ff; color:#438fe9; font-size:1.15rem; font-weight:800; }
+  .featured-copy p { margin:0 0 12px; color:#20bfc1; font-size:.72rem; font-weight:750; letter-spacing:.16em; }
+  .featured-copy h3 { margin:0 0 10px; font-size:clamp(1.55rem,3vw,2.25rem); }
+  .featured-copy span { color:#667085; line-height:1.7; }
+  .arrow { display:grid; width:56px; height:56px; place-items:center; border-radius:50%; background:#0d1b3d; color:#fff; font-size:1.35rem; }
+  .guide-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .guide-grid article { min-height:310px; padding:28px; border:1px solid #dfe6f0; border-radius:26px; background:#fff; box-shadow:0 18px 45px rgba(13,27,61,.05); }
+  .card-top { display:flex; align-items:center; justify-content:space-between; }
+  .card-top > span { font-size:.78rem; font-weight:800; }
+  .icon { display:grid; width:52px; height:52px; place-items:center; border-radius:17px; background:currentColor; color:#fff; font-size:1.2rem; }
+  .blue { color:#438fe9; }.aqua { color:#20bfc1; }.violet { color:#6c7ee1; }
+  .guide-grid h3 { margin:66px 0 10px; color:#0d1b3d; font-size:1.55rem; }
+  .guide-grid p { min-height:54px; margin:0; color:#667085; line-height:1.65; }
+  .guide-grid small { display:inline-block; margin-top:30px; padding:8px 12px; border-radius:999px; background:#f3f6fa; color:#7d899c; font-weight:650; }
+  @media (max-width:800px) { .page-hero{padding:72px 24px 80px}h1{font-size:clamp(3.7rem,18vw,5.8rem)}.featured-section,.guide-section{padding:72px 24px}.guide-grid{grid-template-columns:1fr}.featured-card{grid-template-columns:82px 1fr}.featured-number{width:72px;height:72px}.arrow{display:none} }
+  @media (max-width:520px) { .featured-card{grid-template-columns:1fr;padding:28px 24px}.guide-grid article{min-height:280px}.guide-grid h3{margin-top:48px} }
+</style>

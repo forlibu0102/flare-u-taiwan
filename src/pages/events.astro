@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Events" description="FLARE U 最新官方行程、活動與重要日期整理">
+  <section class="page-hero">
+    <div class="page-inner hero-grid">
+      <div>
+        <p class="eyebrow">EVENT SCHEDULE</p>
+        <h1>Every<br />FLARE U<br />Moment.</h1>
+        <p class="lead">集中整理 FLARE U 的官方活動、節目與重要日期，出發前快速掌握時間與資訊。</p>
+      </div>
+      <div class="status-panel">
+        <span class="status-dot"></span>
+        <p>NEXT EVENT</p>
+        <strong>行程更新中</strong>
+        <span>最新官方行程公布後將立即整理</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="calendar-section">
+    <div class="page-inner">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FULL CALENDAR</p>
+          <h2>完整行事曆</h2>
+        </div>
+      </div>
+      <div class="calendar-frame">
+        <iframe class="calendar-desktop" src="https://calendar.google.com/calendar/embed?src=forlibu0102%40gmail.com&ctz=Asia%2FTaipei" title="FLARE U Taiwan Google 行事曆" loading="lazy"></iframe>
+        <iframe class="calendar-mobile" src="https://calendar.google.com/calendar/embed?src=forlibu0102%40gmail.com&ctz=Asia%2FTaipei&mode=AGENDA&showTitle=0&showPrint=0&showTabs=0&showCalendars=0&showTz=0" title="FLARE U Taiwan Google 行事曆行程列表" loading="lazy"></iframe>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(body) { margin: 0; color: #0d1b3d; font-family: Inter, "Noto Sans TC", system-ui, sans-serif; }
+  .page-inner { width: min(1200px, 100%); margin: 0 auto; }
+  .page-hero { padding: 104px 24px 116px; background: radial-gradient(circle at 84% 13%, rgba(32,199,201,.2), transparent 29%), radial-gradient(circle at 8% 88%, rgba(67,143,233,.15), transparent 30%), #fafcff; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(300px,420px); align-items: end; gap: 70px; }
+  .eyebrow { margin: 0; color: #438fe9; font-size: .75rem; font-weight: 750; letter-spacing: .18em; }
+  h1 { max-width: 760px; margin: 22px 0 26px; font-size: clamp(4rem,9vw,7.8rem); line-height: .84; letter-spacing: -.07em; }
+  .lead { max-width: 630px; margin: 0; color: #667085; font-size: 1.06rem; line-height: 1.8; }
+  .status-panel { position: relative; padding: 30px; border: 1px solid rgba(216,225,238,.9); border-radius: 25px; background: rgba(255,255,255,.86); box-shadow: 0 22px 60px rgba(13,27,61,.09); backdrop-filter: blur(16px); }
+  .status-panel p { margin: 0 0 13px; color: #7d899c; font-size: .78rem; font-weight: 700; letter-spacing: .12em; }
+  .status-panel strong { display: block; font-size: 1.45rem; }
+  .status-panel > span:last-child { display: block; margin-top: 8px; color: #667085; }
+  .status-dot { position: absolute; top: 30px; right: 30px; width: 10px; height: 10px; border-radius: 50%; background: #20c7c9; box-shadow: 0 0 0 7px rgba(32,199,201,.12); }
+  .calendar-section { padding: 96px 24px; }
+  .calendar-section { background: linear-gradient(180deg,#fff 0%,#f7faff 100%); }
+  .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+  h2 { margin: 10px 0 0; font-size: clamp(2.4rem,5vw,4.2rem); letter-spacing: -.05em; }
+  .calendar-frame { overflow: hidden; padding: 12px; border: 1px solid #dfe6f0; border-radius: 28px; background: #fff; box-shadow: 0 20px 55px rgba(13,27,61,.07); }
+  .calendar-frame iframe { display:block; width:100%; height:680px; border:0; border-radius:18px; }
+  .calendar-mobile { display:none!important; }
+  @media (max-width:800px) { .page-hero { padding:72px 24px 80px; } .hero-grid { grid-template-columns:1fr; gap:40px; } h1 { font-size:clamp(3.7rem,18vw,5.8rem); } .calendar-section { padding:72px 24px; } .calendar-frame{padding:8px;border-radius:22px}.calendar-desktop{display:none!important}.calendar-mobile{display:block!important;height:620px!important;border-radius:15px!important} }
+  @media (max-width:520px) { .section-heading { align-items:flex-start; flex-direction:column; } .status-panel { padding:24px; } .calendar-section{padding-right:16px;padding-left:16px}.calendar-mobile{height:560px!important} }
+</style>

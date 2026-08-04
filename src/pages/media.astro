@@ -1,0 +1,327 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const videoGroups = [
+  {
+    id: 'works', label: '作品相關', eyebrow: 'MUSIC & RELEASES',
+    videos: [
+      ['LA-hJsCtSlU', '《YOUTH ERROR》相關影片 01'],
+      ['CoJr2QFiZ6s', '《YOUTH ERROR》相關影片 02'],
+      ['Aup09D6m-YE', '《YOUTH ERROR》相關影片 03'],
+      ['TzaKubLIgEU', '《YOUTH ERROR》相關影片 04'],
+      ['C_n5RGDWCRo', '《YOUTH ERROR》相關影片 05'],
+      ['bHgc0kmHYTA', '《YOUTH ERROR》相關影片 06'],
+      ['eSmLBVrQGFE', '《YOUTH ERROR》MV TEASER 1'],
+      ['ds7lo7hMdQU', '《YOUTH ERROR》Highlight Medley'],
+      ['YOGB_ozluBs', 'From Murphy to Julie :):'],
+    ],
+  },
+  {
+    id: 'music-shows', label: '打歌舞台', eyebrow: 'MUSIC SHOWS',
+    videos: [
+      ['F8kPwp3ROQo', '260603 Show Champion · WAY 2 U'],
+      ['gnVS6PaecGE', '260602 THE SHOW · WAY 2 U'],
+      ['vy8RXkX8VCM', '260602 THE SHOW · Hyper'],
+      ['DfP10PkDIgE', '260531 人氣歌謠 · WAY 2 U FULL CAM'],
+      ['NfV1Zy23B1w', '260531 人氣歌謠 · WAY 2 U'],
+      ['3KDJuV2Wopw', '260530 音樂中心 · WAY 2 U'],
+      ['ryEf2ZTquG4', '260529 Music Bank · WAY 2 U'],
+      ['EWmkXIR5Qk8', '260528 M COUNTDOWN · WAY 2 U'],
+      ['r9KtIX1Yep0', '260524 人氣歌謠 · WAY 2 U'],
+      ['EyQuJonKTm0', '260523 音樂中心 · WAY 2 U'],
+      ['8BxoN7yn9C0', '260522 Music Bank · WAY 2 U'],
+      ['0IJmIyN3EBY', '260521 M COUNTDOWN · WAY 2 U'],
+      ['YxZpusBGS-Q', '260517 人氣歌謠 · WAY 2 U'],
+      ['fJmssaMcSWA', '260517 人氣歌謠 · WAY 2 U FULL CAM'],
+      ['bQGNsUiuY1k', '260516 音樂中心 · WAY 2 U'],
+      ['GgrAKA4s7O8', '260516 音樂中心 · WAY 2 U FULL CAM'],
+      ['aoUZoqK1QH0', '260515 Music Bank · WAY 2 U'],
+      ['xi407xVtHNA', '260514 M COUNTDOWN · WAY 2 U（首次公開）'],
+      ['19P4NehU2LU', '260602 THE SHOW · Hyper FAN CAM'],
+      ['DVNPHdMuk4k', '260602 THE SHOW · WAY 2 U FAN CAM'],
+      ['2iQiWKRKiIQ', '260528 M COUNTDOWN · WAY 2 U 4K FAN CAM'],
+    ],
+  },
+  {
+    id: 'fancams', label: '個人直拍', eyebrow: 'MEMBER FANCAMS',
+    videos: [
+      ['5FW_izNg6Ns', '260603 Show Champion · 姜玗進直拍'],
+      ['03KWOjDeMio', '260603 Show Champion · 崔立于直拍'],
+      ['Tb5LCUyVWao', '260524 人氣歌謠 · 姜玗進直拍'],
+      ['p8etzReAj_E', '260524 人氣歌謠 · 崔立于直拍'],
+      ['7iZQ29_yH2w', '260516 音樂中心 · 崔立于直拍'],
+      ['3CeOVvceZ0E', '260516 音樂中心 · 姜玗進直拍'],
+      ['fygMgzxmU20', '260515 Music Bank · 崔立于直拍'],
+      ['jewWVEoAyxI', '260515 Music Bank · 姜玗進直拍'],
+      ['51tvOhkAtTY', '260514 M COUNTDOWN · 崔立于直拍'],
+      ['075i6jh6tw0', '260514 M COUNTDOWN · 姜玗進直拍'],
+    ],
+  },
+  {
+    id: 'shows', label: '綜藝／訪談', eyebrow: 'SHOWS & INTERVIEWS',
+    videos: [
+      ['qOf6eR2Nsx4', '[Idol School Camp] EP.6'],
+      ['byBR2mbHBCg', '[Idol School Camp] EP.5'],
+      ['zz761Joo0Yk', '[Idol School Camp] EP.4'],
+      ['s51xevgxuUM', '[Idol School Camp] EP.3'],
+      ['qQLTTdtvXZY', 'FLARE U First Fight?! Another Class 2026'],
+      ['WXnI-6kYnY4', 'OVERDRIVE – MC 째리뽀'],
+      ['IxFb_XBLggw', '綜藝／訪談影片 07'],
+      ['zpGCRadEhDQ', '綜藝／訪談影片 08'],
+      ['o1XcXDTRFwA', '綜藝／訪談影片 09'],
+      ['3ljLXlcOW9U', '綜藝／訪談影片 10'],
+      ['OH7sBckHNPU', '綜藝／訪談影片 11'],
+      ['91nxZo2rHms', '綜藝／訪談影片 12'],
+      ['AztfFmMKVT0', '綜藝／訪談影片 13'],
+      ['YN3gL13TdqM', '綜藝／訪談影片 14'],
+      ['iuv1A4YLY84', '綜藝／訪談影片 15'],
+      ['y2w8bnN_eJw', '綜藝／訪談影片 16'],
+      ['Cg5pEuO6Njs', '綜藝／訪談影片 17'],
+      ['oVi1aQ79GtE', '綜藝／訪談影片 18'],
+      ['DxChWpjvS-E', '綜藝／訪談影片 19'],
+      ['unNukiuFVvo', '260602 THE SHOW · MC 採訪片段'],
+      ['kHoqPGrhdQQ', '260514 M COUNTDOWN · 出道訪問'],
+    ],
+  },
+  {
+    id: 'radio', label: '電台節目', eyebrow: 'RADIO',
+    videos: [
+      ['jYUiQm8KV68', 'FLARE U 電台節目 01'],
+      ['kpzP3ioCFp8', 'FLARE U 電台節目 02'],
+      ['T4yddk1npIg', 'FLARE U 電台節目 03'],
+      ['BKfH4ZZ9zFY', 'FLARE U 電台節目 04'],
+      ['uUzQe4hoAvQ', 'FLARE U 電台節目 05'],
+      ['-EKO_uoaU-c', 'FLARE U 電台節目 06'],
+      ['snF-il1n128', 'FLARE U 電台節目 07'],
+      ['sNwpz0AbCQY', 'FLARE U 電台節目 08'],
+      ['206PXVBG-D0', 'FLARE U 電台節目 09'],
+      ['RZrx4Xm6veg', 'FLARE U 電台節目 10'],
+      ['CSR0Ms6PYdk', 'FLARE U 電台節目 11'],
+      ['WC9-VVPViyY', 'FLARE U 電台節目 12'],
+    ],
+  },
+  {
+    id: 'behind', label: '幕後花絮', eyebrow: 'BEHIND THE SCENES',
+    videos: [
+      ['AIc5R93IFO0', 'FLARE U 幕後花絮 01'],
+      ['4cuJN17bg9Y', 'FLARE U 幕後花絮 02'],
+      ['mJCaKapBj1U', 'FLARE U 幕後花絮 03'],
+      ['84jR5bwb8hc', 'FLARE U 幕後花絮 04'],
+      ['_T8QFpcxo8A', 'FLARE U 幕後花絮 05'],
+      ['unV-VSqn730', 'FLARE U 幕後花絮 06'],
+      ['Ag3Kr4OiKwc', 'FLARE U 幕後花絮 07'],
+      ['ODNY8ZKOVgk', 'FLARE U 幕後花絮 08'],
+      ['GiaTbm9ZEAE', 'FLARE U 幕後花絮 09'],
+      ['e0hIsN3TFcI', 'FLARE U 幕後花絮 10'],
+    ],
+  },
+  {
+    id: 'stage', label: '舞台表演', eyebrow: 'PERFORMANCES',
+    videos: [
+      ['RI4KEySjPwY', 'FLARE U 舞台表演 01'],
+      ['pTHUvoiGT1E', 'FLARE U 舞台表演 02'],
+      ['ncznydQLv60', 'STONE MUSIC · FLARE U Stone LIVE'],
+    ],
+  },
+  {
+    id: 'vlog', label: 'VLOG', eyebrow: 'VLOG',
+    videos: [['XPIQRqaGyTg', '2026.05.08 青春旅行記']],
+  },
+];
+---
+
+<Layout title="Media" description="FLARE U 官方影片、舞台與影音內容整理">
+  <section class="page-hero">
+    <div class="page-inner">
+      <div>
+        <p class="eyebrow">MEDIA ARCHIVE</p>
+        <h1>Watch.<br />Listen.<br />FLARE U.</h1>
+        <p class="lead">收藏 FLARE U 的官方影片、舞台與精彩片段，想看的內容都能快速找到。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="category-section">
+    <div class="page-inner">
+      <div class="section-heading category-heading">
+        <div>
+          <p class="eyebrow">VIDEO CATEGORIES</p>
+          <h2>影音分類</h2>
+          <p class="category-intro">整理作品、節目、電台與舞台內容；選擇分類後，以列表快速瀏覽。</p>
+        </div>
+      </div>
+
+      <div class="category-tabs" role="tablist" aria-label="影音分類">
+        {videoGroups.map((group, index) => (
+          <button class:list={['category-tab', { active: index === 0 }]} type="button" role="tab" aria-selected={index === 0 ? 'true' : 'false'} data-category-button={group.id}>
+            {group.label}<span>{String(group.videos.length).padStart(2, '0')}</span>
+          </button>
+        ))}
+      </div>
+
+      {videoGroups.map((group, groupIndex) => (
+        <div class="video-group" data-category-panel={group.id} hidden={groupIndex !== 0}>
+          <div class="group-title">
+            <p class="eyebrow">{group.eyebrow}</p>
+            <h3>{group.label}</h3>
+          </div>
+          <div class="video-list">
+            {group.videos.map(([id, title], index) => (
+              <a class="video-row" data-video-item data-page-index={Math.floor(index / 5)} hidden={index >= 5} href={`https://www.youtube.com/watch?v=${id}`} target="_blank" rel="noreferrer">
+                <div class="video-thumb">
+                  <img src={`https://i.ytimg.com/vi/${id}/mqdefault.jpg`} alt="" loading="lazy" />
+                  <span class="row-play" aria-hidden="true">▶</span>
+                </div>
+                <div class="video-info">
+                  <p class="video-number">{String(index + 1).padStart(2, '0')} · YOUTUBE</p>
+                  <h4>{title}</h4>
+                  <p>開啟 YouTube 觀看完整影片</p>
+                </div>
+                <span class="watch-link">觀看影片 ↗</span>
+              </a>
+            ))}
+          </div>
+          {group.videos.length > 5 && (
+            <nav class="video-pagination" aria-label={`${group.label}影片分頁`} data-pagination>
+              {Array.from({ length: Math.ceil(group.videos.length / 5) }, (_, pageIndex) => (
+                <button class:list={['page-button', { active: pageIndex === 0 }]} type="button" data-page-button={pageIndex} aria-label={`第 ${pageIndex + 1} 頁`} aria-current={pageIndex === 0 ? 'page' : undefined}>
+                  {pageIndex + 1}
+                </button>
+              ))}
+            </nav>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="media-section">
+    <div class="page-inner">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">WATCH NOW</p>
+          <h2>最新影音</h2>
+        </div>
+      </div>
+
+      <div class="video-shell">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/videoseries?list=UUrHCkXuYLQyx90BtAuunKQg"
+          title="FLARE U 官方 YouTube 最新影片"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <section class="archive-section">
+    <div class="page-inner archive-card">
+      <div>
+        <p class="eyebrow">VIDEO LIBRARY</p>
+        <h2>完整影音庫</h2>
+        <p class="archive-copy">前往 FLARE U 官方 YouTube 頻道，瀏覽所有 MV、舞台、短影音與最新上傳內容。</p>
+        <a class="channel-link" href="https://www.youtube.com/@flareu_official" target="_blank" rel="noreferrer">
+          前往官方 YouTube <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <div class="archive-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4V5Zm4 4 7 3-7 3V9Z" /></svg>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(body) { margin: 0; color: #0d1b3d; font-family: Inter, "Noto Sans TC", system-ui, sans-serif; }
+  :global(main) { display:flex; flex-direction:column; }
+  .page-inner { width: min(1200px,100%); margin: 0 auto; }
+  .page-hero { order:1; padding:104px 24px 116px; background:radial-gradient(circle at 84% 13%,rgba(108,126,225,.18),transparent 29%),radial-gradient(circle at 8% 88%,rgba(67,143,233,.14),transparent 30%),#fafcff; }
+  .eyebrow { margin:0; color:#438fe9; font-size:.75rem; font-weight:750; letter-spacing:.18em; }
+  h1 { max-width:760px; margin:22px 0 26px; font-size:clamp(4rem,9vw,7.8rem); line-height:.84; letter-spacing:-.07em; }
+  .lead { max-width:610px; margin:0; color:#667085; font-size:1.06rem; line-height:1.8; }
+  .media-section,.archive-section { padding:96px 24px; }
+  .media-section { order:2; }
+  .category-section { order:3; padding:104px 24px; background:#f8fbff; }
+  .archive-section { order:4; background:linear-gradient(180deg,#fff 0%,#f7f8ff 100%); }
+  .section-heading { margin-bottom:32px; }
+  h2 { margin:10px 0 0; font-size:clamp(2.4rem,5vw,4.2rem); letter-spacing:-.05em; }
+  .video-shell { overflow:hidden; aspect-ratio:16/9; border:1px solid #dfe6f0; border-radius:30px; background:#0d1b3d; box-shadow:0 20px 55px rgba(13,27,61,.12); }
+  .video-shell iframe { display:block; width:100%; height:100%; border:0; }
+  .category-heading { display:flex; justify-content:space-between; gap:32px; }
+  .category-intro { max-width:650px; margin:18px 0 0; color:#667085; line-height:1.75; }
+  .category-tabs { display:flex; gap:10px; margin:38px 0 52px; padding-bottom:8px; overflow-x:auto; scrollbar-width:thin; }
+  .category-tab { display:flex; align-items:center; gap:12px; flex:0 0 auto; padding:13px 17px; border:1px solid #dbe4ef; border-radius:999px; background:#fff; color:#526078; font:inherit; font-weight:750; cursor:pointer; }
+  .category-tab span { display:grid; min-width:27px; height:27px; place-items:center; border-radius:999px; background:#f0f5fb; color:#438fe9; font-size:.7rem; }
+  .category-tab.active { border-color:#0d1b3d; background:#0d1b3d; color:#fff; }
+  .category-tab.active span { background:rgba(255,255,255,.14); color:#fff; }
+  .group-title { margin-bottom:24px; }
+  .group-title h3 { margin:9px 0 0; font-size:clamp(2rem,4vw,3.2rem); letter-spacing:-.04em; }
+  .video-list { display:grid; gap:14px; }
+  .video-row[hidden], .video-group[hidden] { display:none !important; }
+  .video-row { display:grid; grid-template-columns:210px minmax(0,1fr) auto; align-items:center; gap:26px; padding:14px; border:1px solid #dfe6f0; border-radius:22px; background:#fff; color:inherit; text-decoration:none; transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
+  .video-row:hover { transform:translateY(-2px); border-color:#b9d6f7; box-shadow:0 15px 36px rgba(13,27,61,.08); }
+  .video-thumb { position:relative; overflow:hidden; aspect-ratio:16/9; border-radius:14px; background:#eaf1f9; }
+  .video-thumb img { display:block; width:100%; height:100%; object-fit:cover; }
+  .row-play { position:absolute; inset:50% auto auto 50%; display:grid; width:42px; height:42px; place-items:center; border-radius:50%; background:rgba(13,27,61,.86); color:#fff; font-size:.75rem; transform:translate(-50%,-50%); }
+  .video-number { margin:0 0 8px; color:#438fe9; font-size:.7rem; font-weight:800; letter-spacing:.15em; }
+  .video-info h4 { margin:0; font-size:1.2rem; line-height:1.4; }
+  .video-info > p:last-child { margin:8px 0 0; color:#7a869b; font-size:.88rem; }
+  .watch-link { padding:0 16px; color:#0d1b3d; font-weight:800; white-space:nowrap; }
+  .video-pagination { display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px; margin-top:28px; }
+  .page-button { display:grid; width:40px; height:40px; place-items:center; border:1px solid #dbe4ef; border-radius:50%; background:#fff; color:#526078; font:inherit; font-size:.86rem; font-weight:800; cursor:pointer; transition:background .2s ease,color .2s ease,border-color .2s ease; }
+  .page-button:hover { border-color:#438fe9; color:#438fe9; }
+  .page-button.active { border-color:#0d1b3d; background:#0d1b3d; color:#fff; }
+  .archive-card { display:flex; align-items:center; justify-content:space-between; gap:40px; min-height:270px; padding:44px; border:1px solid #dfe6f0; border-radius:30px; background:#fff; box-shadow:0 20px 55px rgba(13,27,61,.07); }
+  .archive-copy { max-width:600px; margin:18px 0 0; color:#667085; line-height:1.75; }
+  .channel-link { display:inline-flex; align-items:center; gap:10px; margin-top:26px; padding:14px 20px; border-radius:999px; background:#0d1b3d; color:#fff; font-weight:750; text-decoration:none; transition:transform .2s ease,background .2s ease; }
+  .channel-link:hover { transform:translateY(-2px); background:#2563eb; }
+  .archive-icon { display:grid; flex:0 0 auto; width:92px; height:92px; place-items:center; border-radius:28px; background:#f0f1ff; color:#6c7ee1; }
+  .archive-icon svg { width:44px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linejoin:round; }
+  @media (max-width:800px) { .page-hero{padding:72px 24px 80px}h1{font-size:clamp(3.7rem,18vw,5.8rem)}.media-section,.archive-section,.category-section{padding:72px 24px}.archive-card{align-items:flex-start;flex-direction:column}.video-row{grid-template-columns:150px minmax(0,1fr)}.watch-link{display:none} }
+  @media (max-width:520px) { .video-shell{border-radius:20px}.archive-card{padding:30px 24px}.archive-icon{width:72px;height:72px;border-radius:22px}.category-tabs{margin:28px 0 40px}.video-row{grid-template-columns:112px minmax(0,1fr);gap:14px;padding:10px;border-radius:17px}.video-thumb{border-radius:11px}.row-play{width:32px;height:32px}.video-info h4{font-size:.98rem}.video-info>p:last-child{display:none}.video-number{font-size:.61rem}.group-title h3{font-size:2rem} }
+</style>
+
+<script>
+  const buttons = document.querySelectorAll('[data-category-button]');
+  const panels = document.querySelectorAll('[data-category-panel]');
+
+  const showPage = (panel, selectedPage) => {
+    panel.querySelectorAll('[data-video-item]').forEach((item) => {
+      item.toggleAttribute('hidden', item.getAttribute('data-page-index') !== selectedPage);
+    });
+    panel.querySelectorAll('[data-page-button]').forEach((pageButton) => {
+      const active = pageButton.getAttribute('data-page-button') === selectedPage;
+      pageButton.classList.toggle('active', active);
+      if (active) pageButton.setAttribute('aria-current', 'page');
+      else pageButton.removeAttribute('aria-current');
+    });
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const selected = button.getAttribute('data-category-button');
+      buttons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-selected', String(active));
+      });
+      panels.forEach((panel) => {
+        panel.toggleAttribute('hidden', panel.getAttribute('data-category-panel') !== selected);
+        if (panel.getAttribute('data-category-panel') === selected) showPage(panel, '0');
+      });
+    });
+  });
+
+  panels.forEach((panel) => {
+    panel.querySelectorAll('[data-page-button]').forEach((pageButton) => {
+      pageButton.addEventListener('click', () => {
+        showPage(panel, pageButton.getAttribute('data-page-button'));
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  });
+</script>

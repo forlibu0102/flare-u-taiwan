@@ -1,0 +1,231 @@
+---
+const currentPath = Astro.url.pathname;
+const isCurrent = (path: string) =>
+  path === "/" ? currentPath === "/" : currentPath.startsWith(path);
+---
+
+<header>
+  <a class="logo" href="/" aria-label="FLARE U Taiwan 首頁">
+    <img src="/images/logo/header-logo.png" alt="FLARE U Taiwan" />
+  </a>
+
+  <nav class="desktop-nav" aria-label="主要導覽">
+    <a class:list={{ active: isCurrent("/") }} href="/">首頁</a>
+    <a class:list={{ active: isCurrent("/about") }} href="/about">關於</a>
+    <a class:list={{ active: isCurrent("/voting") }} href="/voting">投票</a>
+    <a class:list={{ active: isCurrent("/events") }} href="/events">行程</a>
+    <a class:list={{ active: isCurrent("/media") }} href="/media">影音</a>
+  </nav>
+
+  <details class="nav-shell">
+    <summary aria-label="開啟網站選單">
+      <span class="menu-label">Menu</span>
+      <span class="menu-icon" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </summary>
+
+    <nav class="mobile-nav" aria-label="手機導覽">
+      <a class:list={{ active: isCurrent("/") }} href="/" style="text-decoration: none;">首頁</a>
+      <a class:list={{ active: isCurrent("/about") }} href="/about" style="text-decoration: none;">關於 FLARE U</a>
+      <a class:list={{ active: isCurrent("/voting") }} href="/voting" style="text-decoration: none;">投票專區</a>
+      <a class:list={{ active: isCurrent("/events") }} href="/events" style="text-decoration: none;">行程資訊</a>
+      <a class:list={{ active: isCurrent("/media") }} href="/media" style="text-decoration: none;">影音專區</a>
+    </nav>
+  </details>
+</header>
+
+<style>
+  header {
+    position: relative;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 78px;
+    padding: 12px clamp(24px, 5vw, 80px);
+    border-bottom: 1px solid #e5e7eb;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(18px);
+  }
+
+  .logo {
+    display: block;
+    flex: 0 0 auto;
+    width: clamp(190px, 18vw, 250px);
+    line-height: 0;
+  }
+
+  .logo img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .nav-shell {
+    display: none;
+  }
+
+  summary {
+    display: none;
+  }
+
+  .desktop-nav {
+    display: flex;
+    gap: 32px;
+  }
+
+  .desktop-nav a {
+    color: #374151;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .desktop-nav a:hover {
+    color: #14b8a6;
+  }
+
+  .desktop-nav a.active {
+    color: #438fe9;
+  }
+
+  @media (max-width: 1050px) {
+    .desktop-nav {
+      gap: 18px;
+    }
+
+    .desktop-nav a {
+      font-size: 0.92rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .desktop-nav {
+      display: none;
+    }
+
+    header {
+      min-height: 74px;
+      padding: 11px 22px;
+    }
+
+    .logo {
+      width: min(190px, 60vw);
+    }
+
+    .nav-shell {
+      position: relative;
+      display: block;
+    }
+
+    summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      padding: 0 15px;
+      border: 1px solid #dfe6f0;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #0d1b3d;
+      cursor: pointer;
+      list-style: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .menu-icon {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 18px;
+    }
+
+    .menu-icon span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: currentColor;
+      transition: transform 180ms ease;
+    }
+
+    .nav-shell[open] .menu-icon span:first-child {
+      transform: translateY(3.5px) rotate(45deg);
+    }
+
+    .nav-shell[open] .menu-icon span:last-child {
+      transform: translateY(-3.5px) rotate(-45deg);
+    }
+
+    .mobile-nav {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      display: grid;
+      width: min(270px, calc(100vw - 32px));
+      gap: 0;
+      padding: 10px;
+      border: 1px solid #dfe6f0;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 24px 65px rgba(13, 27, 61, 0.18);
+      backdrop-filter: blur(20px);
+    }
+
+    .mobile-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 0 14px;
+      border-radius: 13px;
+      color: #0d1b3d;
+      font-weight: 650;
+      text-decoration: none !important;
+    }
+
+    .mobile-nav a + a {
+      border-top: 1px solid #edf0f5;
+    }
+
+    .mobile-nav a:hover {
+      background: #f4f8ff;
+      color: #438fe9;
+    }
+
+    .mobile-nav a.active {
+      background: #f2f7ff;
+      color: #438fe9;
+    }
+
+    .mobile-nav a span {
+      display: inline;
+      color: #8a96aa;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .logo {
+      width: 166px;
+    }
+
+    .menu-label {
+      display: none;
+    }
+
+    summary {
+      width: 44px;
+      padding: 0 12px;
+    }
+  }
+</style>
