@@ -56,6 +56,22 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </div>
   </section>
+
+  <section class="community-section">
+    <div class="page-inner">
+      <div class="community-card">
+        <div class="community-mark" aria-hidden="true">LINE</div>
+        <div class="community-copy">
+          <p class="eyebrow">VOTING COMMUNITY</p>
+          <h2>VOTE FOR FLARE U</h2>
+          <p>加入 LINE 投票社群，及時掌握投票提醒、票數變化與最新應援資訊。</p>
+        </div>
+        <a class="community-link" href="https://line.me/ti/g2/1zFtX6bx32L0kOAaepgBfmz3RH_f1aduJ_7upw?utm_source=invitation&amp;utm_medium=link_copy&amp;utm_campaign=default" target="_blank" rel="noreferrer">
+          加入 LINE 社群 <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style>
@@ -72,8 +88,15 @@ import Layout from '../layouts/Layout.astro';
   .status-panel strong { display: block; font-size: 1.45rem; }
   .status-panel > span:last-child { display: block; margin-top: 8px; color: #667085; }
   .status-dot { position: absolute; top: 30px; right: 30px; width: 10px; height: 10px; border-radius: 50%; background: #20c7c9; box-shadow: 0 0 0 7px rgba(32,199,201,.12); }
-  .voting-content, .guide-section { padding: 96px 24px; }
+  .voting-content, .guide-section, .community-section { padding: 96px 24px; }
   .guide-section { background: linear-gradient(180deg,#fff 0%,#f7faff 100%); }
+  .community-section { padding-top:0; background:#f7faff; }
+  .community-card { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:28px; padding:36px; border:1px solid #dce7e3; border-radius:28px; background:radial-gradient(circle at 92% 8%,rgba(6,199,85,.14),transparent 28%),#fff; box-shadow:0 20px 55px rgba(13,27,61,.07); }
+  .community-mark { display:grid; width:78px; height:78px; place-items:center; border-radius:24px; background:#06c755; color:#fff; font-size:.86rem; font-weight:850; letter-spacing:.04em; box-shadow:0 13px 30px rgba(6,199,85,.22); }
+  .community-copy h2 { margin:8px 0 10px; font-size:clamp(1.9rem,3.6vw,3.1rem); }
+  .community-copy>p:last-child { max-width:660px; margin:0; color:#667085; line-height:1.7; }
+  .community-link { display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:15px 20px; border-radius:999px; background:#06c755; color:#fff; font-weight:800; text-decoration:none; white-space:nowrap; transition:transform .2s ease,box-shadow .2s ease; }
+  .community-link:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(6,199,85,.23); }
   .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
   h2 { margin: 10px 0 0; font-size: clamp(2.4rem,5vw,4.2rem); letter-spacing: -.05em; }
   .count-pill { padding: 10px 15px; border-radius: 999px; background: #eef6ff; color: #438fe9; font-size: .75rem; font-weight: 750; letter-spacing: .1em; }
@@ -108,9 +131,9 @@ import Layout from '../layouts/Layout.astro';
   .steps-grid span { color: #438fe9; font-size: .75rem; font-weight: 750; }
   .steps-grid h3 { margin: 34px 0 8px; font-size: 1.35rem; }
   .steps-grid p { margin: 0; color: #667085; line-height: 1.65; }
-  @media (max-width: 800px) { .page-hero { padding: 72px 24px 80px; } .hero-grid { grid-template-columns: 1fr; gap: 40px; } h1 { font-size: clamp(4rem,20vw,6rem); } .voting-content,.guide-section { padding: 72px 24px; } .steps-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 800px) { .page-hero { padding: 72px 24px 80px; } .hero-grid { grid-template-columns: 1fr; gap: 40px; } h1 { font-size: clamp(4rem,20vw,6rem); } .voting-content,.guide-section,.community-section { padding: 72px 24px; } .community-section{padding-top:0}.steps-grid { grid-template-columns: 1fr; }.community-card{grid-template-columns:auto minmax(0,1fr)}.community-link{grid-column:1/-1;width:100%} }
   @media (max-width: 700px) { :global(.vote-meta){grid-template-columns:1fr}:global(.vote-card){padding:27px 22px}:global(.vote-topline){align-items:flex-start;flex-direction:column}:global(.vote-countdown){font-size:.78rem} }
-  @media (max-width: 520px) { .section-heading { align-items: flex-start; flex-direction: column; } .status-panel { padding: 24px; } .empty-state { padding: 48px 22px; } }
+  @media (max-width: 520px) { .section-heading { align-items: flex-start; flex-direction: column; } .status-panel { padding: 24px; } .empty-state { padding: 48px 22px; }.community-card{grid-template-columns:1fr;padding:28px 24px}.community-mark{width:66px;height:66px;border-radius:20px}.community-link{grid-column:auto} }
 </style>
 
 <script>
