@@ -10,11 +10,12 @@ import Layout from '../layouts/Layout.astro';
         <h1>Every<br />FLARE U<br />Moment.</h1>
         <p class="lead">集中整理 FLARE U 的官方活動、節目與重要日期，出發前快速掌握時間與資訊。</p>
       </div>
-      <div class="status-panel">
+      <div class="status-panel" aria-live="polite" aria-busy="true" data-next-event>
         <span class="status-dot"></span>
         <p>NEXT EVENT</p>
-        <strong>行程更新中</strong>
-        <span>最新官方行程公布後將立即整理</span>
+        <strong data-event-title>行程載入中…</strong>
+        <span class="event-date" data-event-date></span>
+        <span class="event-time" data-event-time></span>
       </div>
     </div>
   </section>
@@ -47,7 +48,9 @@ import Layout from '../layouts/Layout.astro';
   .status-panel { position: relative; padding: 30px; border: 1px solid rgba(216,225,238,.9); border-radius: 25px; background: rgba(255,255,255,.86); box-shadow: 0 22px 60px rgba(13,27,61,.09); backdrop-filter: blur(16px); }
   .status-panel p { margin: 0 0 13px; color: #7d899c; font-size: .78rem; font-weight: 700; letter-spacing: .12em; }
   .status-panel strong { display: block; font-size: 1.45rem; }
-  .status-panel > span:last-child { display: block; margin-top: 8px; color: #667085; }
+  .event-date,.event-time { display: block; color: #667085; }
+  .event-date { margin-top: 12px; font-weight: 700; }
+  .event-time { margin-top: 5px; }
   .status-dot { position: absolute; top: 30px; right: 30px; width: 10px; height: 10px; border-radius: 50%; background: #20c7c9; box-shadow: 0 0 0 7px rgba(32,199,201,.12); }
   .calendar-section { padding: 96px 24px; }
   .calendar-section { background: linear-gradient(180deg,#fff 0%,#f7faff 100%); }
@@ -59,3 +62,57 @@ import Layout from '../layouts/Layout.astro';
   @media (max-width:800px) { .page-hero { padding:72px 24px 80px; } .hero-grid { grid-template-columns:1fr; gap:40px; } h1 { font-size:clamp(3.7rem,18vw,5.8rem); } .calendar-section { padding:72px 24px; } .calendar-frame{padding:8px;border-radius:22px}.calendar-desktop{display:none!important}.calendar-mobile{display:block!important;height:620px!important;border-radius:15px!important} }
   @media (max-width:520px) { .section-heading { align-items:flex-start; flex-direction:column; } .status-panel { padding:24px; } .calendar-section{padding-right:16px;padding-left:16px}.calendar-mobile{height:560px!important} }
 </style>
+
+<script>
+  const panel = document.querySelector<HTMLElement>('[data-next-event]');
+  const title = panel?.querySelector<HTMLElement>('[data-event-title]');
+  const date = panel?.querySelector<HTMLElement>('[data-event-date]');
+  const time = panel?.querySelector<HTMLElement>('[data-event-time]');
+  const timeZone = 'Asia/Taipei';
+
+  const dateFormatter = new Intl.DateTimeFormat('zh-TW', {
+    timeZone,
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+  });
+  const timeFormatter = new Intl.DateTimeFormat('zh-TW', {
+    timeZone,
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+
+  function showFallback(message: string) {
+    if (title) title.textContent = message;
+    if (date) date.textContent = '';
+    if (time) time.textContent = '';
+  }
+
+  async function loadNextEvent() {
+    try {
+      const response = await fetch('/api/next-event');
+      if (!response.ok) throw new Error('Next event request failed');
+      const event = await response.json();
+
+      if (!event) {
+        showFallback('目前沒有已公布行程');
+        return;
+      }
+
+      const startsAt = new Date(event.start);
+      const endsAt = new Date(event.end);
+      if (title) title.textContent = event.title;
+      if (date) date.textContent = dateFormatter.format(startsAt);
+      if (time) time.textContent = event.allDay
+        ? '全天行程'
+        : `${timeFormatter.format(startsAt)}－${timeFormatter.format(endsAt)}`;
+    } catch {
+      showFallback('行程暫時無法載入');
+    } finally {
+      panel?.setAttribute('aria-busy', 'false');
+    }
+  }
+
+  loadNextEvent();
+</script>
