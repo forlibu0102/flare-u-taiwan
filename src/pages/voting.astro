@@ -240,7 +240,7 @@ import Layout from '../layouts/Layout.astro';
         return;
       }
 
-      emptyState?.setAttribute('hidden', '');
+      emptyState?.remove();
       if (deadlineTitle) deadlineTitle.textContent = votes[0].title;
       if (deadlineTime) deadlineTime.textContent = `${countdown(votes[0].end)} · ${dateTimeFormatter.format(new Date(votes[0].end))}`;
       votes.forEach((vote) => list?.append(renderVote(vote)));
