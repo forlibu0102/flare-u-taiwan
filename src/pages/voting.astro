@@ -174,6 +174,15 @@ import Layout from '../layouts/Layout.astro';
     return link;
   }
 
+  function gapMetric(rank: string, gap: string) {
+    const numericRank = Number(rank.replace(/^#/, ''));
+    const numericGap = Number(gap.replace(/,/g, ''));
+    if (numericRank === 1 || numericGap === 0) return metric('票數狀態', '目前第一');
+    if (!Number.isFinite(numericGap)) return metric('與第一名差距', '待更新');
+    if (numericGap < 0) return metric('距離第一名', `差 ${Math.abs(numericGap).toLocaleString('zh-TW')} 票`);
+    return metric('領先第二名', `${numericGap.toLocaleString('zh-TW')} 票`);
+  }
+
   function renderVote(vote: Vote) {
     const card = document.createElement('article');
     card.className = 'vote-card';
@@ -202,7 +211,7 @@ import Layout from '../layouts/Layout.astro';
     meta.className = 'vote-meta';
     if (vote.rank) meta.append(metric('目前名次', `#${vote.rank.replace(/^#/, '')}`));
     if (vote.votes) meta.append(metric('目前票數', Number(vote.votes.replace(/,/g, '')).toLocaleString('zh-TW')));
-    if (vote.gap) meta.append(metric('與第一名差距', Number(vote.gap.replace(/,/g, '')).toLocaleString('zh-TW')));
+    if (vote.gap || vote.rank.replace(/^#/, '') === '1') meta.append(gapMetric(vote.rank, vote.gap));
 
     const details = document.createElement('div');
     details.className = 'vote-details';
