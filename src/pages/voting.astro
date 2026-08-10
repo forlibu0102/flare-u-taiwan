@@ -41,22 +41,6 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <section class="guide-section">
-    <div class="page-inner">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">參與方式</p>
-          <h2>投票參與方式</h2>
-        </div>
-      </div>
-      <div class="steps-grid">
-        <article><span>01</span><h3>確認投票</h3><p>查看進行中的項目、平台與截止時間。</p></article>
-        <article><span>02</span><h3>閱讀教學</h3><p>依照步驟準備帳號、App 或投票券。</p></article>
-        <article><span>03</span><h3>完成應援</h3><p>完成投票並留意每日重置與追加機會。</p></article>
-      </div>
-    </div>
-  </section>
-
   <section class="community-section">
     <div class="page-inner">
       <div class="community-card">
@@ -88,9 +72,8 @@ import Layout from '../layouts/Layout.astro';
   .status-panel strong { display: block; font-size: 1.45rem; }
   .status-panel > span:last-child { display: block; margin-top: 8px; color: #667085; }
   .status-dot { position: absolute; top: 30px; right: 30px; width: 10px; height: 10px; border-radius: 50%; background: #20c7c9; box-shadow: 0 0 0 7px rgba(32,199,201,.12); }
-  .voting-content, .guide-section, .community-section { padding: 96px 24px; }
-  .guide-section { background: linear-gradient(180deg,#fff 0%,#f7faff 100%); }
-  .community-section { padding-top:0; background:#f7faff; }
+  .voting-content, .community-section { padding: 96px 24px; }
+  .community-section { background:linear-gradient(180deg,#fff 0%,#f7faff 100%); }
   .community-card { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:28px; padding:36px; border:1px solid #dce7e3; border-radius:28px; background:radial-gradient(circle at 92% 8%,rgba(6,199,85,.14),transparent 28%),#fff; box-shadow:0 20px 55px rgba(13,27,61,.07); }
   .community-mark { display:grid; width:78px; height:78px; place-items:center; border-radius:24px; background:#06c755; color:#fff; font-size:.86rem; font-weight:850; letter-spacing:.04em; box-shadow:0 13px 30px rgba(6,199,85,.22); }
   .community-copy h2 { margin:8px 0 10px; font-size:clamp(1.9rem,3.6vw,3.1rem); }
@@ -115,6 +98,7 @@ import Layout from '../layouts/Layout.astro';
   :global(.vote-status::before) { width:7px; height:7px; border-radius:50%; background:#20c7c9; content:""; box-shadow:0 0 0 5px rgba(32,199,201,.12); }
   :global(.vote-countdown) { padding:8px 12px; border-radius:999px; background:#fff0f1; color:#d94d5b; font-size:.8rem; font-weight:800; }
   :global(.vote-card h3) { max-width:850px; margin:26px 0 16px; font-size:clamp(1.55rem,3vw,2.35rem); line-height:1.25; letter-spacing:-.025em; }
+  :global(.platform-label) { margin:0 0 10px; color:#7d899c; font-size:.69rem; font-weight:800; letter-spacing:.12em; }
   :global(.platform-list) { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 26px; padding:0; list-style:none; }
   :global(.platform-list li) { padding:8px 12px; border:1px solid #dbe8fa; border-radius:999px; background:#eef5ff; color:#367fd2; font-size:.76rem; font-weight:750; }
   :global(.vote-meta) { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
@@ -126,12 +110,7 @@ import Layout from '../layouts/Layout.astro';
   :global(.vote-actions a) { display:inline-flex; padding:13px 18px; border-radius:999px; background:#0d1b3d; color:#fff; font-size:.88rem; font-weight:750; text-decoration:none; transition:transform .2s ease,background .2s ease; }
   :global(.vote-actions a:hover) { transform:translateY(-2px); background:#2563eb; }
   :global(.vote-actions a.secondary) { background:#eef5ff; color:#2563eb; }
-  .steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
-  .steps-grid article { min-height: 205px; padding: 28px; border: 1px solid #dfe6f0; border-radius: 24px; background: #fff; }
-  .steps-grid span { color: #438fe9; font-size: .75rem; font-weight: 750; }
-  .steps-grid h3 { margin: 34px 0 8px; font-size: 1.35rem; }
-  .steps-grid p { margin: 0; color: #667085; line-height: 1.65; }
-  @media (max-width: 800px) { .page-hero { padding: 72px 24px 80px; } .hero-grid { grid-template-columns: 1fr; gap: 40px; } h1 { font-size: clamp(4rem,20vw,6rem); } .voting-content,.guide-section,.community-section { padding: 72px 24px; } .community-section{padding-top:0}.steps-grid { grid-template-columns: 1fr; }.community-card{grid-template-columns:auto minmax(0,1fr)}.community-link{grid-column:1/-1;width:100%} }
+  @media (max-width: 800px) { .page-hero { padding: 72px 24px 80px; } .hero-grid { grid-template-columns: 1fr; gap: 40px; } h1 { font-size: clamp(4rem,20vw,6rem); } .voting-content,.community-section { padding: 72px 24px; }.community-card{grid-template-columns:auto minmax(0,1fr)}.community-link{grid-column:1/-1;width:100%} }
   @media (max-width: 700px) { :global(.vote-meta){grid-template-columns:1fr}:global(.vote-card){padding:27px 22px}:global(.vote-topline){align-items:flex-start;flex-direction:column}:global(.vote-countdown){font-size:.78rem} }
   @media (max-width: 520px) { .section-heading { align-items: flex-start; flex-direction: column; } .status-panel { padding: 24px; } .empty-state { padding: 48px 22px; }.community-card{grid-template-columns:1fr;padding:28px 24px}.community-mark{width:66px;height:66px;border-radius:20px}.community-link{grid-column:auto} }
 </style>
@@ -222,6 +201,9 @@ import Layout from '../layouts/Layout.astro';
 
     const heading = document.createElement('h3');
     heading.textContent = vote.title;
+    const platformLabel = document.createElement('p');
+    platformLabel.className = 'platform-label';
+    platformLabel.textContent = '投票平台';
     const platforms = document.createElement('ul');
     platforms.className = 'platform-list';
     vote.platforms.forEach((platform) => {
@@ -253,7 +235,7 @@ import Layout from '../layouts/Layout.astro';
     if (vote.appStoreUrl) actions.append(action('App Store', vote.appStoreUrl, true));
     if (vote.googlePlayUrl) actions.append(action('Google Play', vote.googlePlayUrl, true));
 
-    card.append(top, heading, platforms);
+    card.append(top, heading, platformLabel, platforms);
     if (meta.childElementCount) card.append(meta);
     card.append(details);
     if (actions.childElementCount) card.append(actions);
