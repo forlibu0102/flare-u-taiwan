@@ -65,10 +65,10 @@ import Layout from '../layouts/Layout.astro';
 					</span>
 				</div>
 				<p class="card-value">
-					<span>0</span>
+					<span id="current-vote-count">—</span>
 					<span class="card-unit">項</span>
 				</p>
-				<p class="card-note">目前沒有進行中的投票</p>
+				<p class="card-note" id="current-vote-note">投票資料載入中…</p>
 			</article>
 
 			<article class="summary-card summary-card--aqua">
@@ -78,8 +78,8 @@ import Layout from '../layouts/Layout.astro';
 						<svg viewBox="0 0 24 24"><path d="M7 2.5v3M17 2.5v3M4 8.5h16M5 4.5h14a1 1 0 0 1 1 1v14H4v-14a1 1 0 0 1 1-1Zm3 8h3v3H8v-3Z" /></svg>
 					</span>
 				</div>
-				<p class="event-name">行程更新中</p>
-				<p class="card-note">最新官方行程將顯示於此</p>
+				<p class="event-name" id="next-event-name">行程載入中…</p>
+				<p class="card-note" id="next-event-time"></p>
 			</article>
 		</div>
 	</section>
@@ -190,6 +190,64 @@ import Layout from '../layouts/Layout.astro';
 		if (debutDaysElement) {
 			debutDaysElement.textContent = debutDays.toLocaleString('zh-TW');
 		}
+
+		const voteCount = document.querySelector('#current-vote-count');
+		const voteNote = document.querySelector('#current-vote-note');
+		const eventName = document.querySelector('#next-event-name');
+		const eventTime = document.querySelector('#next-event-time');
+		const eventDateFormatter = new Intl.DateTimeFormat('zh-TW', {
+			timeZone: 'Asia/Taipei',
+			month: 'long',
+			day: 'numeric',
+			weekday: 'short',
+		});
+		const eventTimeFormatter = new Intl.DateTimeFormat('zh-TW', {
+			timeZone: 'Asia/Taipei',
+			hour: 'numeric',
+			minute: '2-digit',
+			hour12: true,
+		});
+
+		async function loadVotingSummary() {
+			try {
+				const response = await fetch('/api/votes');
+				if (!response.ok) throw new Error('Voting request failed');
+				const votes = await response.json();
+				if (voteCount) voteCount.textContent = String(votes.length);
+				if (voteNote) voteNote.textContent = votes.length
+					? `最近截止：${votes[0].title}`
+					: '目前沒有進行中的投票';
+			} catch {
+				if (voteCount) voteCount.textContent = '—';
+				if (voteNote) voteNote.textContent = '投票資料暫時無法載入';
+			}
+		}
+
+		async function loadEventSummary() {
+			try {
+				const response = await fetch('/api/next-event');
+				if (!response.ok) throw new Error('Event request failed');
+				const event = await response.json();
+				if (!event) {
+					if (eventName) eventName.textContent = '目前沒有已公布行程';
+					if (eventTime) eventTime.textContent = '';
+					return;
+				}
+
+				const startsAt = new Date(event.start);
+				const endsAt = new Date(event.end);
+				if (eventName) eventName.textContent = event.title;
+				if (eventTime) eventTime.textContent = event.allDay
+					? `${eventDateFormatter.format(startsAt)} · 全天`
+					: `${eventDateFormatter.format(startsAt)} · ${eventTimeFormatter.format(startsAt)}－${eventTimeFormatter.format(endsAt)}`;
+			} catch {
+				if (eventName) eventName.textContent = '行程暫時無法載入';
+				if (eventTime) eventTime.textContent = '請稍後再試';
+			}
+		}
+
+		loadVotingSummary();
+		loadEventSummary();
 	</script>
 </Layout>
 
