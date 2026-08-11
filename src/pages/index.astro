@@ -7,13 +7,13 @@ import Layout from '../layouts/Layout.astro';
 	description="FLARE U 台灣資訊整合站｜投票、行程、影音與完整指南"
 >
 	<!-- Hero -->
-	<section class="hero">
+	<section class="hero" id="page-top">
 		<div class="hero-content">
 			<div class="hero-copy">
 				<p class="eyebrow">TAIWAN FAN HUB</p>
 
 				<h1>
-					Every FLARE U Moment.<br />
+					Every <span class="keep-together">FLARE U</span> Moment.<br />
 					All in One Place.
 				</h1>
 
@@ -93,7 +93,6 @@ import Layout from '../layouts/Layout.astro';
 					<h2>What’s New</h2>
 				</div>
 
-				<a class="text-link announcement-header-link" data-announcement-link href="https://flareu.jp/feature/entry" target="_blank" rel="noreferrer">前往日本官網 →</a>
 			</div>
 
 			<div class="news-list" data-announcement-list>
@@ -109,7 +108,10 @@ import Layout from '../layouts/Layout.astro';
 					<p>招募截止：2026 年 9 月 12 日（六）22:59</p>
 				</div>
 
-				<span class="news-arrow" aria-hidden="true">↗</span>
+				<span class="news-cta">
+					<span class="news-cta-label">前往日本官網</span>
+					<span class="news-arrow" aria-hidden="true">↗</span>
+				</span>
 			</a>
 			</div>
 		</div>
@@ -173,6 +175,9 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<span class="quick-arrow">↗</span>
 				</a>
+			</div>
+			<div class="back-top-row">
+				<a class="back-top" href="#page-top" aria-label="回到頁首">↑</a>
 			</div>
 		</div>
 	</section>
@@ -252,7 +257,6 @@ import Layout from '../layouts/Layout.astro';
 			const section = document.querySelector('[data-announcement-section]');
 			const list = document.querySelector('[data-announcement-list]');
 			const template = document.querySelector('[data-announcement-item]');
-			const headerLink = document.querySelector('[data-announcement-link]');
 			if (!section || !list || !template) return;
 			try {
 				const response = await fetch('/api/announcements');
@@ -275,13 +279,10 @@ import Layout from '../layouts/Layout.astro';
 					item.querySelector('.news-category').textContent = announcement.category;
 					item.querySelector('h3').textContent = announcement.title;
 					item.querySelector('.news-copy > p:last-child').textContent = announcement.description;
+					item.querySelector('.news-cta-label').textContent = announcement.linkText;
 					return item;
 				});
 				list.replaceChildren(...items);
-				if (headerLink) {
-					headerLink.href = announcements[0].url;
-					headerLink.textContent = `${announcements[0].linkText} →`;
-				}
 			} catch {}
 		}
 
@@ -302,6 +303,10 @@ import Layout from '../layouts/Layout.astro';
 		font-family:
 			Inter, "Noto Sans TC", system-ui, -apple-system, BlinkMacSystemFont,
 			"Segoe UI", sans-serif;
+	}
+
+	:global(html) {
+		scroll-behavior: smooth;
 	}
 
 	.hero {
@@ -400,6 +405,10 @@ import Layout from '../layouts/Layout.astro';
 		font-size: clamp(3.5rem, 8vw, 7.5rem);
 		line-height: 0.95;
 		letter-spacing: -0.06em;
+	}
+
+	.keep-together {
+		white-space: nowrap;
 	}
 
 	.hero-description {
@@ -719,6 +728,17 @@ import Layout from '../layouts/Layout.astro';
 		transition: background-color 180ms ease, transform 180ms ease;
 	}
 
+	.news-cta {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 13px;
+		color: #0d1b3d;
+		font-size: 0.86rem;
+		font-weight: 750;
+		white-space: nowrap;
+	}
+
 	.news-item:hover .news-arrow {
 		background: #438fe9;
 		transform: rotate(8deg);
@@ -860,6 +880,34 @@ import Layout from '../layouts/Layout.astro';
 		transform: rotate(8deg);
 	}
 
+	.back-top-row {
+		display: flex;
+		justify-content: center;
+		margin-top: 48px;
+	}
+
+	.back-top {
+		display: grid;
+		width: 52px;
+		height: 52px;
+		place-items: center;
+		border: 1px solid #d8e2ef;
+		border-radius: 50%;
+		background: #ffffff;
+		color: #0d1b3d;
+		font-size: 1.35rem;
+		font-weight: 800;
+		text-decoration: none;
+		box-shadow: 0 14px 34px rgba(13, 27, 61, 0.08);
+		transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+	}
+
+	.back-top:hover {
+		background: #0d1b3d;
+		color: #ffffff;
+		transform: translateY(-3px);
+	}
+
 	@media (max-width: 800px) {
 		.hero {
 			min-height: 620px;
@@ -867,7 +915,7 @@ import Layout from '../layouts/Layout.astro';
 		}
 
 		h1 {
-			font-size: clamp(3.2rem, 15vw, 5rem);
+			font-size: clamp(2.8rem, 12vw, 4.2rem);
 		}
 
 		.hero-content {
@@ -964,8 +1012,12 @@ import Layout from '../layouts/Layout.astro';
 			grid-template-columns: 1fr;
 		}
 
-		.news-arrow {
-			display: none;
+		.news-cta {
+			justify-content: flex-start;
+		}
+
+		.news-cta-label {
+			font-size: 0.82rem;
 		}
 
 		.hero-actions {
