@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Voting" description="FLARE U 目前投票、投票教學與應援資訊">
-  <section class="page-hero">
+  <section class="page-hero" id="page-top">
     <div class="page-inner hero-grid">
       <div>
         <p class="eyebrow">投票中心</p>
@@ -54,6 +54,7 @@ import Layout from '../layouts/Layout.astro';
           加入 LINE 社群 <span aria-hidden="true">↗</span>
         </a>
       </div>
+      <div class="back-top-row"><a class="back-top" href="#page-top" aria-label="回到頁首">↑</a></div>
     </div>
   </section>
 </Layout>
@@ -80,6 +81,10 @@ import Layout from '../layouts/Layout.astro';
   .community-copy>p:last-child { max-width:660px; margin:0; color:#667085; line-height:1.7; }
   .community-link { display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:15px 20px; border-radius:999px; background:#06c755; color:#fff; font-weight:800; text-decoration:none; white-space:nowrap; transition:transform .2s ease,box-shadow .2s ease; }
   .community-link:hover { transform:translateY(-2px); box-shadow:0 12px 28px rgba(6,199,85,.23); }
+  :global(html) { scroll-behavior: smooth; }
+  .back-top-row { display:flex; justify-content:center; margin-top:52px; }
+  .back-top { display:grid; width:56px; height:56px; place-items:center; border:1px solid #dfe6f0; border-radius:50%; background:#fff; color:#0d1b3d; font-size:1.35rem; font-weight:800; text-decoration:none; box-shadow:0 12px 30px rgba(13,27,61,.08); transition:transform .2s ease,background .2s ease,color .2s ease; }
+  .back-top:hover { transform:translateY(-3px); background:#0d1b3d; color:#fff; }
   .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
   h2 { margin: 10px 0 0; font-size: clamp(2.4rem,5vw,4.2rem); letter-spacing: -.05em; }
   .count-pill { padding: 10px 15px; border-radius: 999px; background: #eef6ff; color: #438fe9; font-size: .75rem; font-weight: 750; letter-spacing: .1em; }

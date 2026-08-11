@@ -131,7 +131,7 @@ const videoGroups = [
 ---
 
 <Layout title="Media" description="FLARE U 官方影片、舞台與影音內容整理">
-  <section class="page-hero">
+  <section class="page-hero" id="page-top">
     <div class="page-inner">
       <div>
         <p class="eyebrow">MEDIA ARCHIVE</p>
@@ -254,6 +254,7 @@ const videoGroups = [
           <span class="translation-arrow" aria-hidden="true">↗</span>
         </a>
       </div>
+      <div class="back-top-row"><a class="back-top" href="#page-top" aria-label="回到頁首">↑</a></div>
     </div>
   </section>
 </Layout>
@@ -282,6 +283,10 @@ const videoGroups = [
   .translation-card h3 { margin:34px 0 10px; font-size:clamp(1.35rem,2.3vw,1.8rem); }
   .translation-card p { margin:0; color:#667085; line-height:1.65; }
   .translation-arrow { position:absolute; right:30px; bottom:30px; color:#438fe9; font-size:1.35rem; font-weight:800; }
+  :global(html) { scroll-behavior:smooth; }
+  .back-top-row { display:flex; justify-content:center; margin-top:52px; }
+  .back-top { display:grid; width:56px; height:56px; place-items:center; border:1px solid #dfe6f0; border-radius:50%; background:#fff; color:#0d1b3d; font-size:1.35rem; font-weight:800; text-decoration:none; box-shadow:0 12px 30px rgba(13,27,61,.08); transition:transform .2s ease,background .2s ease,color .2s ease; }
+  .back-top:hover { transform:translateY(-3px); background:#0d1b3d; color:#fff; }
   .section-heading { margin-bottom:32px; }
   h2 { margin:10px 0 0; font-size:clamp(2.4rem,5vw,4.2rem); letter-spacing:-.05em; }
   .video-shell { overflow:hidden; aspect-ratio:16/9; border:1px solid #dfe6f0; border-radius:30px; background:#0d1b3d; box-shadow:0 20px 55px rgba(13,27,61,.12); }
