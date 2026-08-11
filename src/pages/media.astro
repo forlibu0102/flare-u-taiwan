@@ -321,8 +321,16 @@ const videoGroups = [
 </style>
 
 <script>
-  const buttons = document.querySelectorAll('[data-category-button]');
-  const panels = document.querySelectorAll('[data-category-panel]');
+  const tabs = document.querySelector('.category-tabs');
+  const categorySection = document.querySelector('.category-section .page-inner');
+  const scopeAttribute = categorySection?.getAttributeNames().find((name) => name.startsWith('data-astro-cid'));
+
+  const make = (tag, className) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (scopeAttribute) element.setAttribute(scopeAttribute, '');
+    return element;
+  };
 
   const showPage = (panel, selectedPage) => {
     panel.querySelectorAll('[data-video-item]').forEach((item) => {
@@ -336,27 +344,122 @@ const videoGroups = [
     });
   };
 
-  buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const selected = button.getAttribute('data-category-button');
-      buttons.forEach((item) => {
-        const active = item === button;
-        item.classList.toggle('active', active);
-        item.setAttribute('aria-selected', String(active));
-      });
-      panels.forEach((panel) => {
-        panel.toggleAttribute('hidden', panel.getAttribute('data-category-panel') !== selected);
-        if (panel.getAttribute('data-category-panel') === selected) showPage(panel, '0');
+  const bindInteractions = () => {
+    const buttons = document.querySelectorAll('[data-category-button]');
+    const panels = document.querySelectorAll('[data-category-panel]');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const selected = button.getAttribute('data-category-button');
+        buttons.forEach((item) => {
+          const active = item === button;
+          item.classList.toggle('active', active);
+          item.setAttribute('aria-selected', String(active));
+        });
+        panels.forEach((panel) => {
+          panel.toggleAttribute('hidden', panel.getAttribute('data-category-panel') !== selected);
+          if (panel.getAttribute('data-category-panel') === selected) showPage(panel, '0');
+        });
       });
     });
-  });
+    panels.forEach((panel) => {
+      panel.querySelectorAll('[data-page-button]').forEach((pageButton) => {
+        pageButton.addEventListener('click', () => {
+          showPage(panel, pageButton.getAttribute('data-page-button'));
+          panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    });
+  };
 
-  panels.forEach((panel) => {
-    panel.querySelectorAll('[data-page-button]').forEach((pageButton) => {
-      pageButton.addEventListener('click', () => {
-        showPage(panel, pageButton.getAttribute('data-page-button'));
-        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
+  const createPanel = (group, groupIndex) => {
+    const panel = make('div', 'video-group');
+    panel.dataset.categoryPanel = group.id;
+    panel.toggleAttribute('hidden', groupIndex !== 0);
+    const groupTitle = make('div', 'group-title');
+    const eyebrow = make('p', 'eyebrow');
+    eyebrow.textContent = group.eyebrow;
+    const heading = make('h3');
+    heading.textContent = group.label;
+    groupTitle.append(eyebrow, heading);
+
+    const videoList = make('div', 'video-list');
+    group.videos.forEach((video, index) => {
+      const row = make('a', 'video-row');
+      row.dataset.videoItem = '';
+      row.dataset.pageIndex = String(Math.floor(index / 5));
+      row.toggleAttribute('hidden', index >= 5);
+      row.href = video.url;
+      row.target = '_blank';
+      row.rel = 'noreferrer';
+      const thumb = make('div', 'video-thumb');
+      const image = make('img');
+      image.src = `https://i.ytimg.com/vi/${video.id}/mqdefault.jpg`;
+      image.alt = '';
+      image.loading = 'lazy';
+      const play = make('span', 'row-play');
+      play.setAttribute('aria-hidden', 'true');
+      play.textContent = '▶';
+      thumb.append(image, play);
+      const info = make('div', 'video-info');
+      const number = make('p', 'video-number');
+      number.textContent = `${String(index + 1).padStart(2, '0')} · ${video.source || 'YOUTUBE'}`;
+      const title = make('h4');
+      title.textContent = video.title;
+      const helper = make('p');
+      helper.textContent = '開啟 YouTube 觀看完整影片';
+      info.append(number, title, helper);
+      const watch = make('span', 'watch-link');
+      watch.textContent = '觀看影片 ↗';
+      row.append(thumb, info, watch);
+      videoList.append(row);
     });
-  });
+    panel.append(groupTitle, videoList);
+
+    if (group.videos.length > 5) {
+      const pagination = make('nav', 'video-pagination');
+      pagination.dataset.pagination = '';
+      pagination.setAttribute('aria-label', `${group.label}影片分頁`);
+      for (let index = 0; index < Math.ceil(group.videos.length / 5); index += 1) {
+        const pageButton = make('button', `page-button${index === 0 ? ' active' : ''}`);
+        pageButton.type = 'button';
+        pageButton.dataset.pageButton = String(index);
+        pageButton.setAttribute('aria-label', `第 ${index + 1} 頁`);
+        if (index === 0) pageButton.setAttribute('aria-current', 'page');
+        pageButton.textContent = String(index + 1);
+        pagination.append(pageButton);
+      }
+      panel.append(pagination);
+    }
+    return panel;
+  };
+
+  async function loadMedia() {
+    try {
+      const response = await fetch('/api/media');
+      if (!response.ok) throw new Error('Media request failed');
+      const groups = await response.json();
+      if (!Array.isArray(groups) || !groups.length || !tabs || !categorySection) return;
+
+      tabs.replaceChildren();
+      categorySection.querySelectorAll('[data-category-panel]').forEach((panel) => panel.remove());
+      groups.forEach((group, index) => {
+        const button = make('button', `category-tab${index === 0 ? ' active' : ''}`);
+        button.type = 'button';
+        button.setAttribute('role', 'tab');
+        button.setAttribute('aria-selected', String(index === 0));
+        button.dataset.categoryButton = group.id;
+        button.append(document.createTextNode(group.label));
+        const amount = make('span');
+        amount.textContent = String(group.videos.length).padStart(2, '0');
+        button.append(amount);
+        tabs.append(button);
+        categorySection.append(createPanel(group, index));
+      });
+      bindInteractions();
+    } catch {
+      bindInteractions();
+    }
+  }
+
+  loadMedia();
 </script>
