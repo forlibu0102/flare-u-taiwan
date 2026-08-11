@@ -42,7 +42,7 @@ import Layout from '../layouts/Layout.astro';
       <h2>FLARE U 大事記</h2>
     </div>
 
-    <div class="timeline-year">
+    <div id="timeline-data"><div class="timeline-year">
       <div class="year-label"><span>YEAR</span><strong>2026</strong></div>
       <ol class="timeline-list">
         <li><time datetime="2026-05-08">05.08–05.10</time><div><h3>2026 KCON JAPAN</h3><p>登上「2026 KCON JAPAN」舞台。</p></div></li>
@@ -50,14 +50,14 @@ import Layout from '../layouts/Layout.astro';
         <li><time datetime="2026-07-03">07.03</time><div><h3>高雄啤酒音樂節</h3><p>出席高雄啤酒音樂節。</p></div></li>
         <li><time datetime="2026-07-14">07.14</time><div><h3>《THE SHOW》固定主持</h3><p>崔立于成為《THE SHOW》固定主持人。</p></div></li>
         <li><time datetime="2026-07-25">07.25</time><div><h3>保寧泥漿節</h3><p>出席保寧泥漿節。</p></div></li>
-        <li class="scheduled-event" data-event-end="2026-08-08"><time datetime="2026-08-08">08.08</time><div><h3>K-WAVE INFINITY</h3><p data-past-copy="出席高雄拼盤演唱會。">預定出席高雄拼盤演唱會。</p><span class="upcoming-badge">預定</span></div></li>
+        <li><time datetime="2026-08-08">08.08</time><div><h3>K-WAVE INFINITY</h3><p>出席高雄拼盤演唱會。</p></div></li>
         <li class="scheduled-event" data-event-end="2026-09-06"><time datetime="2026-09-06">09.06</time><div><h3>富邦悍將主場表演</h3><p data-past-copy="於台北大巨蛋登上主場例行賽表演。">預定於台北大巨蛋登上主場例行賽表演。</p><span class="upcoming-badge">預定</span></div></li>
         <li class="scheduled-event" data-event-end="2026-09-09"><time datetime="2026-09-09">09.09</time><div><h3>《YOUTH ERROR》Japan Edition</h3><p data-past-copy="發行首張迷你專輯日本版。">預定發行首張迷你專輯日本版。</p><span class="upcoming-badge">預定</span></div></li>
         <li class="scheduled-event" data-event-end="2026-10-04"><time datetime="2026-10-04">10.04</time><div><h3>2026 KPOP PRIME</h3><p data-past-copy="出席拼盤演唱會。">預定出席拼盤演唱會。</p><span class="upcoming-badge">預定</span></div></li>
         <li class="scheduled-event" data-event-end="2026-10-10"><time datetime="2026-10-10">10.10</time><div><h3>2026 京畿韓流音樂節</h3><p data-past-copy="出席「2026 京畿韓流音樂節」。">預定出席「2026 京畿韓流音樂節」。</p><span class="upcoming-badge">預定</span></div></li>
         <li class="scheduled-event" data-event-end="2026-12-13"><time datetime="2026-12-12">12.12–12.13</time><div><h3>2026 FNC KINGDOM</h3><p data-past-copy="出席「2026 FNC KINGDOM」。">預定出席「2026 FNC KINGDOM」。</p><span class="upcoming-badge">預定</span></div></li>
       </ol>
-    </div>
+    </div></div>
   </div></section>
 
   <section class="social-section" id="social"><div class="page-inner">
@@ -75,17 +75,90 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-  document.querySelectorAll<HTMLElement>('.scheduled-event').forEach((event) => {
-    const endDate = event.dataset.eventEnd;
-    if (!endDate) return;
+  type Milestone = {
+    startDate: string;
+    endDate: string;
+    year: number;
+    startMonth: number;
+    startDay: number;
+    endMonth: number;
+    endDay: number;
+    title: string;
+    description: string;
+    highlight: boolean;
+  };
+
+  function isUpcoming(endDate: string) {
     const [year, month, day] = endDate.split('-').map(Number);
-    const eventEnd = new Date(year, month - 1, day, 23, 59, 59);
-    if (Date.now() > eventEnd.getTime()) {
-      event.querySelector('.upcoming-badge')?.remove();
-      const description = event.querySelector<HTMLElement>('[data-past-copy]');
-      if (description?.dataset.pastCopy) description.textContent = description.dataset.pastCopy;
+    return Date.now() <= new Date(year, month - 1, day, 23, 59, 59).getTime();
+  }
+
+  function formatDate(item: Milestone) {
+    const start = `${String(item.startMonth).padStart(2, '0')}.${String(item.startDay).padStart(2, '0')}`;
+    if (item.startDate === item.endDate) return start;
+    const end = item.startMonth === item.endMonth
+      ? String(item.endDay).padStart(2, '0')
+      : `${String(item.endMonth).padStart(2, '0')}.${String(item.endDay).padStart(2, '0')}`;
+    return `${start}–${end}`;
+  }
+
+  async function loadMilestones() {
+    const container = document.querySelector<HTMLElement>('#timeline-data');
+    if (!container) return;
+    try {
+      const response = await fetch('/api/milestones');
+      if (!response.ok) throw new Error('Unable to load milestones');
+      const milestones = await response.json() as Milestone[];
+      if (!milestones.length) return;
+
+      const years = new Map<number, Milestone[]>();
+      milestones.forEach((item) => years.set(item.year, [...(years.get(item.year) || []), item]));
+      container.replaceChildren(...Array.from(years, ([year, items]) => {
+        const section = document.createElement('div');
+        section.className = 'timeline-year';
+        const yearLabel = document.createElement('div');
+        yearLabel.className = 'year-label';
+        const label = document.createElement('span');
+        label.textContent = 'YEAR';
+        const yearText = document.createElement('strong');
+        yearText.textContent = String(year);
+        yearLabel.append(label, yearText);
+
+        const list = document.createElement('ol');
+        list.className = 'timeline-list';
+        items.forEach((item) => {
+          const entry = document.createElement('li');
+          if (item.highlight) entry.className = 'highlight';
+          const time = document.createElement('time');
+          time.dateTime = item.startDate;
+          time.textContent = formatDate(item);
+          const content = document.createElement('div');
+          const title = document.createElement('h3');
+          title.textContent = item.title;
+          content.append(title);
+          if (item.description) {
+            const description = document.createElement('p');
+            description.textContent = item.description;
+            content.append(description);
+          }
+          if (isUpcoming(item.endDate)) {
+            const badge = document.createElement('span');
+            badge.className = 'upcoming-badge';
+            badge.textContent = '預定';
+            content.append(badge);
+          }
+          entry.append(time, content);
+          list.append(entry);
+        });
+        section.append(yearLabel, list);
+        return section;
+      }));
+    } catch (error) {
+      console.error(error);
     }
-  });
+  }
+
+  loadMilestones();
 </script>
 
 <style>
@@ -94,4 +167,5 @@ import Layout from '../layouts/Layout.astro';
 .member-photo-frame{position:relative;width:100%;height:360px;margin:0 0 24px;overflow:hidden;border-radius:20px;background:#eef3f8}.member-photo-frame .member-photo{position:absolute;inset:0;display:block;width:100%!important;max-width:100%!important;height:100%!important;margin:0;border-radius:0;object-fit:cover!important;object-position:center 24%}.member-card.teal .member-photo-frame .member-photo{object-position:center 38%}@media(max-width:800px){.member-photo-frame{height:420px}}@media(max-width:520px){.member-photo-frame{height:330px}}
 .timeline-section{padding:96px 24px;background:#fff}.timeline-year{display:grid;grid-template-columns:220px 1fr;gap:56px;padding:38px;border:1px solid #dfe6f0;border-radius:28px;background:radial-gradient(circle at 90% 8%,rgba(32,199,201,.12),transparent 24%),#fafcff;box-shadow:0 20px 55px rgba(13,27,61,.06)}.year-label{position:sticky;top:24px;align-self:start}.year-label span{display:block;margin-bottom:8px;color:#438fe9;font-size:.7rem;font-weight:750;letter-spacing:.17em}.year-label strong{font-size:clamp(3.6rem,7vw,5.8rem);line-height:1;letter-spacing:-.06em}.timeline-list{margin:0;padding:0;list-style:none}.timeline-list li{position:relative;display:grid;grid-template-columns:120px 1fr;gap:24px;padding:27px 0;border-top:1px solid #e1e8f1}.timeline-list li:first-child{padding-top:0;border-top:0}.timeline-list time{color:#438fe9;font-size:.82rem;font-weight:800;letter-spacing:.08em}.timeline-list h3{margin:0 0 7px;font-size:1.25rem}.timeline-list p{margin:0;color:#667085;line-height:1.7}.timeline-list .highlight h3{color:#2563eb}.upcoming-badge{display:inline-flex;margin-top:11px;padding:6px 10px;border-radius:999px;background:#e9fbfa;color:#159d9f;font-size:.7rem;font-weight:800;letter-spacing:.1em}@media(max-width:800px){.timeline-section{padding:72px 24px}.timeline-year{grid-template-columns:1fr;gap:28px;padding:30px}.year-label{position:static}.timeline-list li{grid-template-columns:100px 1fr}}@media(max-width:520px){.timeline-year{padding:26px 22px;border-radius:24px}.timeline-list li{grid-template-columns:1fr;gap:8px}.timeline-list time{font-size:.75rem}}
 :global(html){scroll-behavior:smooth}.about-jump-nav{padding:0 24px;background:#fafcff}.jump-links{display:grid;grid-template-columns:repeat(3,1fr);overflow:hidden;border:1px solid #dfe6f0;border-radius:24px;transform:translateY(32px);background:#fff;box-shadow:0 18px 45px rgba(13,27,61,.08)}.jump-links a{display:flex;align-items:center;gap:13px;min-height:88px;padding:22px 26px;border-left:1px solid #e8edf4;color:#0d1b3d;font-weight:800;text-decoration:none;transition:background .2s ease,color .2s ease}.jump-links a:first-child{border-left:0}.jump-links a:hover{background:#eef6ff;color:#2563eb}.jump-links span{color:#438fe9;font-size:.7rem;letter-spacing:.12em}.jump-links b{margin-left:auto;color:#438fe9}@media(max-width:700px){.jump-links{grid-template-columns:1fr;transform:translateY(24px)}.jump-links a{min-height:64px;padding:16px 20px;border-top:1px solid #e8edf4;border-left:0}.jump-links a:first-child{border-top:0}}
+#timeline-data{display:grid;gap:24px}
 </style>
