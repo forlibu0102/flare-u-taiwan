@@ -28,6 +28,14 @@ function getYouTubeId(value) {
   return null;
 }
 
+function parsePublishedDate(value) {
+  const match = String(value || '').trim().match(/^(\d{2}|\d{4})[./-](\d{1,2})[./-](\d{1,2})$/);
+  if (!match) return Number.NEGATIVE_INFINITY;
+  const [, rawYear, rawMonth, rawDay] = match;
+  const year = rawYear.length === 2 ? 2000 + Number(rawYear) : Number(rawYear);
+  return Date.UTC(year, Number(rawMonth) - 1, Number(rawDay));
+}
+
 export default async function handler(_request, response) {
   try {
     const sheetResponse = await fetch(SHEET_URL, { signal: AbortSignal.timeout(8000) });
@@ -63,7 +71,8 @@ export default async function handler(_request, response) {
         title,
         url: `https://www.youtube.com/watch?v=${videoId}`,
         source: String(row['來源頻道'] || 'YOUTUBE').trim(),
-        order: Number(row['排序']) || Number.MAX_SAFE_INTEGER,
+        order: String(row['排序'] || '').trim() === '' ? null : Number(row['排序']),
+        publishedAt: parsePublishedDate(row['發布日期']),
         rowIndex,
       });
     });
@@ -72,8 +81,14 @@ export default async function handler(_request, response) {
       .map((group) => ({
         ...group,
         videos: group.videos
-          .sort((a, b) => a.order - b.order || a.rowIndex - b.rowIndex)
-          .map(({ order, rowIndex, ...video }) => video),
+          .sort((a, b) => {
+            const aHasOrder = Number.isFinite(a.order);
+            const bHasOrder = Number.isFinite(b.order);
+            if (aHasOrder && bHasOrder) return a.order - b.order || a.rowIndex - b.rowIndex;
+            if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
+            return b.publishedAt - a.publishedAt || a.rowIndex - b.rowIndex;
+          })
+          .map(({ order, publishedAt, rowIndex, ...video }) => video),
       }))
       .sort((a, b) => {
         const aIndex = CATEGORY_ORDER.indexOf(a.id);
