@@ -59,7 +59,7 @@ export default async function handler(_request, response) {
       .sort((a, b) => a.sortAt - b.sortAt)
       .map(({ sortAt, ...item }) => item);
 
-    response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+    response.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=60');
     response.status(200).json(milestones);
   } catch (error) {
     console.error('Unable to load milestones', error);
