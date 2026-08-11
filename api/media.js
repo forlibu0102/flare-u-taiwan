@@ -1,6 +1,7 @@
 import { parse } from 'csv-parse/sync';
 
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/17B0IQM7ffaonREBhSuVN0PneBzoOOY1y61DSl9j5QzU/export?format=csv&gid=0';
+const CATEGORY_ORDER = ['works', 'vlog', 'behind', 'live', 'music-shows', 'fancams', 'shows', 'radio', 'stage'];
 const CATEGORY_DEFAULTS = {
   works: ['作品相關', 'MUSIC & RELEASES'],
   'music-shows': ['打歌舞台', 'MUSIC SHOWS'],
@@ -67,12 +68,19 @@ export default async function handler(_request, response) {
       });
     });
 
-    const result = Array.from(groups.values()).map((group) => ({
-      ...group,
-      videos: group.videos
-        .sort((a, b) => a.order - b.order || a.rowIndex - b.rowIndex)
-        .map(({ order, rowIndex, ...video }) => video),
-    }));
+    const result = Array.from(groups.values())
+      .map((group) => ({
+        ...group,
+        videos: group.videos
+          .sort((a, b) => a.order - b.order || a.rowIndex - b.rowIndex)
+          .map(({ order, rowIndex, ...video }) => video),
+      }))
+      .sort((a, b) => {
+        const aIndex = CATEGORY_ORDER.indexOf(a.id);
+        const bIndex = CATEGORY_ORDER.indexOf(b.id);
+        return (aIndex === -1 ? CATEGORY_ORDER.length : aIndex)
+          - (bIndex === -1 ? CATEGORY_ORDER.length : bIndex);
+      });
 
     response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
     response.status(200).json(result);
