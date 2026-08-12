@@ -13,15 +13,11 @@ const {
 	description = '整理 FLARE U 的投票、行程、影音與成員資訊。',
 } = Astro.props;
 
-const pageTitle =
-	title === 'FLARE U Taiwan'
-		? title
-		: `${title}｜FLARE U Taiwan`;
-
 const siteUrl = 'https://flare-u-taiwan.vercel.app';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const shareImageUrl = new URL('/images/og-image.png', siteUrl).toString();
 const isHomePage = Astro.url.pathname === '/';
+const pageTitle = isHomePage ? title : `${title}｜FLARE U Taiwan`;
 ---
 
 <!doctype html>

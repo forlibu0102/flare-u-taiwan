@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://flare-u-taiwan.vercel.app/sitemap.xml
