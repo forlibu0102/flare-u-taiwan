@@ -57,7 +57,7 @@ html[data-theme="dark"] .notice-card {
 /* Dark theme: keep every light surface paired with readable text. */
 html[data-theme="dark"] main :is(
   .summary-section, .content-section, .category-section, .media-section,
-  .archive-section, .translation-section, .calendar-section, .voting-content,
+  .archive-section, .album-section, .translation-section, .calendar-section, .voting-content,
   .community-section, .story-section, .members-section, .timeline-section,
   .social-section, .about-content
 ) {
