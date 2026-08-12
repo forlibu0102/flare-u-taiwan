@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="關於本站"
+  description="FLARE U Taiwan 的建站初衷、資料來源與非營利聲明。"
+>
+  <section class="site-about-hero" id="page-top">
+    <div class="page-inner">
+      <p class="eyebrow">ABOUT THIS SITE</p>
+      <h1>關於本站</h1>
+      <p class="lead">讓想關心 FLARE U 的人，更容易找到重要而可靠的資訊。</p>
+    </div>
+  </section>
+
+  <section class="about-content">
+    <div class="page-inner content-grid">
+      <article class="purpose-card featured">
+        <p class="card-number">01</p>
+        <p class="card-label">建站初衷</p>
+        <h2>把分散的資訊，整理成好找的入口。</h2>
+        <p>
+          FLARE U Taiwan 由台灣 U’RE 建立，希望將 FLARE U 的投票、行程、影音與團體資訊集中整理，降低搜尋與追蹤消息的門檻。
+        </p>
+        <p>
+          我們希望這裡是一個清楚、易懂的資訊站，幫助新舊粉絲快速掌握正在發生的事。
+        </p>
+      </article>
+
+      <article class="purpose-card">
+        <p class="card-number">02</p>
+        <p class="card-label">資料來源</p>
+        <h2>內容整理自官方公開資訊。</h2>
+        <p>
+          本站內容以 FLARE U 官方網站、官方社群與相關官方平台公開的資訊為主，經過整理後提供中文索引與導覽。
+        </p>
+        <p>若本站內容與官方最新公告不一致，請以官方發布的資訊為準。</p>
+      </article>
+
+      <aside class="notice-card" aria-labelledby="notice-title">
+        <div>
+          <p class="card-label">NOTICE</p>
+          <h2 id="notice-title">非官方・非營利聲明</h2>
+        </div>
+        <div class="notice-copy">
+          <p>
+            本站為粉絲自發建立的非官方、非營利資訊整理網站，與 FLARE U、成員、經紀公司及各官方平台無隸屬、授權或合作關係。本站不販售商品、不收取會員費，也不以本站內容獲利。
+          </p>
+          <p>
+            站內提及的團名、人名、圖像、影音、商標及其他相關素材，其權利歸原創作者或權利人所有；本站僅作為資訊整理與導覽使用。
+          </p>
+        </div>
+      </aside>
+
+      <div class="actions">
+        <a class="primary-link" href="/">回到首頁</a>
+        <a class="secondary-link" href="/about">認識 FLARE U</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  :global(*) { box-sizing: border-box; }
+  :global(body) { margin: 0; color: #0d1b3d; font-family: Inter, "Noto Sans TC", system-ui, sans-serif; }
+  .page-inner { width: min(1120px, 100%); margin: 0 auto; }
+  .site-about-hero { padding: 108px 24px 104px; background: radial-gradient(circle at 85% 12%, rgba(32,199,201,.18), transparent 28%), radial-gradient(circle at 7% 90%, rgba(67,143,233,.16), transparent 30%), #fafcff; }
+  .eyebrow, .card-label { margin: 0; color: #438fe9; font-size: .72rem; font-weight: 800; letter-spacing: .17em; }
+  h1 { margin: 20px 0 24px; font-size: clamp(3.8rem, 9vw, 7.4rem); line-height: .9; letter-spacing: -.07em; }
+  .lead { max-width: 660px; margin: 0; color: #667085; font-size: clamp(1rem, 2vw, 1.18rem); line-height: 1.8; }
+  .about-content { padding: 82px 24px 100px; background: #fff; }
+  .content-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .purpose-card { padding: 38px; border: 1px solid #dfe6f0; border-radius: 28px; background: #fff; box-shadow: 0 20px 55px rgba(13,27,61,.06); }
+  .purpose-card.featured { background: radial-gradient(circle at 90% 8%, rgba(67,143,233,.13), transparent 29%), #fff; }
+  .card-number { margin: 0 0 50px; color: #a7b2c2; font-size: .8rem; font-weight: 800; }
+  .purpose-card h2, .notice-card h2 { margin: 12px 0 20px; font-size: clamp(1.65rem, 3vw, 2.35rem); line-height: 1.25; letter-spacing: -.035em; }
+  .purpose-card > p:not(.card-number, .card-label), .notice-copy p { margin: 13px 0 0; color: #667085; line-height: 1.85; }
+  .notice-card { grid-column: 1 / -1; display: grid; grid-template-columns: .7fr 1.3fr; gap: 56px; margin-top: 12px; padding: 42px; border-radius: 28px; background: #0d1b3d; color: #fff; }
+  .notice-card .card-label { color: #55d6d3; }
+  .notice-card h2 { margin-bottom: 0; }
+  .notice-copy p { margin-top: 0; color: #cbd5e1; }
+  .notice-copy p + p { margin-top: 16px; }
+  .actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 30px; }
+  .actions a { display: inline-flex; min-height: 50px; align-items: center; justify-content: center; padding: 0 22px; border-radius: 999px; font-size: .9rem; font-weight: 800; text-decoration: none; }
+  .primary-link { background: #0d1b3d; color: #fff; }
+  .secondary-link { border: 1px solid #d8dee9; color: #0d1b3d; }
+  @media (max-width: 760px) {
+    .site-about-hero { padding: 76px 24px 78px; }
+    .about-content { padding: 60px 24px 76px; }
+    .content-grid, .notice-card { grid-template-columns: 1fr; }
+    .notice-card { gap: 16px; padding: 32px 26px; }
+    .purpose-card { padding: 32px 26px; }
+    .card-number { margin-bottom: 36px; }
+  }
+  @media (max-width: 520px) {
+    .actions { flex-direction: column; }
+    .actions a { width: 100%; }
+  }
+</style>
