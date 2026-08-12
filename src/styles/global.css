@@ -1,0 +1,59 @@
+:root {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  background: #081225;
+}
+
+html[data-theme="dark"] body,
+html[data-theme="dark"] main {
+  background: #081225;
+  color: #e8eef7;
+}
+
+html[data-theme="dark"] :is(.hero, .page-hero, .site-about-hero) {
+  background-color: #0b1830 !important;
+  color: #f3f7fc !important;
+}
+
+html[data-theme="dark"] :is(.summary-section, .content-section, .quick-section, .news-section, .story-section, .members-section, .timeline-section, .social-section, .about-content, .media-section, .video-section, .voting-section, .events-section, .guides-section, .resources-section) {
+  background-color: #081225 !important;
+  background-image: none !important;
+  color: #e8eef7 !important;
+}
+
+html[data-theme="dark"] :is(.summary-card, .quick-card, .news-item, .story-card, .member-card, .timeline-year, .social-grid > a, .purpose-card, .event-card, .vote-card, .guide-card, .resource-card, .video-card, .jump-links) {
+  border-color: #2b3b55 !important;
+  background-color: #101f38 !important;
+  background-image: none !important;
+  color: #edf3fa !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .2) !important;
+}
+
+html[data-theme="dark"] :is(h1, h2, h3, h4, strong, dt, dd, .event-name, .card-value, .quick-card h3, .news-item h3) {
+  color: #f2f6fb;
+}
+
+html[data-theme="dark"] :is(.hero-description, .lead, .card-note, .quick-copy p, .news-copy p, .story-card > p, .member-story, .timeline-list p, .social-grid p, .purpose-card > p, .notice-copy p) {
+  color: #aebbd0 !important;
+}
+
+html[data-theme="dark"] :is(.secondary-button, .secondary-link, .back-top) {
+  border-color: #3b4d68 !important;
+  background: #111f38 !important;
+  color: #e8eef7 !important;
+}
+
+html[data-theme="dark"] :is(.about-jump-nav, .jump-links) {
+  background-color: #081225 !important;
+}
+
+html[data-theme="dark"] :is(.profile-list div, dl div, .timeline-list li, .jump-links a) {
+  border-color: #2b3b55 !important;
+}
+
+html[data-theme="dark"] .notice-card {
+  background: #142846 !important;
+}

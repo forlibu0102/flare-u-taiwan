@@ -21,6 +21,7 @@ const pageTitle =
 const siteUrl = 'https://flare-u-taiwan.vercel.app';
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).toString();
 const shareImageUrl = new URL('/images/og-image.png', siteUrl).toString();
+const isHomePage = Astro.url.pathname === '/';
 ---
 
 <!doctype html>
@@ -28,6 +29,17 @@ const shareImageUrl = new URL('/images/og-image.png', siteUrl).toString();
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#ffffff" />
+		<script is:inline>
+			(() => {
+				const saved = localStorage.getItem('flare-u-theme');
+				const theme = saved === 'light' || saved === 'dark'
+					? saved
+					: matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+				document.documentElement.dataset.theme = theme;
+				document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#081225' : '#ffffff');
+			})();
+		</script>
 
 		<meta name="description" content={description} />
 		<meta name="generator" content={Astro.generator} />
@@ -49,6 +61,16 @@ const shareImageUrl = new URL('/images/og-image.png', siteUrl).toString();
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={shareImageUrl} />
 		<meta name="twitter:image:alt" content="FLARE U Taiwan 台灣粉絲資訊站" />
+
+		{isHomePage && (
+			<script type="application/ld+json" set:html={JSON.stringify({
+				'@context': 'https://schema.org',
+				'@type': 'WebSite',
+				name: 'FLARE U Taiwan',
+				alternateName: ['FLARE U 台灣粉絲資訊站', 'flare-u-taiwan.vercel.app'],
+				url: `${siteUrl}/`,
+			})} />
+		)}
 
 		<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />

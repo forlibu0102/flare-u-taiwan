@@ -15,6 +15,10 @@ const isCurrent = (path: string) =>
     <a class:list={{ active: isCurrent("/voting") }} href="/voting">投票</a>
     <a class:list={{ active: isCurrent("/events") }} href="/events">行程</a>
     <a class:list={{ active: isCurrent("/media") }} href="/media">影音</a>
+	<button class="theme-toggle" type="button" aria-label="切換深色模式" aria-pressed="false">
+	  <span class="theme-icon" aria-hidden="true">☾</span>
+	  <span class="theme-label">深色</span>
+	</button>
   </nav>
 
   <details class="nav-shell">
@@ -32,9 +36,42 @@ const isCurrent = (path: string) =>
       <a class:list={{ active: isCurrent("/voting") }} href="/voting" style="text-decoration: none;">投票專區</a>
       <a class:list={{ active: isCurrent("/events") }} href="/events" style="text-decoration: none;">行程資訊</a>
       <a class:list={{ active: isCurrent("/media") }} href="/media" style="text-decoration: none;">影音專區</a>
+	  <button class="theme-toggle mobile-theme-toggle" type="button" aria-label="切換深色模式" aria-pressed="false">
+		<span class="theme-icon" aria-hidden="true">☾</span>
+		<span class="theme-label">切換為深色模式</span>
+	  </button>
     </nav>
   </details>
 </header>
+
+<script>
+  const themeButtons = document.querySelectorAll<HTMLButtonElement>('.theme-toggle');
+
+  function updateThemeControls(theme: 'light' | 'dark') {
+    const isDark = theme === 'dark';
+    themeButtons.forEach((button) => {
+      button.setAttribute('aria-pressed', String(isDark));
+      button.setAttribute('aria-label', isDark ? '切換淺色模式' : '切換深色模式');
+      const icon = button.querySelector('.theme-icon');
+      const label = button.querySelector('.theme-label');
+      if (icon) icon.textContent = isDark ? '☀' : '☾';
+      if (label) label.textContent = button.classList.contains('mobile-theme-toggle')
+        ? `切換為${isDark ? '淺色' : '深色'}模式`
+        : isDark ? '淺色' : '深色';
+    });
+  }
+
+  const initialTheme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+  updateThemeControls(initialTheme);
+
+  themeButtons.forEach((button) => button.addEventListener('click', () => {
+    const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = nextTheme;
+    localStorage.setItem('flare-u-theme', nextTheme);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', nextTheme === 'dark' ? '#081225' : '#ffffff');
+    updateThemeControls(nextTheme);
+  }));
+</script>
 
 <style>
   header {
@@ -73,8 +110,27 @@ const isCurrent = (path: string) =>
 
   .desktop-nav {
     display: flex;
+	align-items: center;
     gap: 32px;
   }
+
+  .theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 7px;
+	min-height: 38px;
+	padding: 0 13px;
+	border: 1px solid #dfe6f0;
+	border-radius: 999px;
+	background: #ffffff;
+	color: #374151;
+	cursor: pointer;
+	font: inherit;
+	font-size: .82rem;
+	font-weight: 700;
+  }
+
+  .theme-icon { font-size: 1rem; line-height: 1; }
 
   .desktop-nav a {
     color: #374151;
@@ -206,6 +262,17 @@ const isCurrent = (path: string) =>
       color: #438fe9;
     }
 
+	.mobile-theme-toggle {
+	  justify-content: flex-start;
+	  width: 100%;
+	  min-height: 48px;
+	  margin-top: 8px;
+	  padding: 0 14px;
+	  border: 0;
+	  border-radius: 13px;
+	  background: #f4f8ff;
+	}
+
     .mobile-nav a span {
       display: inline;
       color: #8a96aa;
@@ -213,6 +280,19 @@ const isCurrent = (path: string) =>
       font-weight: 500;
     }
   }
+
+  :global(html[data-theme="dark"]) header { border-color: #25324a; background: rgba(8, 18, 37, .94); }
+  :global(html[data-theme="dark"]) .desktop-nav a { color: #cbd5e1; }
+  :global(html[data-theme="dark"]) .desktop-nav a:hover,
+  :global(html[data-theme="dark"]) .desktop-nav a.active { color: #75b9ff; }
+  :global(html[data-theme="dark"]) .theme-toggle,
+  :global(html[data-theme="dark"]) summary { border-color: #33445f; background: #111f38; color: #e6edf7; }
+  :global(html[data-theme="dark"]) .mobile-nav { border-color: #33445f; background: rgba(10, 23, 45, .98); }
+  :global(html[data-theme="dark"]) .mobile-nav a { color: #e6edf7; }
+  :global(html[data-theme="dark"]) .mobile-nav a + a { border-color: #253650; }
+  :global(html[data-theme="dark"]) .mobile-nav a:hover,
+  :global(html[data-theme="dark"]) .mobile-nav a.active,
+  :global(html[data-theme="dark"]) .mobile-theme-toggle { background: #162743; color: #75b9ff; }
 
   @media (max-width: 420px) {
     .logo {
