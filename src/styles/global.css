@@ -129,11 +129,61 @@ html[data-theme="dark"] .vote-details {
   color: #b7c3d5 !important;
 }
 
-/* The home hero is photographic and intentionally remains a light panel. */
+/* Home hero: use a low-glare photographic treatment in dark mode. */
+html[data-theme="dark"] main .hero {
+  background:
+    radial-gradient(circle at 78% 18%, rgba(32, 199, 201, .1), transparent 30%),
+    radial-gradient(circle at 10% 76%, rgba(67, 143, 233, .16), transparent 34%),
+    #081225 !important;
+}
+
+html[data-theme="dark"] main .hero .hero-content::after {
+  background: linear-gradient(
+    90deg,
+    #081225 0%,
+    rgba(8, 18, 37, .98) 31%,
+    rgba(8, 18, 37, .88) 47%,
+    rgba(8, 18, 37, .48) 66%,
+    rgba(8, 18, 37, .12) 84%
+  );
+}
+
+html[data-theme="dark"] main .hero .hero-photo {
+  background: #081225;
+}
+
+html[data-theme="dark"] main .hero .hero-photo img {
+  filter: brightness(.62) saturate(.78) contrast(.96);
+}
+
 html[data-theme="dark"] main .hero :is(h1, h2, h3) {
-  color: #0d1b3d !important;
+  color: #f2f6fb !important;
+  text-shadow: 0 3px 28px rgba(0, 0, 0, .22);
+}
+
+html[data-theme="dark"] main .hero :is(.eyebrow, .hero-copy .eyebrow) {
+  color: #75b9ff !important;
+  text-shadow: none !important;
 }
 
 html[data-theme="dark"] main .hero .hero-description {
-  color: #526b8d !important;
+  color: #b7c4d7 !important;
+}
+
+html[data-theme="dark"] main .hero .primary-button {
+  background: #438fe9 !important;
+  color: #ffffff !important;
+}
+
+html[data-theme="dark"] main .hero .secondary-button {
+  border-color: #465974 !important;
+  background: rgba(17, 31, 56, .78) !important;
+  color: #edf3fa !important;
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 800px) {
+  html[data-theme="dark"] main .hero .hero-photo img {
+    filter: brightness(.56) saturate(.76) contrast(.98);
+  }
 }
