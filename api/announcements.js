@@ -31,7 +31,7 @@ export default async function handler(_request, response) {
     const announcements = rows
       .filter((row) => !['否', 'no', 'false', '0'].includes(String(row['顯示'] || '').toLowerCase()))
       .map((row, rowIndex) => {
-        const date = parseDateParts(row['顯示日期']);
+        const date = parseDateParts(row['發布日期'] || row['顯示日期']);
         const expiresAt = parseTaipeiDateTime(row['下架時間']);
         if (!date || !row['公告標題']) return null;
         return {
