@@ -19,12 +19,15 @@ import Layout from '../layouts/Layout.astro';
       <article class="purpose-card featured">
         <p class="card-number">01</p>
         <p class="card-label">建站初衷</p>
-        <h2>把分散的資訊，整理成好找的入口。</h2>
+        <h2>Hello U’RE 們～</h2>
         <p>
-          FLARE U Taiwan 由台灣 U’RE 建立，希望將 FLARE U 的投票、行程、影音與團體資訊集中整理，降低搜尋與追蹤消息的門檻。
+          FLARE U Taiwan 粉絲站是由台灣 U’RE 建立。因為 FLARE U 陸續有新粉絲加入，也有更多人對他們產生好奇，所以希望藉由這個網站，將 FLARE U 的團體資訊、投票、行程及影音內容集中整理，降低搜尋與追蹤消息的門檻。
         </p>
         <p>
-          我們希望這裡是一個清楚、易懂的資訊站，幫助新舊粉絲快速掌握正在發生的事。
+          我希望這裡是一個清楚、易懂的資訊站，幫助新、舊粉絲快速掌握正在發生的事。
+        </p>
+        <p>
+          目前這個網站只有我一個人負責更新與處理，所有資訊都會盡量即時更新。大家對這個網站有任何建議，都歡迎隨時與我聯繫。
         </p>
       </article>
 
@@ -37,6 +40,19 @@ import Layout from '../layouts/Layout.astro';
         </p>
         <p>若本站內容與官方最新公告不一致，請以官方發布的資訊為準。</p>
       </article>
+
+      <aside class="contact-card" aria-labelledby="contact-title">
+        <div>
+          <p class="card-label">CONTACT</p>
+          <h2 id="contact-title">有任何建議，歡迎與我聯繫。</h2>
+          <p>資訊補充、內容修正、網站使用問題或其他建議，都可以透過 Instagram 私訊告訴我。</p>
+        </div>
+        <a href="https://www.instagram.com/for_libu0102/" target="_blank" rel="noreferrer" aria-label="前往 Instagram 聯繫 for_libu0102">
+          <span>Instagram</span>
+          <strong>@for_libu0102</strong>
+          <b aria-hidden="true">↗</b>
+        </a>
+      </aside>
 
       <aside class="notice-card" aria-labelledby="notice-title">
         <div>
@@ -81,6 +97,14 @@ import Layout from '../layouts/Layout.astro';
   .notice-card h2 { margin-bottom: 0; }
   .notice-copy p { margin-top: 0; color: #cbd5e1; }
   .notice-copy p + p { margin-top: 16px; }
+  .contact-card { grid-column: 1 / -1; display: grid; grid-template-columns: 1.25fr .75fr; align-items: center; gap: 50px; margin-top: 12px; padding: 42px; border: 1px solid #dfe6f0; border-radius: 28px; background: radial-gradient(circle at 90% 10%, rgba(200,73,151,.13), transparent 28%), #fff; box-shadow: 0 20px 55px rgba(13,27,61,.06); }
+  .contact-card h2 { margin: 12px 0 12px; font-size: clamp(1.65rem, 3vw, 2.35rem); line-height: 1.25; letter-spacing: -.035em; }
+  .contact-card p:not(.card-label) { margin: 0; color: #667085; line-height: 1.8; }
+  .contact-card > a { position: relative; display: flex; min-height: 132px; flex-direction: column; justify-content: center; padding: 24px 58px 24px 26px; border-radius: 22px; background: #0d1b3d; color: #fff; text-decoration: none; transition: transform .2s ease, background .2s ease; }
+  .contact-card > a:hover { transform: translateY(-3px); background: #2563eb; }
+  .contact-card > a span { color: #9fb4d1; font-size: .7rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .contact-card > a strong { margin-top: 8px; font-size: 1.08rem; }
+  .contact-card > a b { position: absolute; right: 26px; font-size: 1.4rem; }
   .actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 30px; }
   .actions a { display: inline-flex; min-height: 50px; align-items: center; justify-content: center; padding: 0 22px; border-radius: 999px; font-size: .9rem; font-weight: 800; text-decoration: none; }
   .primary-link { background: #0d1b3d; color: #fff; }
@@ -88,8 +112,9 @@ import Layout from '../layouts/Layout.astro';
   @media (max-width: 760px) {
     .site-about-hero { padding: 76px 24px 78px; }
     .about-content { padding: 60px 24px 76px; }
-    .content-grid, .notice-card { grid-template-columns: 1fr; }
+    .content-grid, .notice-card, .contact-card { grid-template-columns: 1fr; }
     .notice-card { gap: 16px; padding: 32px 26px; }
+    .contact-card { gap: 24px; padding: 32px 26px; }
     .purpose-card { padding: 32px 26px; }
     .card-number { margin-bottom: 36px; }
   }
@@ -97,4 +122,14 @@ import Layout from '../layouts/Layout.astro';
     .actions { flex-direction: column; }
     .actions a { width: 100%; }
   }
+</style>
+
+<style is:global>
+  html[data-theme="dark"] .contact-card {
+    border-color: #2d405e !important;
+    background: #11213b !important;
+    color: #eef4fb !important;
+  }
+  html[data-theme="dark"] .contact-card h2 { color: #f3f7fc !important; }
+  html[data-theme="dark"] .contact-card p:not(.card-label) { color: #b7c3d5 !important; }
 </style>
