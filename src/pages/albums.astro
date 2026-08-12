@@ -23,7 +23,7 @@ import Layout from '../layouts/Layout.astro';
 </style>
 
 <script>
-  type Album = {name:string;releaseDate:string;coverUrl:string};
+  type Album = {name:string;albumType:string;releaseDate:string;coverUrl:string};
   const grid=document.querySelector<HTMLElement>('[data-album-grid]');
   const make=<K extends keyof HTMLElementTagNameMap>(tag:K,className='',text='')=>{const el=document.createElement(tag);if(className)el.className=className;if(text)el.textContent=text;return el;};
   fetch('/api/albums').then(response=>response.ok?response.json():[]).then((albums:Album[])=>{
@@ -31,7 +31,7 @@ import Layout from '../layouts/Layout.astro';
     grid.replaceChildren(...albums.map(album=>{
       const card=make('a','album-card');card.href=`/albums/detail?album=${encodeURIComponent(album.name)}`;
       const image=make('img');image.src=album.coverUrl||'/images/albums/youth-error.jpg';image.alt=`FLARE U ${album.name} 專輯封面`;
-      const copy=make('div');copy.append(make('p','card-label','ALBUM'),make('h2','',album.name),make('p','',album.releaseDate),make('span','','查看專輯資訊 →'));card.append(image,copy);return card;
+      const copy=make('div');copy.append(make('p','card-label',album.albumType||'ALBUM'),make('h2','',album.name),make('p','',album.releaseDate),make('span','','查看專輯資訊 →'));card.append(image,copy);return card;
     }));
   }).catch(()=>{});
 </script>

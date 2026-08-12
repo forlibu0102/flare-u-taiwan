@@ -24,7 +24,7 @@ const platforms = [
   <main data-album-page>
   <section class="album-hero" id="page-top"><div class="page-inner hero-grid">
     <figure><img data-album-cover src="/images/albums/youth-error.jpg" alt="FLARE U 迷你一輯 YOUTH ERROR 封面" /></figure>
-    <div class="hero-copy"><p class="eyebrow">ALBUM</p><h1 data-album-title>YOUTH<br />ERROR</h1><p class="release" data-album-release>2026.05.13 RELEASE</p><div data-album-intro><p class="intro">FLARE U 的出道專輯《YOUTH ERROR》，記錄了兩位帶著不同錯誤與跌跌撞撞成長的青春少年。在那些不如預期的日子與無數抉擇中，他們經歷挫折與摸索，最終望向同一個方向。</p><p class="intro">專輯描繪兩位青春少年組成一個團隊、互相補足彼此，最終共同創造出一道光的歷程。</p></div></div>
+    <div class="hero-copy"><p class="eyebrow" data-album-type>1ST MINI ALBUM</p><h1 data-album-title>YOUTH<br />ERROR</h1><p class="release" data-album-release>2026.05.13 RELEASE</p><div data-album-intro><p class="intro">FLARE U 的出道專輯《YOUTH ERROR》，記錄了兩位帶著不同錯誤與跌跌撞撞成長的青春少年。在那些不如預期的日子與無數抉擇中，他們經歷挫折與摸索，最終望向同一個方向。</p><p class="intro">專輯描繪兩位青春少年組成一個團隊、互相補足彼此，最終共同創造出一道光的歷程。</p></div></div>
   </div></section>
 
   <section class="platform-section"><div class="page-inner"><p class="eyebrow">LISTEN & WATCH</p><h2>官方平台</h2><div class="platform-grid" data-platform-grid>{platforms.map(([name,url]) => <a href={url} target="_blank" rel="noreferrer"><span>{name}</span><b aria-hidden="true">↗</b></a>)}</div></div></section>
@@ -38,13 +38,13 @@ const platforms = [
 </style>
 
 <script>
-  type Album = { name:string; releaseDate:string; coverUrl:string; description:string[]; links:[string,string][]; tracks:{number:string;title:string;badge:string;description:string}[] };
+  type Album = { name:string; albumType:string; releaseDate:string; coverUrl:string; description:string[]; links:[string,string][]; tracks:{number:string;title:string;badge:string;description:string}[] };
   const page = document.querySelector<HTMLElement>('[data-album-page]');
   const make = <K extends keyof HTMLElementTagNameMap>(tag:K, className='', text='') => { const el=document.createElement(tag); if(className) el.className=className; if(text) el.textContent=text; return el; };
   function renderAlbum(album:Album) {
     if (!page) return;
-    const title=page.querySelector<HTMLElement>('[data-album-title]'), release=page.querySelector<HTMLElement>('[data-album-release]'), cover=page.querySelector<HTMLImageElement>('[data-album-cover]'), intro=page.querySelector<HTMLElement>('[data-album-intro]'), platforms=page.querySelector<HTMLElement>('[data-platform-grid]'), trackList=page.querySelector<HTMLElement>('[data-track-list]');
-    if(title) title.textContent=album.name; if(release) release.textContent=`${album.releaseDate} RELEASE`; if(cover&&album.coverUrl){cover.src=album.coverUrl;cover.alt=`FLARE U ${album.name} 專輯封面`;}
+    const type=page.querySelector<HTMLElement>('[data-album-type]'), title=page.querySelector<HTMLElement>('[data-album-title]'), release=page.querySelector<HTMLElement>('[data-album-release]'), cover=page.querySelector<HTMLImageElement>('[data-album-cover]'), intro=page.querySelector<HTMLElement>('[data-album-intro]'), platforms=page.querySelector<HTMLElement>('[data-platform-grid]'), trackList=page.querySelector<HTMLElement>('[data-track-list]');
+    if(type) type.textContent=album.albumType||'ALBUM'; if(title) title.textContent=album.name; if(release) release.textContent=`${album.releaseDate} RELEASE`; if(cover&&album.coverUrl){cover.src=album.coverUrl;cover.alt=`FLARE U ${album.name} 專輯封面`;}
     if(intro){intro.replaceChildren(...album.description.map(text=>make('p','intro',text)));}
     if(platforms){platforms.replaceChildren(...album.links.map(([name,url])=>{const a=make('a');a.href=url;a.target='_blank';a.rel='noreferrer';a.append(make('span','',name),make('b','','↗'));return a;}));}
     if(trackList){trackList.replaceChildren(...album.tracks.map((track,index)=>{const details=make('details');details.open=index===0;const summary=make('summary');summary.append(make('span','',track.number),make('strong','',track.title));if(track.badge)summary.append(make('em','',track.badge));summary.append(make('b','','+'));details.append(summary,make('p','',track.description));return details;}));}

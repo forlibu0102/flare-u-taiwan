@@ -36,7 +36,7 @@ export default async function handler(_request, response) {
           .sort((a, b) => a.order - b.order)
           .map(({ order, ...track }) => track);
         return {
-          name, releaseDate: row['發行日期'] || '', coverUrl: row['封面網址'] || '',
+          name, albumType: row['專輯類型'] || 'ALBUM', releaseDate: row['發行日期'] || '', coverUrl: row['封面網址'] || '',
           description: String(row['專輯簡介'] || '').split(/\n+/).filter(Boolean),
           links, tracks, order: orderOf(row['排序'], index),
         };
