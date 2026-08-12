@@ -1,65 +1,37 @@
 ---
 import Layout from '../layouts/Layout.astro';
-
-const tracks = [
-  { number:'01', title:'WAY 2 U', badge:'主打歌', description:'融合充滿彈性的 Pluck Riff、輕快節奏、Hyper Pop glitch 音色與 Plug & B 律動 Groove 的 Hybrid Pop 歌曲。描寫如手機震動般突然萌生的心動，發現自己早已喜歡上對方，並毫不猶豫奔向對方。' },
-  { number:'02', title:'hyper', badge:'副主打', description:'一首 Drum & Bass 曲風歌曲，以爆發力十足的 Bass Line 搭配 Rage 音樂尖銳而充滿攻擊性的能量，傳達拋開複雜思緒與沉重情緒，一路高速飛向更高處的奔放能量。' },
-  { number:'03', title:'우니까 (Don’t Cry)', description:'充滿明亮 Synth 節奏與洗腦旋律的 Pop House 歌曲。向因受傷而哭泣的人傳遞溫暖心意，在安慰與悸動之間描繪細膩情感。' },
-  { number:'04', title:'MIRACLE', badge:'Fan Song', description:'一首 Hyper Pop 作品，在充滿能量的音樂之上向粉絲獻上最燦爛的告白。描寫一路拚命奔跑，卻因為有粉絲而變得完整，彼此成為對方奇蹟般的存在。' },
-  { number:'05', title:'WOO-HOO', description:'一首 Funk 曲風歌曲，以富有律動感的 Dance Pop Groove 為基礎，結合 Funk Bass 與充滿質感的 Vocal Chop。描寫擺脫無聊日常、將身體交給節奏，唤醒自由奔放的自己。' },
-  { number:'06', title:'놀이터 (Playground)', description:'以閃耀的 Synth Pad 與 Pluck Sound 為主軸的中板 R&B 歌曲。描寫對童年純真時光的懷念，副歌宛如展翅飛翔的旋律，喚醒曾被遺忘的夢想與悸動。' },
-];
-
-const platforms = [
-  ['Official MV','https://youtu.be/dyxmlYXdxUs?si=0EqBJpJ9UNLlXIoP'],
-  ['YouTube Music','https://music.youtube.com/playlist?list=OLAK5uy_mUvfh7t0kp-TJIJKC2YMxlmhvzvdkrD4Y&si=_3QIcoEnVUpvZv-e'],
-  ['Spotify','https://open.spotify.com/album/554ZAVXkeiPlgSpcpf0Mnj?si=KG-AVS7KTOOZNwtfB-7ETA'],
-  ['Apple Music','https://music.apple.com/tw/album/youth-error-ep/6768207932'],
-  ['KKBOX','https://kkbox.fm/raJXZc'],
-  ['Melon','https://www.melon.com/album/detail.htm?albumId=13379287'],
-];
 ---
 
-<Layout title="FLARE U 專輯｜YOUTH ERROR" description="FLARE U 迷你一輯《YOUTH ERROR》專輯簡介、完整曲目、官方 MV 與各平台收聽連結。">
-  <main data-album-page>
-  <section class="album-hero" id="page-top"><div class="page-inner hero-grid">
-    <figure><img data-album-cover src="/images/albums/youth-error.jpg" alt="FLARE U 迷你一輯 YOUTH ERROR 封面" /></figure>
-    <div class="hero-copy"><p class="eyebrow">ALBUM</p><h1 data-album-title>YOUTH<br />ERROR</h1><p class="release" data-album-release>2026.05.13 RELEASE</p><div data-album-intro><p class="intro">FLARE U 的出道專輯《YOUTH ERROR》，記錄了兩位帶著不同錯誤與跌跌撞撞成長的青春少年。在那些不如預期的日子與無數抉擇中，他們經歷挫折與摸索，最終望向同一個方向。</p><p class="intro">專輯描繪兩位青春少年組成一個團隊、互相補足彼此，最終共同創造出一道光的歷程。</p></div></div>
-  </div></section>
-
-  <section class="album-selector-section" data-album-selector-section hidden><div class="page-inner"><p class="eyebrow">DISCOGRAPHY</p><h2>選擇專輯</h2><div class="album-selector" data-album-selector></div></div></section>
-
-  <section class="platform-section"><div class="page-inner"><p class="eyebrow">LISTEN & WATCH</p><h2>官方平台</h2><div class="platform-grid" data-platform-grid>{platforms.map(([name,url]) => <a href={url} target="_blank" rel="noreferrer"><span>{name}</span><b aria-hidden="true">↗</b></a>)}</div></div></section>
-
-  <section class="track-section"><div class="page-inner"><p class="eyebrow">TRACK LIST</p><h2>曲目介紹</h2><div class="track-list" data-track-list>{tracks.map((track, index) => <details open={index === 0}><summary><span>{track.number}</span><strong>{track.title}</strong>{track.badge && <em>{track.badge}</em>}<b aria-hidden="true">+</b></summary><p>{track.description}</p></details>)}</div><div class="back-row"><a href="#page-top" aria-label="回到頁首">↑</a></div></div></section>
-  </main>
+<Layout title="FLARE U 專輯" description="FLARE U 專輯總覽，查看各張專輯的簡介、完整曲目、官方 MV 與收聽平台。">
+  <section class="album-index" id="page-top">
+    <div class="page-inner">
+      <p class="eyebrow">DISCOGRAPHY</p>
+      <div class="heading-row"><h1>專輯</h1><p>選擇專輯，查看專輯簡介、完整曲目與各平台收聽連結。</p></div>
+      <div class="album-grid" data-album-grid>
+        <a class="album-card" href="/albums/detail?album=YOUTH%20ERROR">
+          <img src="/images/albums/youth-error.jpg" alt="FLARE U YOUTH ERROR 專輯封面" />
+          <div><p class="card-label">1ST MINI ALBUM</p><h2>YOUTH ERROR</h2><p>2026.05.13</p><span>查看專輯資訊 →</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <style is:global>
-*{box-sizing:border-box}body{margin:0;color:#0d1b3d;font-family:Inter,"Noto Sans TC",system-ui,sans-serif}.page-inner{width:min(1160px,100%);margin:0 auto}.eyebrow{margin:0;color:#438fe9;font-size:.74rem;font-weight:800;letter-spacing:.18em}.album-hero{padding:92px 24px;background:radial-gradient(circle at 90% 10%,rgba(32,199,201,.16),transparent 28%),#f8fbff}.hero-grid{display:grid;grid-template-columns:minmax(300px,480px) 1fr;align-items:center;gap:72px}.album-hero figure{margin:0}.album-hero img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:30px;box-shadow:0 28px 70px rgba(13,27,61,.16)}h1{margin:18px 0 16px;font-size:clamp(4rem,9vw,7.6rem);line-height:.82;letter-spacing:-.075em}.release{color:#20aeb0;font-size:.78rem;font-weight:850;letter-spacing:.16em}.intro{max-width:650px;margin:18px 0 0;color:#667085;line-height:1.85}.album-selector-section,.platform-section,.track-section{padding:88px 24px}.album-selector-section{background:#f7faff}.platform-section{background:#fff}.track-section{background:#f7faff}h2{margin:10px 0 32px;font-size:clamp(2.5rem,5vw,4.2rem);letter-spacing:-.05em}.album-selector{display:flex;flex-wrap:wrap;gap:12px}.album-selector button{padding:14px 22px;border:1px solid #dfe6f0;border-radius:999px;background:#fff;color:#0d1b3d;font:inherit;font-weight:800;cursor:pointer}.album-selector button[aria-pressed="true"]{border-color:#438fe9;background:#0d1b3d;color:#fff}.platform-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.platform-grid a{display:flex;align-items:center;justify-content:space-between;min-height:84px;padding:0 24px;border:1px solid #dfe6f0;border-radius:20px;background:#fff;color:#0d1b3d;font-weight:800;text-decoration:none;transition:transform .2s ease,border-color .2s ease}.platform-grid a:hover{transform:translateY(-3px);border-color:#438fe9}.platform-grid b{color:#438fe9}.track-list{border-top:1px solid #dfe6f0}.track-list details{border-bottom:1px solid #dfe6f0}.track-list summary{display:grid;grid-template-columns:54px minmax(0,1fr) auto 24px;align-items:center;gap:18px;min-height:92px;cursor:pointer;list-style:none}.track-list summary::-webkit-details-marker{display:none}.track-list summary>span{color:#438fe9;font-size:.76rem;font-weight:800}.track-list strong{font-size:clamp(1.25rem,3vw,1.8rem)}.track-list em{padding:7px 11px;border-radius:999px;background:#e9fbfa;color:#159d9f;font-size:.7rem;font-style:normal;font-weight:800}.track-list summary>b{color:#438fe9;font-size:1.4rem}.track-list details[open] summary>b{transform:rotate(45deg)}.track-list details>p{max-width:820px;margin:-8px 0 28px 72px;color:#667085;line-height:1.85}.back-row{display:flex;justify-content:center;margin-top:52px}.back-row a{display:grid;width:56px;height:56px;place-items:center;border:1px solid #dfe6f0;border-radius:50%;background:#fff;color:#0d1b3d;font-size:1.3rem;text-decoration:none}.back-row a:hover{background:#0d1b3d;color:#fff}@media(max-width:800px){.album-hero{padding:64px 24px 72px}.hero-grid{grid-template-columns:1fr;gap:38px}.album-hero figure{max-width:480px}.album-selector-section,.platform-section,.track-section{padding:68px 24px}.platform-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.album-hero img{border-radius:22px}.platform-grid{grid-template-columns:1fr}.track-list summary{grid-template-columns:38px minmax(0,1fr) 22px;gap:10px}.track-list summary em{grid-column:2}.track-list details>p{margin:-2px 0 24px 48px}}
+  *{box-sizing:border-box}.album-index{min-height:75vh;padding:92px 24px 120px;background:radial-gradient(circle at 90% 10%,rgba(32,199,201,.13),transparent 30%),#f7faff;color:#0d1b3d}.page-inner{width:min(1160px,100%);margin:0 auto}.eyebrow,.card-label{margin:0;color:#438fe9;font-size:.74rem;font-weight:800;letter-spacing:.18em}.heading-row{display:flex;align-items:end;justify-content:space-between;gap:40px;margin:12px 0 52px}.heading-row h1{margin:0;font-size:clamp(4rem,9vw,7rem);letter-spacing:-.07em;line-height:.9}.heading-row>p{max-width:500px;margin:0;color:#667085;line-height:1.8}.album-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.album-card{display:grid;grid-template-columns:minmax(180px,280px) 1fr;align-items:center;gap:36px;padding:30px;border:1px solid #dfe6f0;border-radius:32px;background:#fff;color:#0d1b3d;text-decoration:none;box-shadow:0 20px 55px rgba(13,27,61,.07);transition:transform .2s ease,border-color .2s ease}.album-card:hover{transform:translateY(-5px);border-color:#438fe9}.album-card img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:22px}.album-card h2{margin:12px 0;font-size:clamp(2rem,4vw,3.4rem);line-height:.95;letter-spacing:-.055em}.album-card div>p:not(.card-label){margin:0;color:#667085}.album-card span{display:inline-block;margin-top:28px;color:#438fe9;font-weight:800}@media(max-width:900px){.album-grid{grid-template-columns:1fr}}@media(max-width:650px){.album-index{padding:68px 20px 88px}.heading-row{display:block}.heading-row>p{margin-top:22px}.album-card{grid-template-columns:110px 1fr;gap:20px;padding:18px;border-radius:24px}.album-card img{border-radius:16px}.album-card h2{font-size:1.65rem}.album-card span{margin-top:18px;font-size:.86rem}}
+  html[data-theme="dark"] .album-index{background:#081225;color:#eef4fb}html[data-theme="dark"] .heading-row h1,html[data-theme="dark"] .album-card h2{color:#f3f7fc}html[data-theme="dark"] .heading-row>p,html[data-theme="dark"] .album-card div>p:not(.card-label){color:#b7c3d5}html[data-theme="dark"] .album-card{border-color:#2d405e;background:#11213b;color:#eef4fb}
 </style>
 
 <script>
-  type Album = { name:string; releaseDate:string; coverUrl:string; description:string[]; links:[string,string][]; tracks:{number:string;title:string;badge:string;description:string}[] };
-  const page = document.querySelector<HTMLElement>('[data-album-page]');
-  const make = <K extends keyof HTMLElementTagNameMap>(tag:K, className='', text='') => { const el=document.createElement(tag); if(className) el.className=className; if(text) el.textContent=text; return el; };
-  function renderAlbum(album:Album) {
-    if (!page) return;
-    const title=page.querySelector<HTMLElement>('[data-album-title]'), release=page.querySelector<HTMLElement>('[data-album-release]'), cover=page.querySelector<HTMLImageElement>('[data-album-cover]'), intro=page.querySelector<HTMLElement>('[data-album-intro]'), platforms=page.querySelector<HTMLElement>('[data-platform-grid]'), trackList=page.querySelector<HTMLElement>('[data-track-list]');
-    if(title) title.textContent=album.name; if(release) release.textContent=`${album.releaseDate} RELEASE`; if(cover&&album.coverUrl){cover.src=album.coverUrl;cover.alt=`FLARE U ${album.name} 專輯封面`;}
-    if(intro){intro.replaceChildren(...album.description.map(text=>make('p','intro',text)));}
-    if(platforms){platforms.replaceChildren(...album.links.map(([name,url])=>{const a=make('a');a.href=url;a.target='_blank';a.rel='noreferrer';a.append(make('span','',name),make('b','','↗'));return a;}));}
-    if(trackList){trackList.replaceChildren(...album.tracks.map((track,index)=>{const details=make('details');details.open=index===0;const summary=make('summary');summary.append(make('span','',track.number),make('strong','',track.title));if(track.badge)summary.append(make('em','',track.badge));summary.append(make('b','','+'));details.append(summary,make('p','',track.description));return details;}));}
-    page.querySelectorAll<HTMLButtonElement>('[data-album-index]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.albumIndex===album.name)));
-  }
-  fetch('/api/albums').then(result=>result.ok?result.json():[]).then((albums:Album[])=>{
-    if(!Array.isArray(albums)||!albums.length||!page)return;
-    const section=page.querySelector<HTMLElement>('[data-album-selector-section]'), selector=page.querySelector<HTMLElement>('[data-album-selector]');
-    if(albums.length>1&&section&&selector){section.hidden=false;selector.replaceChildren(...albums.map(album=>{const button=make('button','',album.name);button.type='button';button.dataset.albumIndex=album.name;button.addEventListener('click',()=>renderAlbum(album));return button;}));}
-    renderAlbum(albums[0]);
+  type Album = {name:string;releaseDate:string;coverUrl:string};
+  const grid=document.querySelector<HTMLElement>('[data-album-grid]');
+  const make=<K extends keyof HTMLElementTagNameMap>(tag:K,className='',text='')=>{const el=document.createElement(tag);if(className)el.className=className;if(text)el.textContent=text;return el;};
+  fetch('/api/albums').then(response=>response.ok?response.json():[]).then((albums:Album[])=>{
+    if(!grid||!Array.isArray(albums)||!albums.length)return;
+    grid.replaceChildren(...albums.map(album=>{
+      const card=make('a','album-card');card.href=`/albums/detail?album=${encodeURIComponent(album.name)}`;
+      const image=make('img');image.src=album.coverUrl||'/images/albums/youth-error.jpg';image.alt=`FLARE U ${album.name} 專輯封面`;
+      const copy=make('div');copy.append(make('p','card-label','ALBUM'),make('h2','',album.name),make('p','',album.releaseDate),make('span','','查看專輯資訊 →'));card.append(image,copy);return card;
+    }));
   }).catch(()=>{});
 </script>
-
-<style is:global>
-html[data-theme="dark"] .album-hero,html[data-theme="dark"] .platform-section,html[data-theme="dark"] .track-section{background:#081225!important;color:#eef4fb!important}html[data-theme="dark"] .album-hero h1,html[data-theme="dark"] .platform-section h2,html[data-theme="dark"] .track-section h2,html[data-theme="dark"] .track-list strong{color:#f3f7fc!important}html[data-theme="dark"] .intro,html[data-theme="dark"] .track-list details>p{color:#b7c3d5!important}html[data-theme="dark"] .platform-grid a,html[data-theme="dark"] .back-row a{border-color:#2d405e!important;background:#11213b!important;color:#eef4fb!important}html[data-theme="dark"] .track-list,html[data-theme="dark"] .track-list details{border-color:#2d405e!important}html[data-theme="dark"] .album-card{border-color:#2d405e!important;background:#11213b!important;color:#eef4fb!important}html[data-theme="dark"] .album-card h2{color:#f3f7fc!important}html[data-theme="dark"] .album-card p:not(.eyebrow){color:#b7c3d5!important}
-</style>
