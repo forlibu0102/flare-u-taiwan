@@ -15,6 +15,7 @@ const isCurrent = (path: string) =>
     <a class:list={{ active: isCurrent("/voting") }} href="/voting">投票</a>
     <a class:list={{ active: isCurrent("/events") }} href="/events">行程</a>
     <a class:list={{ active: isCurrent("/media") }} href="/media">影音</a>
+	<a class:list={{ active: isCurrent("/news") }} href="/news">新聞</a>
 	<a class:list={{ active: isCurrent("/albums") }} href="/albums">專輯</a>
 	<button class="theme-toggle" type="button" aria-label="切換深色模式" aria-pressed="false">
 	  <span class="theme-icon" aria-hidden="true">☾</span>
@@ -37,6 +38,7 @@ const isCurrent = (path: string) =>
       <a class:list={{ active: isCurrent("/voting") }} href="/voting" style="text-decoration: none;">投票專區</a>
       <a class:list={{ active: isCurrent("/events") }} href="/events" style="text-decoration: none;">行程資訊</a>
       <a class:list={{ active: isCurrent("/media") }} href="/media" style="text-decoration: none;">影音專區</a>
+      <a class:list={{ active: isCurrent("/news") }} href="/news" style="text-decoration: none;">新聞整理</a>
       <a class:list={{ active: isCurrent("/albums") }} href="/albums" style="text-decoration: none;">專輯</a>
 	  <button class="theme-toggle mobile-theme-toggle" type="button" aria-label="切換深色模式" aria-pressed="false">
 		<span class="theme-icon" aria-hidden="true">☾</span>

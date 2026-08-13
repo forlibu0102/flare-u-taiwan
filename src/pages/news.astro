@@ -1,0 +1,78 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="FLARE U 新聞" description="FLARE U 新聞媒體整理，收錄最新報導、專訪與活動消息的中文摘要及原文連結。">
+  <section class="news-hero" id="page-top">
+    <div class="page-inner hero-layout">
+      <div>
+        <p class="eyebrow">PRESS & NEWS</p>
+        <h1>關於 FLARE U，<br />正在發生的事。</h1>
+      </div>
+      <p class="hero-copy">整理各家媒體報導與中文摘要，從作品發行、舞台活動到專訪消息，一頁掌握最新動態。</p>
+    </div>
+  </section>
+
+  <section class="news-overview">
+    <div class="page-inner">
+      <div class="overview-heading">
+        <div>
+          <p class="eyebrow">NEWS ARCHIVE</p>
+          <h2>新聞總覽</h2>
+        </div>
+        <p class="news-count" data-news-count aria-live="polite">載入新聞中…</p>
+      </div>
+
+      <div class="category-filter" data-category-filter aria-label="新聞分類"></div>
+      <div class="news-grid" data-news-grid aria-live="polite">
+        {Array.from({ length: 6 }, () => <div class="news-card loading-card" aria-hidden="true"><div></div><span></span><span></span><span></span></div>)}
+      </div>
+      <div class="news-empty" data-news-empty hidden>
+        <p class="eyebrow">NO NEWS FOUND</p>
+        <h2>目前沒有這個分類的新聞</h2>
+        <p>請選擇其他分類，或稍後再回來看看。</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style is:global>
+  *{box-sizing:border-box}.page-inner{width:min(1160px,100%);margin:0 auto}.eyebrow{margin:0;color:#438fe9;font-size:.74rem;font-weight:800;letter-spacing:.18em}.news-hero{padding:92px 24px 76px;background:radial-gradient(circle at 88% 16%,rgba(32,199,201,.15),transparent 31%),linear-gradient(145deg,#f7faff 0%,#fff 72%);color:#0d1b3d}.hero-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.65fr);align-items:end;gap:64px}.news-hero h1{margin:16px 0 0;font-size:clamp(3.5rem,7.4vw,6.8rem);line-height:.93;letter-spacing:-.065em}.hero-copy{margin:0 0 8px;color:#667085;font-size:1.02rem;line-height:1.9}.news-overview{min-height:64vh;padding:76px 24px 120px;background:#f7faff;color:#0d1b3d}.overview-heading{display:flex;align-items:end;justify-content:space-between;gap:32px;margin-bottom:30px}.overview-heading h2{margin:9px 0 0;font-size:clamp(2.4rem,5vw,4.4rem);letter-spacing:-.055em}.news-count{margin:0;color:#667085;font-size:.9rem}.category-filter{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:34px}.filter-button{min-height:42px;padding:0 18px;border:1px solid #d8e1ed;border-radius:999px;background:#fff;color:#41516b;cursor:pointer;font:inherit;font-size:.88rem;font-weight:750}.filter-button:hover{border-color:#438fe9;color:#438fe9}.filter-button.active{border-color:#438fe9;background:#438fe9;color:#fff}.news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}.news-card{position:relative;display:flex;min-width:0;flex-direction:column;overflow:hidden;border:1px solid #dfe6f0;border-radius:26px;background:#fff;color:#0d1b3d;box-shadow:0 18px 50px rgba(13,27,61,.065);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.news-card:hover{transform:translateY(-5px);border-color:#438fe9;box-shadow:0 24px 60px rgba(13,27,61,.12)}.news-image{position:relative;overflow:hidden;aspect-ratio:16/10;background:linear-gradient(135deg,#dbeafe,#ccfbf1)}.news-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}.news-card:hover .news-image img{transform:scale(1.035)}.pin-label{position:absolute;top:14px;left:14px;padding:7px 10px;border-radius:999px;background:rgba(13,27,61,.88);color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.08em;backdrop-filter:blur(10px)}.news-body{display:flex;flex:1;flex-direction:column;padding:22px}.news-meta{display:flex;align-items:center;gap:8px;margin:0 0 13px;color:#738097;font-size:.76rem;font-weight:750;letter-spacing:.035em}.news-category{color:#438fe9}.news-title{margin:0;color:#0d1b3d;font-size:1.18rem;line-height:1.48;letter-spacing:-.025em}.news-summary{display:-webkit-box;overflow:hidden;margin:12px 0 0;color:#667085;font-size:.91rem;line-height:1.75;-webkit-box-orient:vertical;-webkit-line-clamp:3}.news-link{display:inline-flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:22px;color:#438fe9;font-size:.88rem;font-weight:800;text-decoration:none}.news-link::after{content:'↗';font-size:1.05rem}.news-empty{padding:72px 24px;text-align:center}.news-empty h2{margin:12px 0}.news-empty>p:last-child{color:#667085}.loading-card{min-height:430px;padding:0 22px 24px;animation:pulse 1.25s ease-in-out infinite}.loading-card div{height:210px;margin:0 -22px 24px;background:#e7edf5}.loading-card span{display:block;height:15px;margin:10px 0;border-radius:999px;background:#e7edf5}.loading-card span:nth-of-type(1){width:44%}.loading-card span:nth-of-type(3){width:72%}@keyframes pulse{50%{opacity:.58}}@media(max-width:920px){.hero-layout{grid-template-columns:1fr;gap:28px}.hero-copy{max-width:680px}.news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:620px){.news-hero{padding:68px 20px 58px}.news-hero h1{font-size:clamp(3rem,14vw,4.6rem)}.news-overview{padding:58px 20px 88px}.overview-heading{align-items:start;flex-direction:column;gap:12px}.news-grid{grid-template-columns:1fr}.news-card{border-radius:22px}.category-filter{flex-wrap:nowrap;overflow-x:auto;margin-right:-20px;padding-right:20px;scrollbar-width:none}.filter-button{flex:0 0 auto}}
+  html[data-theme="dark"] .news-hero,html[data-theme="dark"] .news-overview{background:#081225;color:#eef4fb}html[data-theme="dark"] .news-hero h1,html[data-theme="dark"] .overview-heading h2,html[data-theme="dark"] .news-title{color:#f3f7fc}html[data-theme="dark"] .hero-copy,html[data-theme="dark"] .news-count,html[data-theme="dark"] .news-summary,html[data-theme="dark"] .news-empty>p:last-child{color:#b7c3d5}html[data-theme="dark"] .news-card{border-color:#2d405e;background:#11213b;color:#eef4fb}html[data-theme="dark"] .filter-button{border-color:#344966;background:#11213b;color:#dbe6f3}html[data-theme="dark"] .filter-button.active{border-color:#438fe9;background:#438fe9;color:#fff}
+</style>
+
+<script>
+  type NewsItem = {date:string;media:string;category:string;title:string;summary:string;coverUrl:string;originalUrl:string;linkText:string;pinned:boolean};
+  const grid=document.querySelector<HTMLElement>('[data-news-grid]');
+  const filter=document.querySelector<HTMLElement>('[data-category-filter]');
+  const count=document.querySelector<HTMLElement>('[data-news-count]');
+  const empty=document.querySelector<HTMLElement>('[data-news-empty]');
+  const make=<K extends keyof HTMLElementTagNameMap>(tag:K,className='',text='')=>{const el=document.createElement(tag);if(className)el.className=className;if(text)el.textContent=text;return el;};
+  let items:NewsItem[]=[];
+
+  function render(category='全部') {
+    if(!grid||!count||!empty)return;
+    const visible=category==='全部'?items:items.filter(item=>item.category===category);
+    count.textContent=`共 ${visible.length} 則報導`;
+    empty.hidden=visible.length>0;
+    grid.hidden=visible.length===0;
+    grid.replaceChildren(...visible.map(item=>{
+      const article=make('article','news-card');
+      const imageWrap=make('div','news-image');
+      if(item.coverUrl){const image=make('img');image.src=item.coverUrl;image.alt='';image.loading='lazy';image.referrerPolicy='no-referrer';image.addEventListener('error',()=>image.remove());imageWrap.append(image);}
+      if(item.pinned)imageWrap.append(make('span','pin-label','置頂報導'));
+      const body=make('div','news-body');
+      const meta=make('p','news-meta');meta.append(make('span','news-category',item.category),document.createTextNode('·'),make('span','',item.media),document.createTextNode('·'),make('time','',item.date));
+      const title=make('h2','news-title',item.title);const summary=make('p','news-summary',item.summary);
+      const link=make('a','news-link',item.linkText);link.href=item.originalUrl;link.target='_blank';link.rel='noreferrer';link.setAttribute('aria-label',`${item.linkText}：${item.title}`);
+      body.append(meta,title);if(item.summary)body.append(summary);body.append(link);article.append(imageWrap,body);return article;
+    }));
+  }
+
+  fetch('/api/news').then(response=>{if(!response.ok)throw new Error('request failed');return response.json();}).then((data:NewsItem[])=>{
+    if(!Array.isArray(data))throw new Error('invalid data');items=data;
+    const categories=['全部',...new Set(items.map(item=>item.category))];
+    filter?.replaceChildren(...categories.map((category,index)=>{const button=make('button',`filter-button${index===0?' active':''}`,category);button.type='button';button.addEventListener('click',()=>{filter.querySelectorAll('button').forEach(item=>item.classList.toggle('active',item===button));render(category);});return button;}));
+    render();
+  }).catch(()=>{if(grid)grid.hidden=true;if(empty){empty.hidden=false;empty.querySelector('h2')!.textContent='新聞暫時無法載入';empty.querySelector('p:last-child')!.textContent='請稍後重新整理頁面。';}if(count)count.textContent='';});
+</script>
