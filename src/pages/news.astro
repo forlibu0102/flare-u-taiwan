@@ -23,6 +23,10 @@ import Layout from '../layouts/Layout.astro';
         <p class="news-count" data-news-count aria-live="polite">載入新聞中…</p>
       </div>
 
+      <div class="archive-tools" data-archive-tools hidden>
+        <div class="year-filter" data-year-filter aria-label="選擇新聞年份"></div>
+        <p class="page-status" data-page-status aria-live="polite"></p>
+      </div>
       <div class="news-grid" data-news-grid aria-live="polite">
         {Array.from({ length: 5 }, () => <div class="news-card loading-card" aria-hidden="true"><div></div><section><span></span><span></span><span></span></section></div>)}
       </div>
@@ -31,13 +35,14 @@ import Layout from '../layouts/Layout.astro';
         <h2>目前還沒有新聞</h2>
         <p>請稍後再回來看看。</p>
       </div>
+      <nav class="news-pagination" data-news-pagination aria-label="新聞分頁" hidden></nav>
     </div>
   </section>
 </Layout>
 
 <style is:global>
-  *{box-sizing:border-box}.page-inner{width:min(1160px,100%);margin:0 auto}.eyebrow{margin:0;color:#438fe9;font-size:.74rem;font-weight:800;letter-spacing:.18em}.news-hero{padding:92px 24px 76px;background:radial-gradient(circle at 88% 16%,rgba(32,199,201,.15),transparent 31%),linear-gradient(145deg,#f7faff 0%,#fff 72%);color:#0d1b3d}.hero-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.65fr);align-items:end;gap:64px}.news-hero h1{margin:16px 0 0;font-size:clamp(3.5rem,7.4vw,6.8rem);line-height:.93;letter-spacing:-.065em}.hero-copy{margin:0 0 8px;color:#667085;font-size:1.02rem;line-height:1.9}.news-overview{min-height:64vh;padding:76px 24px 120px;background:#f7faff;color:#0d1b3d}.overview-heading{display:flex;align-items:end;justify-content:space-between;gap:32px;margin-bottom:34px}.overview-heading h2{margin:9px 0 0;font-size:clamp(2.4rem,5vw,4.4rem);letter-spacing:-.055em}.news-count{margin:0;color:#667085;font-size:.9rem}.news-grid{display:grid;gap:18px}.news-card{position:relative;display:grid;grid-template-columns:minmax(220px,320px) 1fr;min-width:0;overflow:hidden;border:1px solid #dfe6f0;border-radius:24px;background:#fff;color:#0d1b3d;box-shadow:0 14px 42px rgba(13,27,61,.055);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.news-card:hover{transform:translateY(-3px);border-color:#438fe9;box-shadow:0 20px 52px rgba(13,27,61,.1)}.news-image{position:relative;min-height:210px;overflow:hidden;background:linear-gradient(135deg,#dbeafe,#ccfbf1)}.news-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}.news-card:hover .news-image img{transform:scale(1.025)}.pin-label{position:absolute;top:14px;left:14px;padding:7px 10px;border-radius:999px;background:rgba(13,27,61,.88);color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.08em;backdrop-filter:blur(10px)}.news-body{display:flex;min-width:0;flex-direction:column;padding:28px 32px}.news-meta{display:flex;align-items:center;gap:8px;margin:0 0 14px;color:#738097;font-size:.78rem;font-weight:750;letter-spacing:.035em}.news-meta span:first-child{color:#438fe9}.news-title{max-width:740px;margin:0;color:#0d1b3d;font-size:clamp(1.18rem,2vw,1.55rem);line-height:1.45;letter-spacing:-.03em}.news-summary{display:-webkit-box;overflow:hidden;margin:12px 0 0;color:#667085;font-size:.92rem;line-height:1.75;-webkit-box-orient:vertical;-webkit-line-clamp:2}.news-link{display:inline-flex;align-items:center;align-self:flex-start;gap:10px;margin-top:auto;padding-top:20px;color:#438fe9;font-size:.88rem;font-weight:800;text-decoration:none}.news-link::after{content:'↗';font-size:1.05rem}.news-empty{padding:72px 24px;text-align:center}.news-empty h2{margin:12px 0}.news-empty>p:last-child{color:#667085}.loading-card{min-height:210px;animation:pulse 1.25s ease-in-out infinite}.loading-card>div{min-height:210px;background:#e7edf5}.loading-card section{padding:30px}.loading-card span{display:block;height:15px;margin:12px 0;border-radius:999px;background:#e7edf5}.loading-card span:nth-child(1){width:30%}.loading-card span:nth-child(3){width:68%}@keyframes pulse{50%{opacity:.58}}@media(max-width:920px){.hero-layout{grid-template-columns:1fr;gap:28px}.hero-copy{max-width:680px}.news-card{grid-template-columns:minmax(190px,260px) 1fr}.news-body{padding:24px}}@media(max-width:620px){.news-hero{padding:68px 20px 58px}.news-hero h1{font-size:clamp(3rem,14vw,4.6rem)}.news-overview{padding:58px 20px 88px}.overview-heading{align-items:start;flex-direction:column;gap:12px}.news-card{grid-template-columns:1fr;border-radius:22px}.news-image{min-height:0;aspect-ratio:16/9}.news-body{padding:22px}.loading-card>div{min-height:0;aspect-ratio:16/9}}
-  html[data-theme="dark"] .news-hero,html[data-theme="dark"] .news-overview{background:#081225;color:#eef4fb}html[data-theme="dark"] .news-hero h1,html[data-theme="dark"] .overview-heading h2,html[data-theme="dark"] .news-title{color:#f3f7fc}html[data-theme="dark"] .hero-copy,html[data-theme="dark"] .news-count,html[data-theme="dark"] .news-summary,html[data-theme="dark"] .news-empty>p:last-child{color:#b7c3d5}html[data-theme="dark"] .news-card{border-color:#2d405e;background:#11213b;color:#eef4fb}
+  *{box-sizing:border-box}.page-inner{width:min(1160px,100%);margin:0 auto}.eyebrow{margin:0;color:#438fe9;font-size:.74rem;font-weight:800;letter-spacing:.18em}.news-hero{padding:92px 24px 76px;background:radial-gradient(circle at 88% 16%,rgba(32,199,201,.15),transparent 31%),linear-gradient(145deg,#f7faff 0%,#fff 72%);color:#0d1b3d}.hero-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.65fr);align-items:end;gap:64px}.news-hero h1{margin:16px 0 0;font-size:clamp(3.5rem,7.4vw,6.8rem);line-height:.93;letter-spacing:-.065em}.hero-copy{margin:0 0 8px;color:#667085;font-size:1.02rem;line-height:1.9}.news-overview{min-height:64vh;padding:76px 24px 120px;background:#f7faff;color:#0d1b3d}.overview-heading{display:flex;align-items:end;justify-content:space-between;gap:32px;margin-bottom:26px}.overview-heading h2{margin:9px 0 0;font-size:clamp(2.4rem,5vw,4.4rem);letter-spacing:-.055em}.news-count,.page-status{margin:0;color:#667085;font-size:.9rem}.archive-tools{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #dfe6f0}.year-filter{display:flex;flex-wrap:wrap;gap:10px}.year-button,.page-button{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:42px;padding:0 17px;border:1px solid #d8e1ed;border-radius:999px;background:#fff;color:#41516b;cursor:pointer;font:inherit;font-size:.88rem;font-weight:800;transition:border-color .18s ease,color .18s ease,background .18s ease}.year-button:hover,.page-button:hover:not(:disabled){border-color:#438fe9;color:#438fe9}.year-button.active,.page-button.active{border-color:#438fe9;background:#438fe9;color:#fff}.news-grid{display:grid;gap:18px}.news-card{position:relative;display:grid;grid-template-columns:minmax(220px,320px) 1fr;min-width:0;overflow:hidden;border:1px solid #dfe6f0;border-radius:24px;background:#fff;color:#0d1b3d;box-shadow:0 14px 42px rgba(13,27,61,.055);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}.news-card:hover{transform:translateY(-3px);border-color:#438fe9;box-shadow:0 20px 52px rgba(13,27,61,.1)}.news-image{position:relative;min-height:210px;overflow:hidden;background:linear-gradient(135deg,#dbeafe,#ccfbf1)}.news-image img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s ease}.news-card:hover .news-image img{transform:scale(1.025)}.pin-label{position:absolute;top:14px;left:14px;padding:7px 10px;border-radius:999px;background:rgba(13,27,61,.88);color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.08em;backdrop-filter:blur(10px)}.news-body{display:flex;min-width:0;flex-direction:column;padding:28px 32px}.news-meta{display:flex;align-items:center;gap:8px;margin:0 0 14px;color:#738097;font-size:.78rem;font-weight:750;letter-spacing:.035em}.news-meta span:first-child{color:#438fe9}.news-title{max-width:740px;margin:0;color:#0d1b3d;font-size:clamp(1.18rem,2vw,1.55rem);line-height:1.45;letter-spacing:-.03em}.news-summary{display:-webkit-box;overflow:hidden;margin:12px 0 0;color:#667085;font-size:.92rem;line-height:1.75;-webkit-box-orient:vertical;-webkit-line-clamp:2}.news-link{display:inline-flex;align-items:center;align-self:flex-start;gap:10px;margin-top:auto;padding-top:20px;color:#438fe9;font-size:.88rem;font-weight:800;text-decoration:none}.news-link::after{content:'↗';font-size:1.05rem}.news-empty{padding:72px 24px;text-align:center}.news-empty h2{margin:12px 0}.news-empty>p:last-child{color:#667085}.news-pagination{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:9px;margin-top:36px}.page-button{padding:0 14px}.page-button:disabled{opacity:.38;cursor:not-allowed}.loading-card{min-height:210px;animation:pulse 1.25s ease-in-out infinite}.loading-card>div{min-height:210px;background:#e7edf5}.loading-card section{padding:30px}.loading-card span{display:block;height:15px;margin:12px 0;border-radius:999px;background:#e7edf5}.loading-card span:nth-child(1){width:30%}.loading-card span:nth-child(3){width:68%}@keyframes pulse{50%{opacity:.58}}@media(max-width:920px){.hero-layout{grid-template-columns:1fr;gap:28px}.hero-copy{max-width:680px}.news-card{grid-template-columns:minmax(190px,260px) 1fr}.news-body{padding:24px}}@media(max-width:620px){.news-hero{padding:68px 20px 58px}.news-hero h1{font-size:clamp(3rem,14vw,4.6rem)}.news-overview{padding:58px 20px 88px}.overview-heading{align-items:start;flex-direction:column;gap:12px}.archive-tools{align-items:flex-start;flex-direction:column;gap:12px}.year-filter{flex-wrap:nowrap;width:calc(100% + 20px);margin-right:-20px;padding-right:20px;overflow-x:auto;scrollbar-width:none}.year-button{flex:0 0 auto}.news-card{grid-template-columns:1fr;border-radius:22px}.news-image{min-height:0;aspect-ratio:16/9}.news-body{padding:22px}.loading-card>div{min-height:0;aspect-ratio:16/9}.page-button{min-width:40px;min-height:40px;padding:0 12px}}
+  html[data-theme="dark"] .news-hero,html[data-theme="dark"] .news-overview{background:#081225;color:#eef4fb}html[data-theme="dark"] .news-hero h1,html[data-theme="dark"] .overview-heading h2,html[data-theme="dark"] .news-title{color:#f3f7fc}html[data-theme="dark"] .hero-copy,html[data-theme="dark"] .news-count,html[data-theme="dark"] .page-status,html[data-theme="dark"] .news-summary,html[data-theme="dark"] .news-empty>p:last-child{color:#b7c3d5}html[data-theme="dark"] .archive-tools{border-color:#2d405e}html[data-theme="dark"] .news-card,html[data-theme="dark"] .year-button,html[data-theme="dark"] .page-button{border-color:#2d405e;background:#11213b;color:#eef4fb}html[data-theme="dark"] .year-button.active,html[data-theme="dark"] .page-button.active{border-color:#438fe9;background:#438fe9;color:#fff}
 </style>
 
 <script>
@@ -45,15 +50,29 @@ import Layout from '../layouts/Layout.astro';
   const grid=document.querySelector<HTMLElement>('[data-news-grid]');
   const count=document.querySelector<HTMLElement>('[data-news-count]');
   const empty=document.querySelector<HTMLElement>('[data-news-empty]');
+  const tools=document.querySelector<HTMLElement>('[data-archive-tools]');
+  const yearFilter=document.querySelector<HTMLElement>('[data-year-filter]');
+  const pageStatus=document.querySelector<HTMLElement>('[data-page-status]');
+  const pagination=document.querySelector<HTMLElement>('[data-news-pagination]');
   const make=<K extends keyof HTMLElementTagNameMap>(tag:K,className='',text='')=>{const el=document.createElement(tag);if(className)el.className=className;if(text)el.textContent=text;return el;};
   let items:NewsItem[]=[];
+  let selectedYear='';
+  let currentPage=1;
+  const pageSize=5;
 
-  function render() {
-    if(!grid||!count||!empty)return;
-    count.textContent=`共 ${items.length} 則報導`;
-    empty.hidden=items.length>0;
-    grid.hidden=items.length===0;
-    grid.replaceChildren(...items.map(item=>{
+  function yearOf(item:NewsItem){return item.date.slice(0,4);}
+
+  function render(scroll=false) {
+    if(!grid||!count||!empty||!pagination||!pageStatus)return;
+    const yearlyItems=items.filter(item=>yearOf(item)===selectedYear);
+    const totalPages=Math.max(1,Math.ceil(yearlyItems.length/pageSize));
+    currentPage=Math.min(currentPage,totalPages);
+    const visible=yearlyItems.slice((currentPage-1)*pageSize,currentPage*pageSize);
+    count.textContent=`${selectedYear} 年共 ${yearlyItems.length} 則報導`;
+    pageStatus.textContent=`第 ${currentPage} 頁，共 ${totalPages} 頁`;
+    empty.hidden=yearlyItems.length>0;
+    grid.hidden=yearlyItems.length===0;
+    grid.replaceChildren(...visible.map(item=>{
       const article=make('article','news-card');
       const imageWrap=make('div','news-image');
       if(item.coverUrl){const image=make('img');image.src=item.coverUrl;image.alt='';image.loading='lazy';image.referrerPolicy='no-referrer';image.addEventListener('error',()=>image.remove());imageWrap.append(image);}
@@ -64,10 +83,19 @@ import Layout from '../layouts/Layout.astro';
       const link=make('a','news-link',item.linkText);link.href=item.originalUrl;link.target='_blank';link.rel='noreferrer';link.setAttribute('aria-label',`${item.linkText}：${item.title}`);
       body.append(meta,title);if(item.summary)body.append(summary);body.append(link);article.append(imageWrap,body);return article;
     }));
+    const pageButton=(label:string,page:number,disabled=false,current=false)=>{const button=make('button',`page-button${current?' active':''}`,label);button.type='button';button.disabled=disabled;if(current)button.setAttribute('aria-current','page');button.addEventListener('click',()=>{currentPage=page;render(true);});return button;};
+    const buttons=[pageButton('上一頁',Math.max(1,currentPage-1),currentPage===1)];
+    for(let page=1;page<=totalPages;page++)buttons.push(pageButton(String(page),page,false,page===currentPage));
+    buttons.push(pageButton('下一頁',Math.min(totalPages,currentPage+1),currentPage===totalPages));
+    pagination.replaceChildren(...buttons);pagination.hidden=yearlyItems.length<=pageSize;
+    if(scroll)document.querySelector('.news-overview')?.scrollIntoView({behavior:'smooth',block:'start'});
   }
 
   fetch('/api/news').then(response=>{if(!response.ok)throw new Error('request failed');return response.json();}).then((data:NewsItem[])=>{
     if(!Array.isArray(data))throw new Error('invalid data');items=data;
+    const years=[...new Set(items.map(yearOf).filter(Boolean))].sort((a,b)=>b.localeCompare(a));selectedYear=years[0]||'';
+    yearFilter?.replaceChildren(...years.map((year,index)=>{const button=make('button',`year-button${index===0?' active':''}`,`${year} 年`);button.type='button';button.addEventListener('click',()=>{selectedYear=year;currentPage=1;yearFilter.querySelectorAll('button').forEach(item=>item.classList.toggle('active',item===button));render();});return button;}));
+    if(tools)tools.hidden=years.length===0;
     render();
   }).catch(()=>{if(grid)grid.hidden=true;if(empty){empty.hidden=false;empty.querySelector('h2')!.textContent='新聞暫時無法載入';empty.querySelector('p:last-child')!.textContent='請稍後重新整理頁面。';}if(count)count.textContent='';});
 </script>
