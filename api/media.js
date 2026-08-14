@@ -77,7 +77,7 @@ export default async function handler(_request, response) {
       });
     });
 
-    const result = Array.from(groups.values())
+    const sortedGroups = Array.from(groups.values())
       .map((group) => ({
         ...group,
         videos: group.videos
@@ -88,7 +88,6 @@ export default async function handler(_request, response) {
             if (aHasOrder !== bHasOrder) return aHasOrder ? -1 : 1;
             return b.publishedAt - a.publishedAt || a.rowIndex - b.rowIndex;
           })
-          .map(({ order, publishedAt, rowIndex, ...video }) => video),
       }))
       .sort((a, b) => {
         const aIndex = CATEGORY_ORDER.indexOf(a.id);
@@ -96,6 +95,23 @@ export default async function handler(_request, response) {
         return (aIndex === -1 ? CATEGORY_ORDER.length : aIndex)
           - (bIndex === -1 ? CATEGORY_ORDER.length : bIndex);
       });
+
+    const allVideos = Array.from(
+      new Map(
+        sortedGroups
+          .flatMap((group) => group.videos)
+          .sort((a, b) => b.publishedAt - a.publishedAt || a.rowIndex - b.rowIndex)
+          .map((video) => [video.id, video]),
+      ).values(),
+    );
+
+    const result = [
+      { id: 'all', label: '全部', eyebrow: 'LATEST VIDEOS', videos: allVideos },
+      ...sortedGroups,
+    ].map((group) => ({
+      ...group,
+      videos: group.videos.map(({ order, publishedAt, rowIndex, ...video }) => video),
+    }));
 
     response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
     response.status(200).json(result);
