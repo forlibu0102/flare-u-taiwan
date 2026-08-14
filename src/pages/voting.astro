@@ -41,6 +41,74 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
+  <section class="comeback-guide" id="comeback-guide">
+    <div class="page-inner">
+      <div class="section-heading guide-heading">
+        <div>
+          <p class="eyebrow">COMEBACK SUPPORT GUIDE</p>
+          <h2>回歸期應援方式</h2>
+          <p>點擊圖片可以開啟原尺寸查看。打歌節目的規則與時程可能調整，實際資訊請以當期公告為準。</p>
+        </div>
+      </div>
+
+      <section class="guide-block" aria-labelledby="music-show-guide-title">
+        <div class="guide-block-heading">
+          <p class="eyebrow">MUSIC SHOW GUIDE</p>
+          <h3 id="music-show-guide-title">打歌舞台投票指南</h3>
+          <span>資料版本：2026.05.02</span>
+        </div>
+        <div class="guide-image-grid guide-image-grid--voting">
+          <a class="guide-image-card" href="/images/voting-guides/preparation.png" target="_blank" rel="noreferrer">
+            <img src="/images/voting-guides/preparation.png" alt="FLARE U 出道事前準備指南" loading="lazy" />
+            <span><b>01</b>事前準備 <i>查看原圖 ↗</i></span>
+          </a>
+          <a class="guide-image-card" href="/images/voting-guides/scoring.png" target="_blank" rel="noreferrer">
+            <img src="/images/voting-guides/scoring.png" alt="FLARE U 打歌節目計分標準" loading="lazy" />
+            <span><b>02</b>評分標準 <i>查看原圖 ↗</i></span>
+          </a>
+          <a class="guide-image-card" href="/images/voting-guides/schedule.png" target="_blank" rel="noreferrer">
+            <img src="/images/voting-guides/schedule.png" alt="FLARE U 打歌投票日程" loading="lazy" />
+            <span><b>03</b>投票日程 <i>查看原圖 ↗</i></span>
+          </a>
+        </div>
+      </section>
+
+      <section class="guide-block" aria-labelledby="streaming-guide-title">
+        <div class="guide-block-heading">
+          <p class="eyebrow">STREAMING GUIDE</p>
+          <h3 id="streaming-guide-title">衝音源與影音分數</h3>
+        </div>
+        <div class="guide-image-grid">
+          <a class="guide-image-card" href="/images/streaming-guides/apple-music.png" target="_blank" rel="noreferrer">
+            <img src="/images/streaming-guides/apple-music.png" alt="FLARE U Apple Music 刷榜指南" loading="lazy" />
+            <span><b>01</b>Apple Music <i>查看原圖 ↗</i></span>
+          </a>
+          <a class="guide-image-card" href="/images/streaming-guides/itunes.png" target="_blank" rel="noreferrer">
+            <img src="/images/streaming-guides/itunes.png" alt="FLARE U iTunes 購買指南" loading="lazy" />
+            <span><b>02</b>iTunes <i>查看原圖 ↗</i></span>
+          </a>
+          <a class="guide-image-card" href="/images/streaming-guides/spotify.png" target="_blank" rel="noreferrer">
+            <img src="/images/streaming-guides/spotify.png" alt="FLARE U Spotify 刷榜指南" loading="lazy" />
+            <span><b>03</b>Spotify <i>查看原圖 ↗</i></span>
+          </a>
+          <a class="guide-image-card" href="/images/streaming-guides/youtube.png" target="_blank" rel="noreferrer">
+            <img src="/images/streaming-guides/youtube.png" alt="FLARE U YouTube 刷榜指南" loading="lazy" />
+            <span><b>04</b>YouTube <i>查看原圖 ↗</i></span>
+          </a>
+          <a class="guide-image-card" href="/images/streaming-guides/youtube-music.png" target="_blank" rel="noreferrer">
+            <img src="/images/streaming-guides/youtube-music.png" alt="FLARE U YouTube Music 刷榜指南" loading="lazy" />
+            <span><b>05</b>YouTube Music <i>查看原圖 ↗</i></span>
+          </a>
+        </div>
+      </section>
+
+      <div class="guide-links">
+        <a href="/albums/detail?album=YOUTH%20ERROR">前往專輯收聽平台 →</a>
+        <a href="/media">前往官方影音 →</a>
+      </div>
+    </div>
+  </section>
+
   <section class="community-section">
     <div class="page-inner">
       <div class="community-card">
@@ -73,7 +141,31 @@ import Layout from '../layouts/Layout.astro';
   .status-panel strong { display: block; font-size: 1.45rem; }
   .status-panel > span:last-child { display: block; margin-top: 8px; color: #667085; }
   .status-dot { position: absolute; top: 30px; right: 30px; width: 10px; height: 10px; border-radius: 50%; background: #20c7c9; box-shadow: 0 0 0 7px rgba(32,199,201,.12); }
-  .voting-content, .community-section { padding: 96px 24px; }
+  .voting-content, .comeback-guide, .community-section { padding: 96px 24px; }
+  .comeback-guide { background:#f7faff; }
+  .guide-heading>div>p:last-child { max-width:760px; margin:18px 0 0; color:#667085; line-height:1.75; }
+  .guide-block { margin-top:54px; }
+  .guide-block-heading { display:flex; align-items:end; flex-wrap:wrap; gap:10px 20px; margin-bottom:22px; }
+  .guide-block-heading .eyebrow { width:100%; }
+  .guide-block-heading h3 { margin:0; font-size:clamp(1.8rem,3.6vw,2.8rem); letter-spacing:-.04em; }
+  .guide-block-heading>span { margin-bottom:5px; color:#7d899c; font-size:.8rem; }
+  .guide-image-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:start; gap:18px; }
+  .guide-image-card { display:block; overflow:hidden; border:1px solid #dfe6f0; border-radius:24px; background:#fff; color:#0d1b3d; text-decoration:none; box-shadow:0 18px 45px rgba(13,27,61,.07); transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; }
+  .guide-image-card:hover { transform:translateY(-3px); border-color:#438fe9; box-shadow:0 22px 52px rgba(13,27,61,.11); }
+  .guide-image-card img { display:block; width:100%; height:auto; background:#eef3f8; }
+  .guide-image-card>span { display:flex; align-items:center; gap:12px; min-height:66px; padding:14px 18px; font-weight:800; }
+  .guide-image-card b { display:grid; width:32px; height:32px; place-items:center; border-radius:50%; background:#eef6ff; color:#438fe9; font-size:.7rem; }
+  .guide-image-card i { margin-left:auto; color:#438fe9; font-size:.78rem; font-style:normal; }
+  .guide-links { display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+  .guide-links a { display:inline-flex; padding:13px 18px; border-radius:999px; background:#0d1b3d; color:#fff; font-size:.86rem; font-weight:800; text-decoration:none; }
+  .guide-links a+ a { background:#e9fbfa; color:#159d9f; }
+  :global(html[data-theme="dark"]) .comeback-guide { background:#081225; color:#e8eef7; }
+  :global(html[data-theme="dark"]) .guide-heading h2,
+  :global(html[data-theme="dark"]) .guide-block-heading h3 { color:#f3f7fc; }
+  :global(html[data-theme="dark"]) .guide-heading>div>p:last-child,
+  :global(html[data-theme="dark"]) .guide-block-heading>span { color:#b7c3d5; }
+  :global(html[data-theme="dark"]) .guide-image-card { border-color:#2d405e; background:#11213b; color:#eef4fb; }
+  :global(html[data-theme="dark"]) .guide-image-card b { background:#1b3152; color:#78b8ff; }
   .community-section { background:linear-gradient(180deg,#fff 0%,#f7faff 100%); }
   .community-card { display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:28px; padding:36px; border:1px solid #dce7e3; border-radius:28px; background:radial-gradient(circle at 92% 8%,rgba(6,199,85,.14),transparent 28%),#fff; box-shadow:0 20px 55px rgba(13,27,61,.07); }
   .community-mark { display:grid; width:78px; height:78px; place-items:center; border-radius:24px; background:#06c755; color:#fff; font-size:.86rem; font-weight:850; letter-spacing:.04em; box-shadow:0 13px 30px rgba(6,199,85,.22); }
@@ -115,8 +207,9 @@ import Layout from '../layouts/Layout.astro';
   :global(.vote-actions a) { display:inline-flex; padding:13px 18px; border-radius:999px; background:#0d1b3d; color:#fff; font-size:.88rem; font-weight:750; text-decoration:none; transition:transform .2s ease,background .2s ease; }
   :global(.vote-actions a:hover) { transform:translateY(-2px); background:#2563eb; }
   :global(.vote-actions a.secondary) { background:#eef5ff; color:#2563eb; }
-  @media (max-width: 800px) { .page-hero { padding: 72px 24px 80px; } .hero-grid { grid-template-columns: 1fr; gap: 40px; } h1 { font-size: clamp(4rem,20vw,6rem); } .voting-content,.community-section { padding: 72px 24px; }.community-card{grid-template-columns:auto minmax(0,1fr)}.community-link{grid-column:1/-1;width:100%} }
+  @media (max-width: 800px) { .page-hero { padding: 72px 24px 80px; } .hero-grid { grid-template-columns: 1fr; gap: 40px; } h1 { font-size: clamp(4rem,20vw,6rem); } .voting-content,.comeback-guide,.community-section { padding: 72px 24px; }.community-card{grid-template-columns:auto minmax(0,1fr)}.community-link{grid-column:1/-1;width:100%} }
   @media (max-width: 700px) { :global(.vote-meta){grid-template-columns:1fr}:global(.vote-card){padding:27px 22px}:global(.vote-topline){align-items:flex-start;flex-direction:column}:global(.vote-countdown){font-size:.78rem} }
+  @media (max-width: 620px) { .guide-image-grid{grid-template-columns:1fr}.guide-image-card{border-radius:20px}.guide-image-card i{display:none}.guide-links a{width:100%;justify-content:center} }
   @media (max-width: 520px) { .section-heading { align-items: flex-start; flex-direction: column; } .status-panel { padding: 24px; } .empty-state { padding: 48px 22px; }.community-card{grid-template-columns:1fr;padding:28px 24px}.community-mark{width:66px;height:66px;border-radius:20px}.community-link{grid-column:auto} }
 </style>
 
