@@ -233,18 +233,6 @@ const videoGroups = [
     </a>
   </section>
 
-  <section class="album-section">
-    <a class="page-inner album-card" href="/albums/detail?album=YOUTH%20ERROR" aria-label="查看 YOUTH ERROR 專輯資訊">
-      <img src="/images/albums/youth-error.jpg" alt="FLARE U 迷你一輯 YOUTH ERROR 封面" loading="lazy" />
-      <div>
-        <p class="eyebrow">DISCOGRAPHY</p>
-        <h2>YOUTH ERROR</h2>
-        <p>查看《YOUTH ERROR》專輯簡介、完整曲目與各平台收聽連結。</p>
-        <span>前往專輯頁 →</span>
-      </div>
-    </a>
-  </section>
-
   <section class="translation-section">
     <div class="page-inner">
       <div class="translation-heading">
@@ -280,12 +268,11 @@ const videoGroups = [
   .eyebrow { margin:0; color:#438fe9; font-size:.75rem; font-weight:750; letter-spacing:.18em; }
   h1 { max-width:760px; margin:22px 0 26px; font-size:clamp(4rem,9vw,7.8rem); line-height:.84; letter-spacing:-.07em; }
   .lead { max-width:610px; margin:0; color:#667085; font-size:1.06rem; line-height:1.8; }
-  .media-section,.archive-section,.album-section,.translation-section { padding:96px 24px; }
+  .media-section,.archive-section,.translation-section { padding:96px 24px; }
   .media-section { order:2; }
   .category-section { order:3; padding:104px 24px; background:#f8fbff; }
   .archive-section { order:4; background:linear-gradient(180deg,#fff 0%,#f7f8ff 100%); }
-  .album-section { order:5; padding-top:0; background:#f7f8ff; }
-  .translation-section { order:6; padding-bottom:112px; background:#f7f9fd; }
+  .translation-section { order:5; padding-bottom:112px; background:#f7f9fd; }
   .translation-heading { max-width:760px; margin-bottom:34px; }
   .translation-heading>p:last-child { margin:18px 0 0; color:#667085; line-height:1.75; }
   .translation-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
@@ -335,14 +322,8 @@ const videoGroups = [
   .channel-link:hover { transform:translateY(-2px); background:#2563eb; }
   .archive-icon { display:grid; flex:0 0 auto; width:92px; height:92px; place-items:center; border-radius:28px; background:#f0f1ff; color:#6c7ee1; }
   .archive-icon svg { width:44px; fill:none; stroke:currentColor; stroke-width:1.5; stroke-linejoin:round; }
-  .album-card { display:grid; grid-template-columns:220px minmax(0,1fr); align-items:center; gap:38px; padding:28px; border:1px solid #dfe6f0; border-radius:30px; background:#fff; color:#0d1b3d; text-decoration:none; box-shadow:0 20px 55px rgba(13,27,61,.07); transition:transform .2s ease,box-shadow .2s ease; }
-  .album-card:hover { transform:translateY(-3px); box-shadow:0 24px 60px rgba(13,27,61,.11); }
-  .album-card img { display:block; width:100%; border-radius:20px; }
-  .album-card h2 { margin:10px 0 12px; }
-  .album-card p:not(.eyebrow) { max-width:650px; margin:0; color:#667085; line-height:1.75; }
-  .album-card span { display:inline-block; margin-top:22px; color:#438fe9; font-weight:800; }
-  @media (max-width:800px) { .page-hero{padding:72px 24px 80px}h1{font-size:clamp(3.7rem,18vw,5.8rem)}.media-section,.archive-section,.category-section,.translation-section{padding:72px 24px}.album-section{padding:0 24px 72px}.archive-card{align-items:flex-start;flex-direction:column}.album-card{grid-template-columns:150px minmax(0,1fr);gap:24px}.video-row{grid-template-columns:150px minmax(0,1fr)}.watch-link{display:none}.translation-grid{grid-template-columns:1fr} }
-  @media (max-width:520px) { .video-shell{border-radius:20px}.archive-card{padding:30px 24px}.album-card{grid-template-columns:1fr;padding:22px}.album-card img{max-width:210px}.archive-icon{width:72px;height:72px;border-radius:22px}.category-tabs{margin:28px 0 40px}.video-row{grid-template-columns:112px minmax(0,1fr);gap:14px;padding:10px;border-radius:17px}.video-thumb{border-radius:11px}.row-play{width:32px;height:32px}.video-info h4{font-size:.98rem}.video-info>p:last-child{display:none}.video-number{font-size:.61rem}.group-title h3{font-size:2rem}.translation-card{min-height:190px;padding:28px 64px 28px 24px;border-radius:22px} }
+  @media (max-width:800px) { .page-hero{padding:72px 24px 80px}h1{font-size:clamp(3.7rem,18vw,5.8rem)}.media-section,.archive-section,.category-section,.translation-section{padding:72px 24px}.archive-card{align-items:flex-start;flex-direction:column}.video-row{grid-template-columns:150px minmax(0,1fr)}.watch-link{display:none}.translation-grid{grid-template-columns:1fr} }
+  @media (max-width:520px) { .video-shell{border-radius:20px}.archive-card{padding:30px 24px}.archive-icon{width:72px;height:72px;border-radius:22px}.category-tabs{margin:28px 0 40px}.video-row{grid-template-columns:112px minmax(0,1fr);gap:14px;padding:10px;border-radius:17px}.video-thumb{border-radius:11px}.row-play{width:32px;height:32px}.video-info h4{font-size:.98rem}.video-info>p:last-child{display:none}.video-number{font-size:.61rem}.group-title h3{font-size:2rem}.translation-card{min-height:190px;padding:28px 64px 28px 24px;border-radius:22px} }
 </style>
 
 <script>
