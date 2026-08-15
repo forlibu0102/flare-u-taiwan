@@ -1,9 +1,28 @@
 <footer>
   <div class="footer-inner">
-    <div>
+    <div class="footer-brand">
       <strong>FLARE U Taiwan</strong>
       <p>Created by Taiwan U'RE, for every U'RE.</p>
 	  <a href="/site-about">關於本站與內容聲明</a>
+    </div>
+
+    <div class="contact-links" aria-label="與我聯繫">
+      <span>與我聯繫</span>
+      <a
+        class="social-link"
+        href="https://www.instagram.com/for_libu0102/"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="前往 Instagram 聯繫 for_libu0102"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+          <circle cx="12" cy="12" r="4"></circle>
+          <circle class="social-icon-dot" cx="17.4" cy="6.6" r="1"></circle>
+        </svg>
+        <span>Instagram</span>
+        <b aria-hidden="true">↗</b>
+      </a>
     </div>
 
     <p class="copyright">
@@ -22,9 +41,9 @@
   .footer-inner {
     width: min(1200px, calc(100% - 48px));
     margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
     gap: 24px;
   }
 
@@ -50,11 +69,71 @@
     white-space: nowrap;
   }
 
+  .contact-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .contact-links > span {
+    color: #667085;
+    font-size: 0.84rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 9px 13px;
+    border: 1px solid #dbe3ee;
+    border-radius: 999px;
+    background: #f8fafc;
+    color: #263850;
+    font-weight: 700;
+    text-decoration: none;
+    transition: border-color .2s ease, color .2s ease, transform .2s ease;
+  }
+
+  .social-link:hover {
+    border-color: #c84997;
+    color: #b53683;
+    transform: translateY(-2px);
+  }
+
+  .social-link:focus-visible {
+    outline: 3px solid rgba(200, 73, 151, .25);
+    outline-offset: 3px;
+  }
+
+  .social-link svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+  }
+
+  .social-link .social-icon-dot {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .social-link b {
+    font-size: .9rem;
+  }
+
   @media (max-width: 700px) {
     .footer-inner {
       width: min(100%, calc(100% - 16px));
-      flex-direction: column;
+      grid-template-columns: 1fr;
       align-items: flex-start;
+    }
+
+    .contact-links {
+      flex-wrap: wrap;
     }
   }
 
@@ -66,4 +145,14 @@
   :global(html[data-theme="dark"]) footer strong { color: #f2f6fb; }
   :global(html[data-theme="dark"]) footer p,
   :global(html[data-theme="dark"]) footer a { color: #9eacc0; }
+  :global(html[data-theme="dark"]) .contact-links > span { color: #9eacc0; }
+  :global(html[data-theme="dark"]) .social-link {
+    border-color: #34445d;
+    background: #101f38;
+    color: #d9e4f2;
+  }
+  :global(html[data-theme="dark"]) .social-link:hover {
+    border-color: #d75aa7;
+    color: #f08ac7;
+  }
 </style>
