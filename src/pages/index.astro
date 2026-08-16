@@ -55,10 +55,21 @@ import Layout from '../layouts/Layout.astro';
 					<span id="debut-days">—</span>
 					<span class="card-unit">天</span>
 				</p>
-				<p class="card-note debut-dates">
-					<span>2026.05.13 韓國出道</span>
-					<span>2026.09.09 日本出道</span>
+				<p class="card-note">2026.05.13 韓國出道</p>
+			</article>
+
+			<article class="summary-card summary-card--japan">
+				<div class="card-heading">
+					<p class="card-label" id="japan-debut-label">UNTIL JAPAN DEBUT</p>
+					<span class="card-icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24"><path d="M12 3.2a8.8 8.8 0 1 0 8.8 8.8A8.8 8.8 0 0 0 12 3.2Zm0 4v5l3.2 2" /></svg>
+					</span>
+				</div>
+				<p class="card-value">
+					<span id="japan-debut-days">—</span>
+					<span class="card-unit">天</span>
 				</p>
+				<p class="card-note">2026.09.09 日本出道</p>
 			</article>
 
 			<a class="summary-card summary-card--navy" href="/voting" aria-label="前往目前投票">
@@ -187,19 +198,32 @@ import Layout from '../layouts/Layout.astro';
 	</section>
 
 	<script>
-		const debutDate = new Date('2026-05-13T00:00:00+08:00');
-		const today = new Date();
-
 		const millisecondsPerDay = 1000 * 60 * 60 * 24;
-		const elapsedDays = Math.floor(
-			(today.getTime() - debutDate.getTime()) / millisecondsPerDay
-		);
-
-		const debutDays = Math.max(1, elapsedDays + 1);
+		const taipeiDateParts = new Intl.DateTimeFormat('en-US', {
+			timeZone: 'Asia/Taipei',
+			year: 'numeric',
+			month: 'numeric',
+			day: 'numeric',
+		}).formatToParts(new Date());
+		const datePart = (type: Intl.DateTimeFormatPartTypes) => Number(taipeiDateParts.find(part => part.type === type)?.value);
+		const todayDay = Date.UTC(datePart('year'), datePart('month') - 1, datePart('day'));
+		const koreaDebutDay = Date.UTC(2026, 4, 13);
+		const japanDebutDay = Date.UTC(2026, 8, 9);
+		const debutDays = Math.max(1, Math.round((todayDay - koreaDebutDay) / millisecondsPerDay) + 1);
 		const debutDaysElement = document.querySelector('#debut-days');
+		const japanDebutDaysElement = document.querySelector('#japan-debut-days');
+		const japanDebutLabel = document.querySelector('#japan-debut-label');
 
 		if (debutDaysElement) {
 			debutDaysElement.textContent = debutDays.toLocaleString('zh-TW');
+		}
+
+		const daysUntilJapanDebut = Math.round((japanDebutDay - todayDay) / millisecondsPerDay);
+		if (japanDebutDaysElement) {
+			japanDebutDaysElement.textContent = (daysUntilJapanDebut > 0 ? daysUntilJapanDebut : Math.abs(daysUntilJapanDebut) + 1).toLocaleString('zh-TW');
+		}
+		if (japanDebutLabel && daysUntilJapanDebut <= 0) {
+			japanDebutLabel.textContent = 'SINCE JAPAN DEBUT';
 		}
 
 		const voteCount = document.querySelector('#current-vote-count');
@@ -470,7 +494,7 @@ import Layout from '../layouts/Layout.astro';
 
 	.summary-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: 16px;
 		margin-top: -66px;
 	}
@@ -521,6 +545,11 @@ import Layout from '../layouts/Layout.astro';
 	.summary-card--blue {
 		--card-accent: #438fe9;
 		--card-soft: #eef6ff;
+	}
+
+	.summary-card--japan {
+		--card-accent: #dc6d91;
+		--card-soft: #fff0f5;
 	}
 
 	.summary-card--navy {
@@ -593,11 +622,6 @@ import Layout from '../layouts/Layout.astro';
 		margin: 0;
 		color: #667085;
 		line-height: 1.6;
-	}
-
-	.debut-dates {
-		display: grid;
-		gap: 4px;
 	}
 
 	.content-section {
@@ -915,6 +939,12 @@ import Layout from '../layouts/Layout.astro';
 		background: #0d1b3d;
 		color: #ffffff;
 		transform: translateY(-3px);
+	}
+
+	@media (max-width: 1050px) {
+		.summary-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
 	}
 
 	@media (max-width: 800px) {
