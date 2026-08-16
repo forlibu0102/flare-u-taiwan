@@ -66,6 +66,7 @@ import Layout from '../layouts/Layout.astro';
 					</span>
 				</div>
 				<p class="card-value">
+					<span class="countdown-prefix" id="japan-countdown-prefix">倒數</span>
 					<span id="japan-debut-days">—</span>
 					<span class="card-unit">天</span>
 				</p>
@@ -213,6 +214,7 @@ import Layout from '../layouts/Layout.astro';
 		const debutDaysElement = document.querySelector('#debut-days');
 		const japanDebutDaysElement = document.querySelector('#japan-debut-days');
 		const japanDebutLabel = document.querySelector('#japan-debut-label');
+		const japanCountdownPrefix = document.querySelector<HTMLElement>('#japan-countdown-prefix');
 
 		if (debutDaysElement) {
 			debutDaysElement.textContent = debutDays.toLocaleString('zh-TW');
@@ -224,6 +226,9 @@ import Layout from '../layouts/Layout.astro';
 		}
 		if (japanDebutLabel && daysUntilJapanDebut <= 0) {
 			japanDebutLabel.textContent = 'SINCE JAPAN DEBUT';
+		}
+		if (japanCountdownPrefix && daysUntilJapanDebut <= 0) {
+			japanCountdownPrefix.hidden = true;
 		}
 
 		const voteCount = document.querySelector('#current-vote-count');
@@ -608,6 +613,13 @@ import Layout from '../layouts/Layout.astro';
 	.card-unit {
 		font-size: 1rem;
 		font-weight: 600;
+	}
+
+	.countdown-prefix {
+		margin-right: 2px;
+		font-size: .82rem;
+		font-weight: 700;
+		letter-spacing: .08em;
 	}
 
 	.event-name {
