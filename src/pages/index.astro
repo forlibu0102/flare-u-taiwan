@@ -55,7 +55,10 @@ import Layout from '../layouts/Layout.astro';
 					<span id="debut-days">—</span>
 					<span class="card-unit">天</span>
 				</p>
-				<p class="card-note">2026.05.13 正式出道</p>
+				<p class="card-note debut-dates">
+					<span>2026.05.13 韓國出道</span>
+					<span>2026.09.09 日本出道</span>
+				</p>
 			</article>
 
 			<a class="summary-card summary-card--navy" href="/voting" aria-label="前往目前投票">
@@ -590,6 +593,11 @@ import Layout from '../layouts/Layout.astro';
 		margin: 0;
 		color: #667085;
 		line-height: 1.6;
+	}
+
+	.debut-dates {
+		display: grid;
+		gap: 4px;
 	}
 
 	.content-section {
