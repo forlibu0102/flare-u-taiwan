@@ -129,12 +129,26 @@ const videoGroups = [
   },
 ];
 
+const publishedDateFromTitle = (title) => {
+  const fullDate = title.match(/(20\d{2})[./-](\d{1,2})[./-](\d{1,2})/);
+  if (fullDate) return Date.UTC(Number(fullDate[1]), Number(fullDate[2]) - 1, Number(fullDate[3]));
+
+  const shortDate = title.match(/(?:^|\s)(\d{2})(\d{2})(\d{2})(?:\s|$)/);
+  if (shortDate) return Date.UTC(2000 + Number(shortDate[1]), Number(shortDate[2]) - 1, Number(shortDate[3]));
+
+  return Number.NEGATIVE_INFINITY;
+};
+
 const displayGroups = [
   {
     id: 'all',
     label: '全部',
     eyebrow: 'LATEST VIDEOS',
-    videos: videoGroups.flatMap((group) => group.videos),
+    videos: videoGroups
+      .flatMap((group) => group.videos)
+      .map((video, index) => ({ video, index, publishedAt: publishedDateFromTitle(video[1]) }))
+      .sort((a, b) => b.publishedAt - a.publishedAt || a.index - b.index)
+      .map(({ video }) => video),
   },
   ...videoGroups,
 ];
