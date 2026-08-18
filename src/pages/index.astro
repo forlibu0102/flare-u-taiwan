@@ -96,6 +96,7 @@ import Layout from '../layouts/Layout.astro';
 				</div>
 				<p class="event-name" id="next-event-name">行程載入中…</p>
 				<p class="card-note" id="next-event-time"></p>
+				<p class="card-note event-more" id="next-event-more" hidden></p>
 			</a>
 		</div>
 	</section>
@@ -235,6 +236,7 @@ import Layout from '../layouts/Layout.astro';
 		const voteNote = document.querySelector('#current-vote-note');
 		const eventName = document.querySelector('#next-event-name');
 		const eventTime = document.querySelector('#next-event-time');
+		const eventMore = document.querySelector('#next-event-more');
 		const eventDateFormatter = new Intl.DateTimeFormat('zh-TW', {
 			timeZone: 'Asia/Taipei',
 			month: 'long',
@@ -271,18 +273,26 @@ import Layout from '../layouts/Layout.astro';
 				if (!event) {
 					if (eventName) eventName.textContent = '目前沒有已公布行程';
 					if (eventTime) eventTime.textContent = '';
+					if (eventMore) eventMore.hidden = true;
 					return;
 				}
 
 				const startsAt = new Date(event.start);
 				const endsAt = new Date(event.end);
+				const sameDayEvents = Array.isArray(event.events) ? event.events : [event];
 				if (eventName) eventName.textContent = event.title;
 				if (eventTime) eventTime.textContent = event.allDay
 					? `${eventDateFormatter.format(startsAt)} · 全天`
 					: `${eventDateFormatter.format(startsAt)} · ${eventTimeFormatter.format(startsAt)}－${eventTimeFormatter.format(endsAt)}`;
+				if (eventMore) {
+					const remaining = sameDayEvents.length - 1;
+					eventMore.hidden = remaining < 1;
+					eventMore.textContent = remaining > 0 ? `當日還有 ${remaining} 個行程 →` : '';
+				}
 			} catch {
 				if (eventName) eventName.textContent = '行程暫時無法載入';
 				if (eventTime) eventTime.textContent = '請稍後再試';
+				if (eventMore) eventMore.hidden = true;
 			}
 		}
 
@@ -625,6 +635,13 @@ import Layout from '../layouts/Layout.astro';
 	.event-name {
 		margin: 24px 0 12px;
 		font-size: 1.45rem;
+		font-weight: 700;
+	}
+
+	.event-more {
+		margin-top: 6px;
+		color: #168d8f;
+		font-size: .86rem;
 		font-weight: 700;
 	}
 
