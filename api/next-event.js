@@ -2,6 +2,12 @@ import ical from 'node-ical';
 
 const CALENDAR_URL = 'https://calendar.google.com/calendar/ical/forlibu0102%40gmail.com/public/basic.ics';
 const ONE_YEAR = 366 * 24 * 60 * 60 * 1000;
+const taipeiDateFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Taipei',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+});
 
 function toCandidate(event) {
   return {
@@ -9,6 +15,15 @@ function toCandidate(event) {
     start: event.start,
     end: event.end,
     allDay: event.isFullDay ?? event.datetype === 'date',
+  };
+}
+
+function serializeEvent(event) {
+  return {
+    title: event.title,
+    start: event.start.toISOString(),
+    end: event.end.toISOString(),
+    allDay: event.allDay,
   };
 }
 
@@ -45,13 +60,15 @@ export default async function handler(_request, response) {
 
     candidates.sort((a, b) => a.start.getTime() - b.start.getTime());
     const nextEvent = candidates[0];
+    const nextEventDate = nextEvent && taipeiDateFormatter.format(nextEvent.start);
+    const eventsOnNextDate = nextEvent
+      ? candidates.filter((event) => taipeiDateFormatter.format(event.start) === nextEventDate)
+      : [];
 
     response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
     response.status(200).json(nextEvent ? {
-      title: nextEvent.title,
-      start: nextEvent.start.toISOString(),
-      end: nextEvent.end.toISOString(),
-      allDay: nextEvent.allDay,
+      ...serializeEvent(nextEvent),
+      events: eventsOnNextDate.map(serializeEvent),
     } : null);
   } catch (error) {
     console.error('Unable to load the next calendar event', error);

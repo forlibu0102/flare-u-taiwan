@@ -13,9 +13,13 @@ import Layout from '../layouts/Layout.astro';
       <div class="status-panel" aria-live="polite" aria-busy="true" data-next-event>
         <span class="status-dot"></span>
         <p>NEXT EVENT</p>
-        <strong data-event-title>行程載入中…</strong>
         <span class="event-date" data-event-date></span>
-        <span class="event-time" data-event-time></span>
+        <div class="event-list" data-event-list>
+          <article class="next-event-item">
+            <strong data-event-title>行程載入中…</strong>
+            <span class="event-time" data-event-time></span>
+          </article>
+        </div>
       </div>
     </div>
   </section>
@@ -47,10 +51,13 @@ import Layout from '../layouts/Layout.astro';
   .lead { max-width: 630px; margin: 0; color: #667085; font-size: 1.06rem; line-height: 1.8; }
   .status-panel { position: relative; padding: 30px; border: 1px solid rgba(216,225,238,.9); border-radius: 25px; background: rgba(255,255,255,.86); box-shadow: 0 22px 60px rgba(13,27,61,.09); backdrop-filter: blur(16px); }
   .status-panel p { margin: 0 0 13px; color: #7d899c; font-size: .78rem; font-weight: 700; letter-spacing: .12em; }
-  .status-panel strong { display: block; font-size: 1.45rem; }
-  .event-date,.event-time { display: block; color: #667085; }
+  .event-list { display: grid; gap: 14px; }
+  :global(.next-event-item) { display: grid; gap: 5px; }
+  :global(.next-event-item + .next-event-item) { padding-top: 14px; border-top: 1px solid #e5ebf3; }
+  :global(.next-event-item strong) { display: block; font-size: 1.45rem; }
+  .event-date, :global(.event-time) { display: block; color: #667085; }
   .event-date { margin-top: 12px; font-weight: 700; }
-  .event-time { margin-top: 5px; }
+  :global(.event-time) { margin-top: 5px; }
   .status-dot { position: absolute; top: 30px; right: 30px; width: 10px; height: 10px; border-radius: 50%; background: #20c7c9; box-shadow: 0 0 0 7px rgba(32,199,201,.12); }
   .calendar-section { padding: 96px 24px; }
   .calendar-section { background: linear-gradient(180deg,#fff 0%,#f7faff 100%); }
@@ -65,6 +72,7 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
   const panel = document.querySelector<HTMLElement>('[data-next-event]');
+  const eventList = panel?.querySelector<HTMLElement>('[data-event-list]');
   const title = panel?.querySelector<HTMLElement>('[data-event-title]');
   const date = panel?.querySelector<HTMLElement>('[data-event-date]');
   const time = panel?.querySelector<HTMLElement>('[data-event-time]');
@@ -84,9 +92,39 @@ import Layout from '../layouts/Layout.astro';
   });
 
   function showFallback(message: string) {
-    if (title) title.textContent = message;
+    if (eventList) {
+      const item = document.createElement('article');
+      item.className = 'next-event-item';
+      const heading = document.createElement('strong');
+      heading.textContent = message;
+      item.append(heading);
+      eventList.replaceChildren(item);
+    } else if (title) title.textContent = message;
     if (date) date.textContent = '';
     if (time) time.textContent = '';
+  }
+
+  function formatEventTime(event) {
+    const startsAt = new Date(event.start);
+    const endsAt = new Date(event.end);
+    return event.allDay
+      ? '全天行程'
+      : `${timeFormatter.format(startsAt)}－${timeFormatter.format(endsAt)}`;
+  }
+
+  function renderEvents(events) {
+    if (!eventList) return;
+    eventList.replaceChildren(...events.map((event) => {
+      const item = document.createElement('article');
+      item.className = 'next-event-item';
+      const heading = document.createElement('strong');
+      heading.textContent = event.title;
+      const eventTime = document.createElement('span');
+      eventTime.className = 'event-time';
+      eventTime.textContent = formatEventTime(event);
+      item.append(heading, eventTime);
+      return item;
+    }));
   }
 
   async function loadNextEvent() {
@@ -100,13 +138,9 @@ import Layout from '../layouts/Layout.astro';
         return;
       }
 
-      const startsAt = new Date(event.start);
-      const endsAt = new Date(event.end);
-      if (title) title.textContent = event.title;
-      if (date) date.textContent = dateFormatter.format(startsAt);
-      if (time) time.textContent = event.allDay
-        ? '全天行程'
-        : `${timeFormatter.format(startsAt)}－${timeFormatter.format(endsAt)}`;
+      const events = Array.isArray(event.events) && event.events.length ? event.events : [event];
+      if (date) date.textContent = dateFormatter.format(new Date(events[0].start));
+      renderEvents(events);
     } catch {
       showFallback('行程暫時無法載入');
     } finally {
