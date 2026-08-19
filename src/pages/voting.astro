@@ -15,6 +15,7 @@ import Layout from '../layouts/Layout.astro';
         <p>即將截止</p>
         <strong data-deadline-title>投票資料載入中…</strong>
         <span data-deadline-time></span>
+        <span class="deadline-gap" data-deadline-gap hidden></span>
       </div>
     </div>
   </section>
@@ -138,7 +139,9 @@ import Layout from '../layouts/Layout.astro';
   .status-panel { position: relative; padding: 30px; border: 1px solid rgba(216,225,238,.9); border-radius: 25px; background: rgba(255,255,255,.86); box-shadow: 0 22px 60px rgba(13,27,61,.09); backdrop-filter: blur(16px); }
   .status-panel p { margin: 0 0 13px; color: #7d899c; font-size: .78rem; font-weight: 700; letter-spacing: .12em; }
   .status-panel strong { display: block; font-size: 1.45rem; }
-  .status-panel > span:last-child { display: block; margin-top: 8px; color: #667085; }
+  .status-panel > span:not(.status-dot) { display: block; color: #667085; }
+  .status-panel > [data-deadline-time] { margin-top: 8px; }
+  .status-panel > .deadline-gap { margin-top: 5px; color: #168d8f; font-weight: 750; }
   .status-dot { position: absolute; top: 30px; right: 30px; width: 10px; height: 10px; border-radius: 50%; background: #20c7c9; box-shadow: 0 0 0 7px rgba(32,199,201,.12); }
   .voting-content, .comeback-guide, .community-section { padding: 96px 24px; }
   .comeback-guide { background:#f7faff; }
@@ -239,6 +242,7 @@ import Layout from '../layouts/Layout.astro';
   const deadlinePanel = document.querySelector<HTMLElement>('[data-deadline-panel]');
   const deadlineTitle = document.querySelector<HTMLElement>('[data-deadline-title]');
   const deadlineTime = document.querySelector<HTMLElement>('[data-deadline-time]');
+  const deadlineGap = document.querySelector<HTMLElement>('[data-deadline-gap]');
   const dateTimeFormatter = new Intl.DateTimeFormat('zh-TW', {
     timeZone: 'Asia/Taipei', month: 'long', day: 'numeric', weekday: 'short',
     hour: 'numeric', minute: '2-digit', hour12: true,
@@ -284,6 +288,14 @@ import Layout from '../layouts/Layout.astro';
     if (!Number.isFinite(numericGap)) return metric('與第一名差距', '待更新');
     if (numericGap < 0) return metric('距離第一名', `差 ${Math.abs(numericGap).toLocaleString('zh-TW')} 票`);
     return metric('領先第二名', `${numericGap.toLocaleString('zh-TW')} 票`);
+  }
+
+  function deadlineGapText(vote: Vote) {
+    const numericRank = Number(vote.rank.replace(/^#/, ''));
+    const numericGap = Number(vote.gap.replace(/[^\d.-]/g, ''));
+    if (numericRank === 1) return '目前第一名';
+    if (!Number.isFinite(numericGap)) return '';
+    return `與第一名差距：${Math.abs(numericGap).toLocaleString('zh-TW')} 票`;
   }
 
   function renderVote(vote: Vote) {
@@ -352,12 +364,18 @@ import Layout from '../layouts/Layout.astro';
       if (!votes.length) {
         if (deadlineTitle) deadlineTitle.textContent = '目前沒有即將截止的投票';
         if (deadlineTime) deadlineTime.textContent = '新的投票資訊公布後將顯示於此';
+        if (deadlineGap) deadlineGap.hidden = true;
         return;
       }
 
       emptyState?.remove();
       if (deadlineTitle) deadlineTitle.textContent = votes[0].title;
       if (deadlineTime) deadlineTime.textContent = `${countdown(votes[0].end)} · ${dateTimeFormatter.format(new Date(votes[0].end))}`;
+      if (deadlineGap) {
+        const gapText = deadlineGapText(votes[0]);
+        deadlineGap.hidden = !gapText;
+        deadlineGap.textContent = gapText;
+      }
       votes.forEach((vote) => list?.append(renderVote(vote)));
       window.setInterval(() => {
         document.querySelectorAll<HTMLElement>('[data-countdown]').forEach((element) => {
@@ -367,6 +385,7 @@ import Layout from '../layouts/Layout.astro';
     } catch {
       if (deadlineTitle) deadlineTitle.textContent = '投票資料暫時無法載入';
       if (deadlineTime) deadlineTime.textContent = '請稍後再試';
+      if (deadlineGap) deadlineGap.hidden = true;
     } finally {
       deadlinePanel?.setAttribute('aria-busy', 'false');
     }
