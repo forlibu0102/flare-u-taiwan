@@ -3,7 +3,8 @@
     <div class="footer-brand">
       <strong>FLARE U Taiwan</strong>
       <p>Created by Taiwan U'RE, for every U'RE.</p>
-	  <a href="/site-about">關於本站與內容聲明</a>
+      <a href="/site-about">關於本站與內容聲明</a>
+      <p class="visitor-count" data-visitor-count>本站瀏覽人次載入中…</p>
     </div>
 
     <div class="contact-links" aria-label="與我聯繫">
@@ -67,6 +68,13 @@
 
   .copyright {
     white-space: nowrap;
+  }
+
+  .visitor-count {
+    margin-top: 14px;
+    color: #168d8f;
+    font-size: .8rem;
+    font-weight: 700;
   }
 
   .contact-links {
@@ -145,6 +153,7 @@
   :global(html[data-theme="dark"]) footer strong { color: #f2f6fb; }
   :global(html[data-theme="dark"]) footer p,
   :global(html[data-theme="dark"]) footer a { color: #9eacc0; }
+  :global(html[data-theme="dark"]) .visitor-count { color: #65d6d5; }
   :global(html[data-theme="dark"]) .contact-links > span { color: #9eacc0; }
   :global(html[data-theme="dark"]) .social-link {
     border-color: #34445d;
@@ -156,3 +165,21 @@
     color: #f08ac7;
   }
 </style>
+
+<script>
+  const visitorCount = document.querySelector<HTMLElement>('[data-visitor-count]');
+
+  async function loadVisitorCount() {
+    if (!visitorCount) return;
+    try {
+      const response = await fetch('https://flare-u-taiwan.goatcounter.com/counter/TOTAL.json');
+      if (!response.ok) throw new Error('Visitor count request failed');
+      const { count } = await response.json();
+      visitorCount.textContent = `本站瀏覽人次 ${count}`;
+    } catch {
+      visitorCount.hidden = true;
+    }
+  }
+
+  loadVisitorCount();
+</script>
