@@ -23,6 +23,7 @@ function getYouTubeId(value) {
       return url.searchParams.get('v')
         || url.pathname.match(/^\/shorts\/([^/?]+)/)?.[1]
         || url.pathname.match(/^\/embed\/([^/?]+)/)?.[1]
+        || url.pathname.match(/^\/live\/([^/?]+)/)?.[1]
         || null;
     }
   } catch {}
