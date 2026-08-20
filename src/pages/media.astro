@@ -139,6 +139,8 @@ const publishedDateFromTitle = (title) => {
   return Number.NEGATIVE_INFINITY;
 };
 
+const categoryOrder = ['vlog', 'original-variety', 'live', 'works', 'behind', 'music-shows', 'fancams', 'shows', 'radio', 'stage'];
+
 const displayGroups = [
   {
     id: 'all',
@@ -150,7 +152,7 @@ const displayGroups = [
       .sort((a, b) => b.publishedAt - a.publishedAt || a.index - b.index)
       .map(({ video }) => video),
   },
-  ...videoGroups,
+  ...videoGroups.sort((a, b) => categoryOrder.indexOf(a.id) - categoryOrder.indexOf(b.id)),
 ];
 ---
 

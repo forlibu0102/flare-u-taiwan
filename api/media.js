@@ -1,12 +1,13 @@
 import { parse } from 'csv-parse/sync';
 
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/17B0IQM7ffaonREBhSuVN0PneBzoOOY1y61DSl9j5QzU/export?format=csv&gid=0';
-const CATEGORY_ORDER = ['works', 'vlog', 'behind', 'live', 'music-shows', 'fancams', 'shows', 'radio', 'stage'];
+const CATEGORY_ORDER = ['vlog', 'original-variety', 'live', 'works', 'behind', 'music-shows', 'fancams', 'shows', 'radio', 'stage'];
 const CATEGORY_DEFAULTS = {
   works: ['作品相關', 'MUSIC & RELEASES'],
   'music-shows': ['打歌舞台', 'MUSIC SHOWS'],
   fancams: ['個人直拍', 'MEMBER FANCAMS'],
   shows: ['綜藝／訪談', 'SHOWS & INTERVIEWS'],
+  'original-variety': ['自製綜藝／團綜', 'ORIGINAL VARIETY'],
   radio: ['電台節目', 'RADIO'],
   behind: ['幕後花絮', 'BEHIND THE SCENES'],
   stage: ['舞台表演', 'PERFORMANCES'],
