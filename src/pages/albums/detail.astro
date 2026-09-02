@@ -44,7 +44,29 @@ const platforms = [
   function renderAlbum(album:Album) {
     if (!page) return;
     const type=page.querySelector<HTMLElement>('[data-album-type]'), title=page.querySelector<HTMLElement>('[data-album-title]'), release=page.querySelector<HTMLElement>('[data-album-release]'), cover=page.querySelector<HTMLImageElement>('[data-album-cover]'), intro=page.querySelector<HTMLElement>('[data-album-intro]'), platforms=page.querySelector<HTMLElement>('[data-platform-grid]'), trackList=page.querySelector<HTMLElement>('[data-track-list]');
-    if(type) type.textContent=album.albumType||'ALBUM'; if(title) title.textContent=album.name; if(release) release.textContent=`${album.releaseDate} RELEASE`; if(cover&&album.coverUrl){cover.src=album.coverUrl;cover.alt=`FLARE U ${album.name} 專輯封面`;}
+    if(type) type.textContent=album.albumType||'ALBUM';
+if(title) title.textContent=album.name;
+if(release) release.textContent=`${album.releaseDate} RELEASE`;
+
+if(cover){
+  const imageBase=`/images/albums/${album.name.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}`;
+  const imageExtensions=['.jpg','.jpeg','.png'];
+  let imageIndex=0;
+
+  const loadAlbumImage=()=>{
+    if(imageIndex>=imageExtensions.length){
+      cover.src='/images/albums/youth-error.jpg';
+      return;
+    }
+
+    cover.src=`${imageBase}${imageExtensions[imageIndex]}`;
+    imageIndex++;
+  };
+
+  cover.onerror=loadAlbumImage;
+  cover.alt=`FLARE U ${album.name} 專輯封面`;
+  loadAlbumImage();
+}
     if(intro){intro.replaceChildren(...album.description.map(text=>make('p','intro',text)));}
     if(platforms){platforms.replaceChildren(...album.links.map(([name,url])=>{const a=make('a');a.href=url;a.target='_blank';a.rel='noreferrer';a.append(make('span','',name),make('b','','↗'));return a;}));}
     if(trackList){trackList.replaceChildren(...album.tracks.map((track,index)=>{const details=make('details');details.open=index===0;const summary=make('summary');summary.append(make('span','',track.number),make('strong','',track.title));if(track.badge)summary.append(make('em','',track.badge));summary.append(make('b','','+'));details.append(summary,make('p','',track.description));return details;}));}
