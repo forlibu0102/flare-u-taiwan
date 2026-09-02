@@ -30,7 +30,24 @@ import Layout from '../layouts/Layout.astro';
     if(!grid||!Array.isArray(albums)||!albums.length)return;
     grid.replaceChildren(...albums.map(album=>{
       const card=make('a','album-card');card.href=`/albums/detail?album=${encodeURIComponent(album.name)}`;
-      const image=make('img');image.src=album.coverUrl||'/images/albums/youth-error.jpg';image.alt=`FLARE U ${album.name} 專輯封面`;
+      const image=make('img');
+const imageBase=`/images/albums/${album.name.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}`;
+const imageExtensions=['.jpg','.jpeg','.png'];
+let imageIndex=0;
+
+const loadAlbumImage=()=>{
+  if(imageIndex>=imageExtensions.length){
+    image.src='/images/albums/youth-error.jpg';
+    return;
+  }
+
+  image.src=`${imageBase}${imageExtensions[imageIndex]}`;
+  imageIndex++;
+};
+
+image.onerror=loadAlbumImage;
+image.alt=`FLARE U ${album.name} 專輯封面`;
+loadAlbumImage();
       const copy=make('div');copy.append(make('p','card-label',album.albumType||'ALBUM'),make('h2','',album.name),make('p','',album.releaseDate),make('span','','查看專輯資訊 →'));card.append(image,copy);return card;
     }));
   }).catch(()=>{});
