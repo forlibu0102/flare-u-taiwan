@@ -1,0 +1,159 @@
+<section class="today-notice" aria-labelledby="today-notice-title">
+  <div class="today-notice__inner">
+    <div class="today-notice__heading">
+      <div>
+        <p class="today-notice__eyebrow">TODAY AT FLARE U</p>
+        <h2 id="today-notice-title">今日通知</h2>
+        <p class="today-notice__date" data-today-date aria-live="polite">正在確認今天的資訊⋯</p>
+      </div>
+      <span class="today-notice__badge">每日更新</span>
+    </div>
+
+    <div class="today-notice__grid">
+      <article class="today-notice__card" aria-labelledby="today-votes-title">
+        <div class="today-notice__card-top">
+          <span class="today-notice__icon today-notice__icon--vote" aria-hidden="true">✓</span>
+          <p>VOTING</p>
+        </div>
+        <h3 id="today-votes-title">今天的投票</h3>
+        <ul class="today-notice__list" data-today-votes aria-live="polite">
+          <li>正在讀取投票資料⋯</li>
+        </ul>
+        <a href="/voting" class="today-notice__link">前往投票專區 <span aria-hidden="true">→</span></a>
+      </article>
+
+      <article class="today-notice__card" aria-labelledby="today-events-title">
+        <div class="today-notice__card-top">
+          <span class="today-notice__icon today-notice__icon--event" aria-hidden="true">□</span>
+          <p>SCHEDULE</p>
+        </div>
+        <h3 id="today-events-title">今天的行程</h3>
+        <ul class="today-notice__list" data-today-events aria-live="polite">
+          <li>正在讀取行程資料⋯</li>
+        </ul>
+        <a href="/events" class="today-notice__link">查看完整行事曆 <span aria-hidden="true">→</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<script>
+  type Vote = { title: string; platforms: string[]; end: string; voteUrl: string };
+  type Event = { title: string; start: string; end: string; allDay: boolean };
+
+  const timeZone = 'Asia/Taipei';
+  const voteList = document.querySelector<HTMLUListElement>('[data-today-votes]');
+  const eventList = document.querySelector<HTMLUListElement>('[data-today-events]');
+  const dateLabel = document.querySelector<HTMLElement>('[data-today-date]');
+  const dateFormatter = new Intl.DateTimeFormat('zh-TW', {
+    timeZone, month: 'long', day: 'numeric', weekday: 'long',
+  });
+  const timeFormatter = new Intl.DateTimeFormat('zh-TW', {
+    timeZone, hour: 'numeric', minute: '2-digit', hour12: true,
+  });
+
+  if (dateLabel) dateLabel.textContent = dateFormatter.format(new Date());
+
+  function showEmpty(list: HTMLUListElement | null, message: string) {
+    if (!list) return;
+    const item = document.createElement('li');
+    item.className = 'today-notice__empty';
+    item.textContent = message;
+    list.replaceChildren(item);
+  }
+
+  function voteDeadline(end: string) {
+    return `截止：${new Intl.DateTimeFormat('zh-TW', {
+      timeZone, month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true,
+    }).format(new Date(end))}`;
+  }
+
+  function eventTime(event: Event) {
+    if (event.allDay) return '全天行程';
+    return `${timeFormatter.format(new Date(event.start))}－${timeFormatter.format(new Date(event.end))}`;
+  }
+
+  async function loadVotes() {
+    try {
+      const response = await fetch('/api/votes');
+      if (!response.ok) throw new Error('Votes request failed');
+      const votes: Vote[] = await response.json();
+      if (!votes.length) return showEmpty(voteList, '今天沒有進行中的投票');
+      if (!voteList) return;
+
+      voteList.replaceChildren(...votes.map((vote) => {
+        const item = document.createElement('li');
+        const heading = document.createElement(vote.voteUrl ? 'a' : 'strong');
+        heading.textContent = vote.title;
+        if (vote.voteUrl && heading instanceof HTMLAnchorElement) {
+          heading.href = vote.voteUrl;
+          heading.target = '_blank';
+          heading.rel = 'noreferrer';
+        }
+        const detail = document.createElement('span');
+        detail.textContent = [vote.platforms?.join('、'), voteDeadline(vote.end)].filter(Boolean).join(' · ');
+        item.append(heading, detail);
+        return item;
+      }));
+    } catch {
+      showEmpty(voteList, '投票資料暫時無法載入');
+    }
+  }
+
+  async function loadEvents() {
+    try {
+      const response = await fetch('/api/next-event?scope=today');
+      if (!response.ok) throw new Error('Events request failed');
+      const data: { events?: Event[] } | null = await response.json();
+      const events = data?.events ?? [];
+      if (!events.length) return showEmpty(eventList, '今天沒有已公布行程');
+      if (!eventList) return;
+
+      eventList.replaceChildren(...events.map((event) => {
+        const item = document.createElement('li');
+        const heading = document.createElement('strong');
+        heading.textContent = event.title;
+        const detail = document.createElement('span');
+        detail.textContent = eventTime(event);
+        item.append(heading, detail);
+        return item;
+      }));
+    } catch {
+      showEmpty(eventList, '行程資料暫時無法載入');
+    }
+  }
+
+  void Promise.all([loadVotes(), loadEvents()]);
+</script>
+
+<style>
+  .today-notice { padding: 76px 24px; background: linear-gradient(135deg, #f2f8ff 0%, #f8fffd 100%); }
+  .today-notice__inner { width: min(1200px, 100%); margin: 0 auto; }
+  .today-notice__heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 28px; }
+  .today-notice__eyebrow, .today-notice__card-top p { margin: 0; color: #438fe9; font-size: .75rem; font-weight: 800; letter-spacing: .16em; }
+  .today-notice h2 { margin: 10px 0 8px; color: #0d1b3d; font-size: clamp(2.4rem, 5vw, 4.2rem); letter-spacing: -.055em; line-height: 1; }
+  .today-notice__date { margin: 0; color: #667085; }
+  .today-notice__badge { padding: 10px 14px; border-radius: 999px; background: #e1faf4; color: #087f76; font-size: .78rem; font-weight: 800; white-space: nowrap; }
+  .today-notice__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .today-notice__card { display: flex; min-height: 268px; flex-direction: column; padding: 28px; border: 1px solid #dce6f1; border-radius: 24px; background: rgba(255, 255, 255, .92); box-shadow: 0 18px 40px rgba(13, 27, 61, .06); }
+  .today-notice__card-top { display: flex; align-items: center; gap: 10px; }
+  .today-notice__icon { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 10px; font-weight: 850; }
+  .today-notice__icon--vote { background: #e8f1ff; color: #2d79d6; }
+  .today-notice__icon--event { background: #e0faf4; color: #087f76; font-size: 1.25rem; }
+  .today-notice h3 { margin: 19px 0 14px; color: #0d1b3d; font-size: 1.45rem; letter-spacing: -.03em; }
+  .today-notice__list { display: grid; gap: 8px; min-height: 74px; margin: 0; padding: 0; list-style: none; }
+  .today-notice__list li { padding: 12px 14px; border-radius: 12px; background: #f6f9fd; color: #526174; }
+  .today-notice__list strong, .today-notice__list a { display: block; color: #17284c; font-size: .95rem; font-weight: 800; text-decoration: none; }
+  .today-notice__list a:hover { color: #2563eb; text-decoration: underline; }
+  .today-notice__list span { display: block; margin-top: 4px; font-size: .82rem; }
+  .today-notice__empty { display: flex; min-height: 52px; align-items: center; font-size: .9rem; }
+  .today-notice__link { display: inline-flex; gap: 8px; margin-top: auto; padding-top: 20px; color: #0d1b3d; font-size: .92rem; font-weight: 800; text-decoration: none; }
+  .today-notice__link span { color: #438fe9; }
+  :global(html[data-theme="dark"]) .today-notice { background: linear-gradient(135deg, #081225, #0b1b2d); }
+  :global(html[data-theme="dark"]) .today-notice h2, :global(html[data-theme="dark"]) .today-notice h3 { color: #f3f7fc; }
+  :global(html[data-theme="dark"]) .today-notice__date { color: #b7c3d5; }
+  :global(html[data-theme="dark"]) .today-notice__card { border-color: #2d405e; background: #11213b; }
+  :global(html[data-theme="dark"]) .today-notice__list li { background: #0d1b30; color: #b7c3d5; }
+  :global(html[data-theme="dark"]) .today-notice__list strong, :global(html[data-theme="dark"]) .today-notice__list a, :global(html[data-theme="dark"]) .today-notice__link { color: #edf4fb; }
+  @media (max-width: 720px) { .today-notice { padding: 64px 16px; } .today-notice__heading { align-items: flex-start; flex-direction: column; gap: 14px; } .today-notice__grid { grid-template-columns: 1fr; } .today-notice__card { min-height: 0; padding: 24px; } }
+</style>

@@ -59,7 +59,7 @@ export default async function handler(_request, response) {
         };
       })
       .filter(Boolean)
-      .filter((vote) => new Date(vote.end) > now)
+      .filter((vote) => (!vote.start || new Date(vote.start) <= now) && new Date(vote.end) > now)
       .sort((a, b) => new Date(a.end) - new Date(b.end));
 
     response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');

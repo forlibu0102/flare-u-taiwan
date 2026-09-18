@@ -27,7 +27,25 @@ function serializeEvent(event) {
   };
 }
 
-export default async function handler(_request, response) {
+function taipeiDateKey(value) {
+  const parts = new Intl.DateTimeFormat('en', {
+    timeZone: 'Asia/Taipei',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).formatToParts(value);
+  const get = (type) => parts.find((part) => part.type === type)?.value;
+  return `${get('year')}-${get('month')}-${get('day')}`;
+}
+
+function occursOnTaipeiDate(event, dateKey) {
+  const startDate = taipeiDateKey(event.start);
+  const finalMoment = new Date(event.end.getTime() - 1);
+  const endDate = taipeiDateKey(finalMoment);
+  return startDate <= dateKey && endDate >= dateKey;
+}
+
+export default async function handler(request, response) {
   try {
     const calendarResponse = await fetch(CALENDAR_URL, {
       signal: AbortSignal.timeout(8000),
@@ -59,6 +77,18 @@ export default async function handler(_request, response) {
     }
 
     candidates.sort((a, b) => a.start.getTime() - b.start.getTime());
+
+    const scope = new URL(request.url, 'https://flare-u-taiwan.vercel.app').searchParams.get('scope');
+    if (scope === 'today') {
+      const today = taipeiDateKey(now);
+      const events = candidates
+        .filter((event) => occursOnTaipeiDate(event, today))
+        .map(serializeEvent);
+      response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+      response.status(200).json({ events });
+      return;
+    }
+
     const nextEvent = candidates[0];
     const nextEventDate = nextEvent && taipeiDateFormatter.format(nextEvent.start);
     const eventsOnNextDate = nextEvent
