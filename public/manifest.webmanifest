@@ -1,0 +1,10 @@
+{
+  "name": "FLARE U Taiwan",
+  "short_name": "FLARE U Taiwan",
+  "description": "FLARE U Taiwan Fan Hub",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7FBFF",
+  "theme_color": "#142B52",
+  "icons": []
+}
