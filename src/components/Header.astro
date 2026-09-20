@@ -51,6 +51,16 @@ const isCurrent = (path: string) =>
       <a class:list={{ active: isCurrent("/media") }} href="/media" style="text-decoration: none;">影音專區</a>
       <a class:list={{ active: isCurrent("/news") }} href="/news" style="text-decoration: none;">新聞整理</a>
       <a class:list={{ active: isCurrent("/albums") }} href="/albums" style="text-decoration: none;">專輯</a>
+      <div class="notification-action">
+  <button
+    id="enable-notifications-mobile"
+    class="notification-button"
+    type="button"
+  >
+    <span class="notification-button-icon" aria-hidden="true">♢</span>
+    <span class="notification-button-label">開啟每日提醒</span>
+  </button>
+</div>
 	  <button class="theme-toggle mobile-theme-toggle" type="button" aria-label="切換深色模式" aria-pressed="false">
 		<span class="theme-icon" aria-hidden="true">☾</span>
 		<span class="theme-label">切換為深色模式</span>
