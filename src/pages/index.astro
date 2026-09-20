@@ -20,6 +20,16 @@ import Layout from '../layouts/Layout.astro';
 				<p class="hero-description">
 					由台灣 U'RE 建立，整理 FLARE U 的團體資訊、投票、行程與影音內容。
 				</p>
+<div class="notification-action">
+  <button
+    id="enable-notifications"
+    class="notification-button"
+    type="button"
+  >
+    <span class="notification-button-icon" aria-hidden="true">♢</span>
+    <span class="notification-button-label">開啟每日提醒</span>
+  </button>
+</div>
 
 				<div class="hero-actions">
 					<a class="primary-button" href="/voting">查看目前投票</a>
@@ -136,9 +146,7 @@ import Layout from '../layouts/Layout.astro';
 	</section>
 
 	<!-- Quick Access -->
-	<button id="enable-notifications" type="button">
-  🔔 開啟通知
-</button>
+
 	<section class="content-section quick-section">
 		<div class="section-inner">
 			<div class="section-heading">
@@ -1114,6 +1122,73 @@ import Layout from '../layouts/Layout.astro';
 			display: none;
 		}
 	}
+.notification-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto 8px;
+  padding: 12px 22px;
+  border: 1px solid rgba(95, 211, 220, 0.35);
+  border-radius: 999px;
+  background: linear-gradient(
+    135deg,
+    rgba(35, 91, 160, 0.95),
+    rgba(41, 148, 164, 0.95)
+  );
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow:
+    0 8px 24px rgba(20, 73, 120, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.notification-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 28px rgba(20, 73, 120, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.notification-button:active {
+  transform: translateY(0);
+}
+
+.notification-button-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 13px;
+}
+
+.notification-button:disabled {
+  background: linear-gradient(
+    135deg,
+    rgba(53, 163, 153, 0.9),
+    rgba(68, 185, 171, 0.9)
+  );
+  border-color: rgba(120, 225, 210, 0.35);
+  cursor: default;
+  opacity: 0.95;
+  box-shadow:
+    0 8px 22px rgba(38, 139, 129, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.notification-button:disabled:hover {
+  transform: none;
+}
 </style>
 
 <script>

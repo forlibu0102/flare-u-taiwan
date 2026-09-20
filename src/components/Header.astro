@@ -17,6 +17,17 @@ const isCurrent = (path: string) =>
     <a class:list={{ active: isCurrent("/media") }} href="/media">影音</a>
 	<a class:list={{ active: isCurrent("/news") }} href="/news">新聞</a>
 	<a class:list={{ active: isCurrent("/albums") }} href="/albums">專輯</a>
+
+  <div class="notification-action">
+  <button
+    id="enable-notifications"
+    class="notification-button"
+    type="button"
+  >
+    <span class="notification-button-icon" aria-hidden="true">♢</span>
+    <span class="notification-button-label">開啟每日提醒</span>
+  </button>
+</div>
 	<button class="theme-toggle" type="button" aria-label="切換深色模式" aria-pressed="false">
 	  <span class="theme-icon" aria-hidden="true">☾</span>
 	  <span class="theme-label">深色</span>
@@ -133,7 +144,36 @@ const isCurrent = (path: string) =>
 	font-size: .82rem;
 	font-weight: 700;
   }
+.notification-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 0 13px;
+  border: 1px solid rgba(96, 190, 220, 0.35);
+  border-radius: 999px;
+  background: rgba(55, 111, 155, 0.22);
+  color: #dceeff;
+  cursor: pointer;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
 
+.notification-button:hover {
+  background: rgba(55, 145, 185, 0.32);
+  border-color: rgba(96, 210, 230, 0.55);
+  transform: translateY(-1px);
+}
+
+.notification-button:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
   .theme-icon { font-size: 1rem; line-height: 1; }
 
   .desktop-nav a {
