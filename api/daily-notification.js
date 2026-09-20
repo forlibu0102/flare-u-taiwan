@@ -143,11 +143,8 @@ export default async function handler(request, response) {
   try {
     const tomorrow = getTomorrowDateKey();
 
-    const baseUrl =
-      process.env.VERCEL_URL
-        ? `https://${process.env.VERCEL_URL}`
-        : BASE_URL;
-
+    const baseUrl = BASE_URL;
+    
     const [eventsResponse, votesResponse] = await Promise.all([
       fetch(
         `${baseUrl}/api/next-event.js?date=${tomorrow}`,
