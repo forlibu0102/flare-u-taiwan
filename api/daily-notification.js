@@ -68,58 +68,33 @@ async function redisRequest(path, options = {}) {
 }
 
 function buildNotificationBody(events, votes, dateKey) {
-  const dateLabel = new Intl.DateTimeFormat('zh-TW', {
+  const dateLabel = new Intl.DateTimeFormat('en-CA', {
     timeZone: 'Asia/Taipei',
-    month: 'numeric',
-    day: 'numeric',
-    weekday: 'short',
+    month: '2-digit',
+    day: '2-digit',
   }).format(new Date(`${dateKey}T12:00:00+08:00`));
 
-  const lines = [`明天（${dateLabel}）`];
+  const lines = [
+    `🌟 FLARE U Taiwan｜明日 ${dateLabel} 提醒`,
+  ];
 
   if (events.length > 0) {
-    lines.push('');
-    lines.push(`📅 行程 ${events.length} 項`);
+    lines.push('📅 活動');
 
     for (const event of events.slice(0, 5)) {
-      if (event.allDay) {
-        lines.push(`・${event.title}`);
-      } else {
-        const start = new Date(event.start);
-
-        const time = new Intl.DateTimeFormat('zh-TW', {
-          timeZone: 'Asia/Taipei',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false,
-        }).format(start);
-
-        lines.push(`・${time} ${event.title}`);
-      }
+      lines.push(`・${event.title}`);
     }
 
     if (events.length > 5) {
-      lines.push(`・還有 ${events.length - 5} 項行程`);
+      lines.push(`・還有 ${events.length - 5} 項活動`);
     }
   }
 
   if (votes.length > 0) {
-    lines.push('');
-    lines.push(`🗳️ 投票 ${votes.length} 項`);
+    lines.push('🗳️ 投票');
 
     for (const vote of votes.slice(0, 5)) {
-      const end = new Date(vote.end);
-
-      const endLabel = new Intl.DateTimeFormat('zh-TW', {
-        timeZone: 'Asia/Taipei',
-        month: 'numeric',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-      }).format(end);
-
-      lines.push(`・${vote.title}（截止 ${endLabel}）`);
+      lines.push(`・${vote.title}`);
     }
 
     if (votes.length > 5) {
@@ -144,7 +119,7 @@ export default async function handler(request, response) {
     const tomorrow = getTomorrowDateKey();
 
     const baseUrl = BASE_URL;
-    
+
     const [eventsResponse, votesResponse] = await Promise.all([
       fetch(
         `${baseUrl}/api/next-event.js?date=${tomorrow}`,
