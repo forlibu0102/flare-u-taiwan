@@ -12,8 +12,11 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@upstash/redis": "^1.38.4",
     "astro": "^7.1.6",
     "csv-parse": "^7.0.2",
-    "node-ical": "^0.27.1"
+    "dotenv": "^18.0.1",
+    "node-ical": "^0.27.1",
+    "web-push": "^3.6.7"
   }
 }

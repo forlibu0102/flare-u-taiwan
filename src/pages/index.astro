@@ -136,6 +136,9 @@ import Layout from '../layouts/Layout.astro';
 	</section>
 
 	<!-- Quick Access -->
+	<button id="enable-notifications" type="button">
+  🔔 開啟通知
+</button>
 	<section class="content-section quick-section">
 		<div class="section-inner">
 			<div class="section-heading">
@@ -1112,3 +1115,77 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 </style>
+
+<script>
+  
+
+  const notificationButton = document.querySelector('#enable-notifications');
+
+if (notificationButton) {
+  notificationButton.addEventListener('click', async () => {
+    try {
+      if (!('Notification' in window)) {
+        alert('此瀏覽器不支援通知功能');
+        return;
+      }
+
+      if (!('serviceWorker' in navigator)) {
+        alert('此瀏覽器不支援背景通知功能');
+        return;
+      }
+
+      const permission = await Notification.requestPermission();
+
+      if (permission !== 'granted') {
+        if (permission === 'denied') {
+          notificationButton.textContent = '通知權限已封鎖';
+        }
+        return;
+      }
+
+      const registration = await navigator.serviceWorker.ready;
+
+      const vapidPublicKey =
+        'BISE5M1-ULbvMy5HoDra5KJi35IcFkrqSfc_7e7VjscS1TmE7XLRKCQ2eW0yA8EBMT8EgyFiAlXzneIos8Qf4yI';
+
+      const applicationServerKey = urlBase64ToUint8Array(vapidPublicKey);
+
+      const subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey,
+      });
+
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(subscription),
+      });
+
+      if (!response.ok) {
+        throw new Error('Subscription upload failed');
+      }
+
+      notificationButton.textContent = '✓ 通知已開啟';
+      notificationButton.disabled = true;
+
+      console.log('Push subscription created:', subscription);
+    } catch (error) {
+      console.error('Notification setup failed:', error);
+      alert('通知設定失敗，請稍後再試');
+    }
+  });
+}
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding)
+    .replace(/-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = window.atob(base64);
+
+  return Uint8Array.from([...rawData].map((char) => char.charCodeAt(0)));
+}
+</script>

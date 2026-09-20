@@ -8,7 +8,10 @@ function parseTaipeiDate(value, currentYear) {
 
   const [, suppliedYear, month, day, hour, minute] = match;
   const year = Number(suppliedYear || currentYear);
-  return new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hour.padStart(2, '0')}:${minute}:00+08:00`);
+
+  return new Date(
+    `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}T${hour.padStart(2, '0')}:${minute}:00+08:00`
+  );
 }
 
 function splitPlatforms(value) {
@@ -18,10 +21,19 @@ function splitPlatforms(value) {
     .filter(Boolean);
 }
 
-export default async function handler(_request, response) {
+function isValidDateKey(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value);
+}
+
+export default async function handler(request, response) {
   try {
-    const sheetResponse = await fetch(SHEET_URL, { signal: AbortSignal.timeout(8000) });
-    if (!sheetResponse.ok) throw new Error(`Sheet request failed: ${sheetResponse.status}`);
+    const sheetResponse = await fetch(SHEET_URL, {
+      signal: AbortSignal.timeout(8000),
+    });
+
+    if (!sheetResponse.ok) {
+      throw new Error(`Sheet request failed: ${sheetResponse.status}`);
+    }
 
     const rows = parse(await sheetResponse.text(), {
       columns: true,
@@ -29,17 +41,48 @@ export default async function handler(_request, response) {
       trim: true,
       relax_column_count: true,
     });
+
     const now = new Date();
-    const currentYear = Number(new Intl.DateTimeFormat('en', {
-      timeZone: 'Asia/Taipei',
-      year: 'numeric',
-    }).format(now));
+
+    const currentYear = Number(
+      new Intl.DateTimeFormat('en', {
+        timeZone: 'Asia/Taipei',
+        year: 'numeric',
+      }).format(now)
+    );
+
+    const url = new URL(
+      request.url,
+      'https://flare-u-taiwan.vercel.app'
+    );
+
+    const dateParam = url.searchParams.get('date');
+
+    let targetStart = null;
+    let targetEnd = null;
+
+    if (dateParam) {
+      if (!isValidDateKey(dateParam)) {
+        return response.status(400).json({
+          error: '日期格式錯誤，請使用 YYYY-MM-DD',
+        });
+      }
+
+      targetStart = new Date(`${dateParam}T00:00:00+08:00`);
+      targetEnd = new Date(targetStart.getTime() + 24 * 60 * 60 * 1000);
+    }
 
     const votes = rows
-      .filter((row) => !['否', 'no', 'false', '0'].includes(String(row['顯示'] || '').toLowerCase()))
+      .filter(
+        (row) =>
+          !['否', 'no', 'false', '0'].includes(
+            String(row['顯示'] || '').toLowerCase()
+          )
+      )
       .map((row) => {
         const start = parseTaipeiDate(row['開始時間'], currentYear);
         const end = parseTaipeiDate(row['截止時間'], currentYear);
+
         if (!end) return null;
 
         return {
@@ -59,13 +102,31 @@ export default async function handler(_request, response) {
         };
       })
       .filter(Boolean)
-      .filter((vote) => (!vote.start || new Date(vote.start) <= now) && new Date(vote.end) > now)
+      .filter((vote) => {
+        const start = vote.start ? new Date(vote.start) : null;
+        const end = new Date(vote.end);
+
+        if (targetStart && targetEnd) {
+          return (
+            (!start || start < targetEnd) &&
+            end > targetStart
+          );
+        }
+
+        return (!start || start <= now) && end > now;
+      })
       .sort((a, b) => new Date(a.end) - new Date(b.end));
 
-    response.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
+    response.setHeader(
+      'Cache-Control',
+      's-maxage=300, stale-while-revalidate=600'
+    );
+
     response.status(200).json(votes);
   } catch (error) {
     console.error('Unable to load voting data', error);
-    response.status(503).json({ error: '投票資料暫時無法載入' });
+    response.status(503).json({
+      error: '投票資料暫時無法載入',
+    });
   }
 }

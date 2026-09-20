@@ -92,5 +92,16 @@ const pageTitle = isHomePage ? title : `${title}｜FLARE U Taiwan`;
 			async
 			src="https://gc.zgo.at/count.js"
 		></script>
-	</body>
+	
+<script is:inline>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('FLARE U Taiwan Service Worker registered'))
+        .catch((error) => console.error('Service Worker registration failed:', error));
+    });
+  }
+</script>
+
+</body>
 </html>
