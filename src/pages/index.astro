@@ -1194,9 +1194,11 @@ import Layout from '../layouts/Layout.astro';
 <script>
   
 
-  const notificationButton = document.querySelector('#enable-notifications');
-
-if (notificationButton) {
+  
+      const notificationButtons = document.querySelectorAll(
+  '#enable-notifications, #enable-notifications-mobile'
+);
+notificationButtons.forEach((notificationButton) => {
   notificationButton.addEventListener('click', async () => {
     try {
       if (!('Notification' in window)) {
@@ -1219,7 +1221,6 @@ if (notificationButton) {
       }
 
       const registration = await navigator.serviceWorker.ready;
-
       const vapidPublicKey =
         'BISE5M1-ULbvMy5HoDra5KJi35IcFkrqSfc_7e7VjscS1TmE7XLRKCQ2eW0yA8EBMT8EgyFiAlXzneIos8Qf4yI';
 
@@ -1250,8 +1251,8 @@ if (notificationButton) {
       console.error('Notification setup failed:', error);
       alert('通知設定失敗，請稍後再試');
     }
-  });
-}
+   });
+});
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
