@@ -83,12 +83,14 @@ function buildNotificationBody(events, votes, dateKey) {
 
   // 找出明天截止的投票
   const tomorrowStart = new Date(`${dateKey}T00:00:00+08:00`);
-  const tomorrowEnd = new Date(`${dateKey}T23:59:59+08:00`);
+  const nextDayStart = new Date(
+    tomorrowStart.getTime() + 24 * 60 * 60 * 1000
+  );
 
   const endingTomorrow = votes
     .filter((vote) => {
       const end = new Date(vote.end);
-      return end >= tomorrowStart && end <= tomorrowEnd;
+      return end >= tomorrowStart && end < nextDayStart;
     })
     .sort((a, b) => new Date(a.end) - new Date(b.end));
 
