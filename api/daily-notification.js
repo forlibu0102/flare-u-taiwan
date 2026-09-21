@@ -93,19 +93,7 @@ function buildNotificationBody(events, votes, dateKey) {
       return end >= tomorrowStart && end < nextDayStart;
     })
     .sort((a, b) => new Date(a.end) - new Date(b.end));
-console.log('Voting notification debug:', {
-  dateKey,
-  tomorrowStart: tomorrowStart.toISOString(),
-  nextDayStart: nextDayStart.toISOString(),
-  votes: votes.map((vote) => ({
-    title: vote.title,
-    end: vote.end,
-  })),
-  endingTomorrow: endingTomorrow.map((vote) => ({
-    title: vote.title,
-    end: vote.end,
-  })),
-});
+
   if (endingTomorrow.length > 0) {
     const vote = endingTomorrow[0];
 
