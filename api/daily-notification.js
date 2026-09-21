@@ -74,32 +74,37 @@ function buildNotificationBody(events, votes, dateKey) {
     day: '2-digit',
   }).format(new Date(`${dateKey}T12:00:00+08:00`));
 
-  const lines = [
-    `🌟 FLARE U Taiwan｜明日 ${dateLabel} 提醒`,
-  ];
+  const lines = [`🌟 FLARE U Taiwan｜明日 ${dateLabel} 提醒`];
 
+  // 明日行程：只顯示第一個行程，避免通知過長
   if (events.length > 0) {
-    lines.push('📅 活動');
-
-    for (const event of events.slice(0, 5)) {
-      lines.push(`・${event.title}`);
-    }
-
-    if (events.length > 5) {
-      lines.push(`・還有 ${events.length - 5} 項活動`);
-    }
+    lines.push(`📅 行程：${events[0].title}`);
   }
 
-  if (votes.length > 0) {
-    lines.push('🗳️ 投票');
+  // 找出明天截止的投票
+  const tomorrowStart = new Date(`${dateKey}T00:00:00+08:00`);
+  const tomorrowEnd = new Date(`${dateKey}T23:59:59+08:00`);
 
-    for (const vote of votes.slice(0, 5)) {
-      lines.push(`・${vote.title}`);
-    }
+  const endingTomorrow = votes
+    .filter((vote) => {
+      const end = new Date(vote.end);
+      return end >= tomorrowStart && end <= tomorrowEnd;
+    })
+    .sort((a, b) => new Date(a.end) - new Date(b.end));
 
-    if (votes.length > 5) {
-      lines.push(`・還有 ${votes.length - 5} 項投票`);
-    }
+  if (endingTomorrow.length > 0) {
+    const vote = endingTomorrow[0];
+
+    const endTime = new Intl.DateTimeFormat('zh-TW', {
+      timeZone: 'Asia/Taipei',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(new Date(vote.end));
+
+    lines.push(`🗳️ 即將結束投票：${endTime}｜${vote.title}`);
+  } else if (votes.length > 0) {
+    lines.push(`🗳️ 進行中投票：${votes.length} 項`);
   }
 
   return lines.join('\n');
@@ -122,7 +127,7 @@ export default async function handler(request, response) {
 
     const [eventsResponse, votesResponse] = await Promise.all([
       fetch(
-        `${baseUrl}/api/next-event.js?date=${tomorrow}`,
+       `${baseUrl}/api/next-event.js?date=${tomorrow}&_=${Date.now()}`,
         {
           signal: AbortSignal.timeout(10000),
         }
