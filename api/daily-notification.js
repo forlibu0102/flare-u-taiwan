@@ -211,13 +211,14 @@ export default async function handler(request, response) {
     );
 
     const payload = JSON.stringify({
-      title: '🌟 FLARE U Taiwan',
-      body: buildNotificationBody(
-        events,
-        votes,
-        tomorrow
-      ),
-    });
+  title: '🌟 FLARE U Taiwan',
+  body: buildNotificationBody(
+    events,
+    votes,
+    tomorrow
+  ),
+  url: `/notice?date=${tomorrow}`,
+});
 
     let successCount = 0;
     let failureCount = 0;

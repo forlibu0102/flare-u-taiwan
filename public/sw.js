@@ -13,10 +13,13 @@ self.addEventListener('push', (event) => {
   }
 
   const options = {
-    body: data.body || '這是一則 FLARE U Taiwan 通知',
-    icon: '/apple-touch-icon.png',
-    badge: '/favicon-32.png',
-  };
+  body: data.body || '這是一則 FLARE U Taiwan 通知',
+  icon: '/apple-touch-icon.png',
+  badge: '/favicon-32.png',
+  data: {
+    url: data.url || '/',
+  },
+};
 
   event.waitUntil(
     self.registration.showNotification(
@@ -40,9 +43,11 @@ self.addEventListener('notificationclick', (event) => {
         }
       }
 
-      if (clients.openWindow) {
-        return clients.openWindow('/');
-      }
+if (clients.openWindow) {
+  return clients.openWindow(
+    event.notification.data?.url || '/'
+  );
+}
     })
   );
 });

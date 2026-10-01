@@ -1,0 +1,871 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="提醒事項"
+  description="FLARE U Taiwan 提醒事項，整理投票與明日行程。"
+>
+  <main class="notice-page">
+    <section class="notice-hero">
+      <div class="page-inner">
+        <p class="eyebrow">FLARE U TAIWAN</p>
+        <h1>
+  <span data-notice-date>提醒事項</span>
+</h1>
+        <p class="lead">
+          集中整理明日的重要投票與行程，一頁掌握 FLARE U 的最新資訊。
+        </p>
+      </div>
+    </section>
+
+    <section class="notice-section voting-section">
+      <div class="page-inner">
+        <div class="section-heading">
+          <p class="eyebrow">VOTING</p>
+          <h2>投票</h2>
+        </div>
+
+        <div class="notice-grid" data-votes>
+          <article class="notice-card loading-card">
+            <span class="card-icon">🗳️</span>
+            <strong>投票資訊載入中…</strong>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="notice-section events-section">
+      <div class="page-inner">
+        <div class="section-heading">
+          <p class="eyebrow">SCHEDULE</p>
+          <h2>明日行程</h2>
+        </div>
+
+        <div class="notice-grid" data-events>
+          <article class="notice-card loading-card">
+            <span class="card-icon">📅</span>
+            <strong>行程資訊載入中…</strong>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
+
+<style>
+  :global(*) {
+    box-sizing: border-box;
+  }
+
+  :global(body) {
+    margin: 0;
+    color: #0d1b3d;
+    font-family: Inter, "Noto Sans TC", system-ui, sans-serif;
+  }
+
+  .page-inner {
+    width: min(1100px, 100%);
+    margin: 0 auto;
+  }
+
+  .notice-hero {
+  padding: 92px 24px 82px;
+  background:
+    radial-gradient(circle at 84% 13%, rgba(32, 199, 201, 0.2), transparent 29%),
+    radial-gradient(circle at 8% 88%, rgba(67, 143, 233, 0.15), transparent 30%),
+    #fafcff;
+}
+
+[data-notice-date] {
+  color: #10254a !important;
+}
+
+.notice-hero p {
+  color: #536783 !important;
+}
+
+html[data-theme="dark"] .notice-hero {
+  background:
+    radial-gradient(circle at 84% 13%, rgba(32, 199, 201, 0.12), transparent 29%),
+    radial-gradient(circle at 8% 88%, rgba(67, 143, 233, 0.12), transparent 30%),
+    #081225;
+}
+
+html[data-theme="dark"] [data-notice-date] {
+  color: #f3f7fc !important;
+}
+
+html[data-theme="dark"] .notice-hero p {
+  color: #b7c3d5 !important;
+}
+
+.notice-hero p {
+  color: #536783 !important;
+}
+
+  .eyebrow {
+    margin: 0;
+    color: #438fe9;
+    font-size: 0.75rem;
+    font-weight: 750;
+    letter-spacing: 0.18em;
+  }
+
+  h1 {
+    margin: 20px 0 24px;
+    font-size: clamp(3.8rem, 9vw, 7rem);
+    line-height: 0.9;
+    letter-spacing: -0.07em;
+  }
+
+  .lead {
+    max-width: 650px;
+    margin: 0;
+    color: #667085;
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .notice-section {
+    padding: 76px 24px;
+  }
+
+  .voting-section {
+    background: #fff;
+  }
+
+  .events-section {
+    background: linear-gradient(180deg, #f7faff 0%, #ffffff 100%);
+  }
+
+  .section-heading {
+    margin-bottom: 30px;
+  }
+
+  .section-heading h2 {
+    margin: 10px 0 0;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    letter-spacing: -0.05em;
+  }
+
+  .notice-grid {
+    display: grid;
+    gap: 18px;
+  }
+
+.notice-card {
+  position: relative;
+  padding: 28px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30, 57, 96, 0.95),
+      rgba(18, 40, 73, 0.92)
+    );
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+:global(.notice-card) {
+  position: relative;
+  padding: 28px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30, 57, 96, 0.95),
+      rgba(18, 40, 73, 0.92)
+    );
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+:global(.notice-card)::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(76, 218, 210, 0.12);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+:global(.notice-card:hover) {
+  transform: translateY(-4px);
+  border-color: rgba(91, 191, 255, 0.24);
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.card-icon {
+  font-size: 1.5rem;
+}
+
+.vote-title,
+.event-title {
+  margin: 0;
+  color: #0d1b3d;
+  font-size: 1.45rem;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.meta span {
+  padding: 6px 11px;
+  border: 1px solid #d8e6fb;
+  border-radius: 999px;
+  background: #eef5ff;
+  color: #438fe9;
+  font-size: 0.8rem;
+  font-weight: 750;
+}
+
+.info-list {
+  display: grid;
+  gap: 0;
+  margin-top: 22px;
+  border-top: 1px solid #e5ebf3;
+}
+
+.info-list > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 13px 0;
+  border-bottom: 1px solid #e5ebf3;
+  color: #667085;
+  line-height: 1.5;
+}
+
+.info-list strong {
+  color: #7d899c;
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+:global(.notice-card .card-link) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: 22px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  background: #4da9ff;
+  color: #071326;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+:global(.notice-card .card-link:hover) {
+  transform: translateY(-2px);
+  background: #6bb8ff;
+  box-shadow: 0 8px 22px rgba(77, 169, 255, 0.24);
+}
+
+.card-link:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.empty-card {
+  padding: 28px;
+  border: 1px dashed #d5deeb;
+  border-radius: 24px;
+  color: #7d899c;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.event-time {
+  display: inline-flex;
+  margin-bottom: 14px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #eef5ff;
+  color: #438fe9;
+  font-size: 0.86rem;
+  font-weight: 750;
+}
+
+.event-description {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #e5ebf3;
+  color: #667085;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+  @media (max-width: 600px) {
+    .notice-hero {
+      padding: 72px 20px 64px;
+    }
+
+    .notice-section {
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-size: clamp(3.5rem, 18vw, 5.5rem);
+    }
+
+    .notice-card {
+      padding: 22px;
+      border-radius: 20px;
+    }
+  }
+  /* =========================================
+   Notice Cards — FLARE U Taiwan
+   ========================================= */
+
+.notice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.notice-grid:has(> .notice-card:only-child) {
+  grid-template-columns: 1fr;
+}
+
+.notice-card {
+  position: relative;
+  padding: 28px 30px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(30, 57, 96, 0.95),
+      rgba(18, 40, 73, 0.92)
+    );
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+/* 卡片上方的小光暈 */
+.notice-card::before {
+  content: "";
+  position: absolute;
+  top: -70px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(76, 218, 210, 0.12);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+/* 投票平台 */
+:global(.notice-card .meta) {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 18px;
+}
+
+:global(.notice-card .meta span) {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(72, 174, 255, 0.14);
+  border: 1px solid rgba(72, 174, 255, 0.28);
+  color: #8ed0ff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+:global(.notice-card .vote-title) {
+  position: relative;
+  margin: 0 0 22px;
+  color: #f4f8ff;
+  font-size: 25px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+:global(.notice-card .info-list) {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(239, 246, 255, 0.78);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+:global(.notice-card .info-list > div) {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+:global(.notice-card .info-list strong) {
+  color: rgba(239, 246, 255, 0.58);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+:global(.notice-card .event-time) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 14px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(91, 220, 205, 0.12);
+  border: 1px solid rgba(91, 220, 205, 0.24);
+  color: #78ddd1;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+:global(.notice-card .event-title) {
+  position: relative;
+  margin: 0;
+  color: #f4f8ff;
+  font-size: 23px;
+  line-height: 1.45;
+  font-weight: 800;
+}
+
+:global(.notice-card .event-description) {
+  position: relative;
+  margin-top: 18px;
+  padding: 13px 15px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(239, 246, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+:global(.notice-card .card-link) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 22px;
+  padding: 11px 17px;
+  border-radius: 999px;
+  background: #4da9ff;
+  color: #071326;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+:global(.notice-card .card-link:hover) {
+  transform: translateY(-2px);
+  background: #6bb8ff;
+  box-shadow: 0 8px 22px rgba(77, 169, 255, 0.24);
+}
+
+
+/* 投票名稱 */
+.notice-card .vote-title {
+  position: relative;
+  margin: 0 0 22px;
+  color: #f4f8ff;
+  font-size: 25px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+
+/* 投票資訊 */
+.notice-card .info-list {
+  position: relative;
+  display: grid;
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(239, 246, 255, 0.78);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.notice-card .info-list strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* 投票備註 */
+.notice-card .event-description {
+  position: relative;
+  margin-top: 18px;
+  padding: 13px 15px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(239, 246, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* 投票按鈕 */
+.notice-card .card-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 22px;
+  padding: 11px 17px;
+  border-radius: 999px;
+  background: #4da9ff;
+  color: #071326;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.notice-card .card-link:hover {
+  transform: translateY(-2px);
+  background: #6bb8ff;
+  box-shadow: 0 8px 22px rgba(77, 169, 255, 0.24);
+}
+
+/* =========================
+   行程卡片
+   ========================= */
+
+.notice-card .event-time {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-bottom: 14px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(91, 220, 205, 0.12);
+  border: 1px solid rgba(91, 220, 205, 0.24);
+  color: #78ddd1;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.notice-card .event-title {
+  position: relative;
+  margin: 0;
+  color: #f4f8ff;
+  font-size: 25px;
+  line-height: 1.35;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.notice-card .event-title + .event-description {
+  margin-top: 18px;
+}
+
+/* =========================
+   空資料卡片
+   ========================= */
+
+.notice-card.empty-card,
+.empty-card {
+  padding: 28px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  color: rgba(239, 246, 255, 0.62);
+}
+
+/* =========================
+   Hover
+   ========================= */
+
+.notice-card {
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.notice-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(91, 191, 255, 0.24);
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* =========================
+   手機版
+   ========================= */
+
+@media (max-width: 768px) {
+  .notice-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  :global(.notice-card .info-list) {
+    grid-template-columns: 1fr;
+  }
+
+  .notice-card {
+    padding: 22px 20px;
+    border-radius: 20px;
+  }
+
+  .notice-card .vote-title {
+    font-size: 21px;
+  }
+
+  .notice-card .event-title {
+    font-size: 20px;
+  }
+}
+</style>
+
+<script>
+  const votesContainer = document.querySelector('[data-votes]');
+  const params = new URLSearchParams(window.location.search);
+
+const today = new Date();
+
+const targetDate = params.get('date') || new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Asia/Taipei',
+}).format(today);
+
+const noticeDate = document.querySelector('[data-notice-date]');
+const formattedDate = targetDate.slice(5).replace('-', '/');
+
+if (noticeDate) {
+  noticeDate.textContent = `${formattedDate} 提醒事項`;
+}
+
+document.title = `${formattedDate} 提醒事項`;
+  const eventsContainer = document.querySelector('[data-events]');
+
+  const timeZone = 'Asia/Taipei';
+
+  const timeFormatter = new Intl.DateTimeFormat('zh-TW', {
+    timeZone,
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
+  function showEmpty(container, message) {
+    if (!container) return;
+
+    const card = document.createElement('div');
+    card.className = 'empty-card';
+    card.textContent = message;
+
+    container.replaceChildren(card);
+  }
+
+  
+  function createVoteCard(vote) {
+  const card = document.createElement('article');
+  card.className = 'notice-card';
+
+  if (Array.isArray(vote.platforms) && vote.platforms.length) {
+    const meta = document.createElement('div');
+    meta.className = 'meta';
+
+    vote.platforms.forEach((platform) => {
+      const tag = document.createElement('span');
+      tag.textContent = platform;
+      meta.appendChild(tag);
+    });
+
+    card.appendChild(meta);
+  }
+
+  const title = document.createElement('h3');
+  title.className = 'vote-title';
+  title.textContent = vote.title || '未命名投票';
+  card.appendChild(title);
+
+  const info = document.createElement('div');
+  info.className = 'info-list';
+
+  if (vote.end) {
+    const end = document.createElement('div');
+    end.innerHTML = `
+      <strong>截止時間</strong>
+      <span>${timeFormatter.format(new Date(vote.end))}</span>
+    `;
+    info.appendChild(end);
+  }
+
+  if (vote.rank) {
+    const rank = document.createElement('div');
+    rank.innerHTML = `
+      <strong>目前排名</strong>
+      <span>#${vote.rank}</span>
+    `;
+    info.appendChild(rank);
+  }
+
+  if (vote.votes) {
+    const count = document.createElement('div');
+    count.innerHTML = `
+      <strong>目前票數</strong>
+      <span>${vote.votes}</span>
+    `;
+    info.appendChild(count);
+  }
+
+  if (info.children.length) {
+    card.appendChild(info);
+  }
+
+  if (vote.note) {
+    const note = document.createElement('div');
+    note.className = 'event-description';
+    note.textContent = vote.note;
+    card.appendChild(note);
+  }
+
+  if (vote.voteUrl) {
+    const link = document.createElement('a');
+    link.className = 'card-link';
+    link.href = vote.voteUrl;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.textContent = '前往投票 →';
+    card.appendChild(link);
+  }
+
+  return card;
+}
+function createEventCard(event) {
+  const card = document.createElement('article');
+  card.className = 'notice-card';
+
+  const time = document.createElement('div');
+  time.className = 'event-time';
+
+  if (event.allDay) {
+    time.textContent = '全天行程';
+  } else {
+    const start = new Date(event.start);
+    const end = new Date(event.end);
+
+    time.textContent =
+      `${timeFormatter.format(start)}－${timeFormatter.format(end)}`;
+  }
+
+  card.appendChild(time);
+
+  const title = document.createElement('h3');
+  title.className = 'event-title';
+  title.textContent = event.title || '未命名行程';
+  card.appendChild(title);
+
+  if (event.description) {
+    const description = document.createElement('div');
+    description.className = 'event-description';
+    description.textContent = event.description;
+    card.appendChild(description);
+  }
+
+  return card;
+}
+
+  async function loadNotice() {
+    try {
+      const [votesResponse, eventsResponse] = await Promise.all([
+        fetch(`/api/votes.js?date=${encodeURIComponent(targetDate)}`),
+        fetch(`/api/next-event.js?date=${encodeURIComponent(targetDate)}`),
+      ]);
+
+      if (!votesResponse.ok) {
+        throw new Error('Vote request failed');
+      }
+
+      if (!eventsResponse.ok) {
+        throw new Error('Event request failed');
+      }
+
+      const votes = await votesResponse.json();
+      const eventsData = await eventsResponse.json();
+
+      const events = Array.isArray(eventsData?.events)
+        ? eventsData.events
+        : eventsData
+          ? [eventsData]
+          : [];
+
+      if (Array.isArray(votes) && votes.length) {
+        votesContainer?.replaceChildren(
+          ...votes.map(createVoteCard)
+        );
+      } else {
+        showEmpty(votesContainer, '明日目前沒有進行中的投票。');
+      }
+
+      if (events.length) {
+        eventsContainer?.replaceChildren(
+          ...events.map(createEventCard)
+        );
+      } else {
+        showEmpty(eventsContainer, '明日目前沒有已公布行程。');
+      }
+    } catch (error) {
+      console.error('Failed to load notice page:', error);
+
+      showEmpty(votesContainer, '投票資訊暫時無法載入。');
+      showEmpty(eventsContainer, '行程資訊暫時無法載入。');
+    }
+  }
+
+  loadNotice();
+</script>
