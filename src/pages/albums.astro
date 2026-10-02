@@ -73,22 +73,22 @@ import Layout from '../layouts/Layout.astro';
     gap: 24px;
   }
 
-  .album-card {
-    display: grid;
-    grid-template-columns: minmax(220px, 340px) 1fr;
-    align-items: center;
-    gap: 28px;
-    padding: 30px;
-    border: 1px solid #dfe6f0;
-    border-radius: 32px;
-    background: #fff;
-    color: #0d1b3d;
-    text-decoration: none;
-    box-shadow: 0 20px 55px rgba(13, 27, 61, 0.07);
-    transition:
-      transform 0.2s ease,
-      border-color 0.2s ease;
-  }
+.album-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 28px;
+  padding: 30px;
+  border: 1px solid #dfe6f0;
+  border-radius: 32px;
+  background: #fff;
+  color: #0d1b3d;
+  text-decoration: none;
+  box-shadow: 0 20px 55px rgba(13, 27, 61, 0.07);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
 
   .album-card:hover {
     transform: translateY(-5px);
