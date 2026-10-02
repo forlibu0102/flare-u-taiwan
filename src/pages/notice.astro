@@ -693,12 +693,21 @@ document.title = `${formattedDate} 提醒事項`;
 
   const timeZone = 'Asia/Taipei';
 
-  const timeFormatter = new Intl.DateTimeFormat('zh-TW', {
-    timeZone,
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  });
+const timeFormatter = new Intl.DateTimeFormat('zh-TW', {
+  timeZone,
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
+
+const dateTimeFormatter = new Intl.DateTimeFormat('zh-TW', {
+  timeZone,
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
 
   function showEmpty(container, message) {
     if (!container) return;
@@ -736,14 +745,14 @@ document.title = `${formattedDate} 提醒事項`;
   const info = document.createElement('div');
   info.className = 'info-list';
 
-  if (vote.end) {
-    const end = document.createElement('div');
-    end.innerHTML = `
-      <strong>截止時間</strong>
-      <span>${timeFormatter.format(new Date(vote.end))}</span>
-    `;
-    info.appendChild(end);
-  }
+ if (vote.end) {
+  const end = document.createElement('div');
+  end.innerHTML = `
+    <strong>截止時間</strong>
+    <span>${dateTimeFormatter.format(new Date(vote.end))}</span>
+  `;
+  info.appendChild(end);
+}
 
   if (vote.rank) {
     const rank = document.createElement('div');
