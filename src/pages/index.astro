@@ -204,6 +204,24 @@ import Layout from '../layouts/Layout.astro';
 					</div>
 					<span class="quick-arrow">↗</span>
 				</a>
+				<a class="quick-card quick-card--notice" href="/notice" id="notice-card">
+  <div class="quick-card-top">
+    <span class="quick-number">05</span>
+    <span class="quick-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 4a7 7 0 0 0-7 7v4l-2 2h18l-2-2v-4a7 7 0 0 0-7-7Z" />
+        <path d="M9.5 20h5" />
+      </svg>
+    </span>
+  </div>
+
+  <div class="quick-copy">
+    <h3>明日提醒</h3>
+    <p>投票與明日行程一次查看</p>
+  </div>
+
+  <span class="quick-arrow">↗</span>
+</a>
 			</div>
 			<div class="back-top-row">
 				<a class="back-top" href="#page-top" aria-label="回到頁首">↑</a>
@@ -213,6 +231,18 @@ import Layout from '../layouts/Layout.astro';
 
 	<script>
 		const millisecondsPerDay = 1000 * 60 * 60 * 24;
+		const noticeCard = document.querySelector('#notice-card');
+
+if (noticeCard) {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const tomorrowKey = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Taipei',
+  }).format(tomorrow);
+
+  noticeCard.href = `/notice?date=${tomorrowKey}`;
+}
 		const taipeiDateParts = new Intl.DateTimeFormat('en-US', {
 			timeZone: 'Asia/Taipei',
 			year: 'numeric',
@@ -869,6 +899,12 @@ import Layout from '../layouts/Layout.astro';
 		--quick-soft: #f0f1ff;
 		--quick-glow: rgba(108, 126, 225, 0.15);
 	}
+
+	.quick-card--notice {
+  --quick-accent: #20c7c9;
+  --quick-soft: #eafbf9;
+  --quick-glow: rgba(32, 199, 201, 0.15);
+}
 
 	.quick-card--resources {
 		--quick-accent: #0d1b3d;
