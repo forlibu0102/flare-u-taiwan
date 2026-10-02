@@ -17,8 +17,10 @@ const isCurrent = (path: string) =>
     <a class:list={{ active: isCurrent("/media") }} href="/media">影音</a>
 	<a class:list={{ active: isCurrent("/news") }} href="/news">新聞</a>
 	<a class:list={{ active: isCurrent("/albums") }} href="/albums">專輯</a>
+<a class:list={{ active: isCurrent("/notice") }} href="/notice" id="notice-nav">明日提醒</a>
 
-  <div class="notification-action">
+<div class="notification-action">
+
   <button
     id="enable-notifications"
     class="notification-button"
@@ -51,7 +53,9 @@ const isCurrent = (path: string) =>
       <a class:list={{ active: isCurrent("/media") }} href="/media" style="text-decoration: none;">影音專區</a>
       <a class:list={{ active: isCurrent("/news") }} href="/news" style="text-decoration: none;">新聞整理</a>
       <a class:list={{ active: isCurrent("/albums") }} href="/albums" style="text-decoration: none;">專輯</a>
-      <div class="notification-action">
+<a class:list={{ active: isCurrent("/notice") }} href="/notice" id="notice-nav-mobile" style="text-decoration: none;">明日提醒</a>
+<div class="notification-action">
+
   <button
     id="enable-notifications-mobile"
     class="notification-button"
@@ -96,6 +100,20 @@ const isCurrent = (path: string) =>
     document.querySelector('meta[name="theme-color"]')?.setAttribute('content', nextTheme === 'dark' ? '#081225' : '#ffffff');
     updateThemeControls(nextTheme);
   }));
+    const noticeNav = document.querySelector<HTMLAnchorElement>('#notice-nav');
+  const noticeNavMobile = document.querySelector<HTMLAnchorElement>('#notice-nav-mobile');
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  const tomorrowKey = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Taipei',
+  }).format(tomorrow);
+
+  const noticeUrl = `/notice?date=${tomorrowKey}`;
+
+  if (noticeNav) noticeNav.href = noticeUrl;
+  if (noticeNavMobile) noticeNavMobile.href = noticeUrl;
 </script>
 
 <style>
