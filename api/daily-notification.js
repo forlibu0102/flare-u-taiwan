@@ -5,6 +5,7 @@ dotenv.config({ path: '.env.local' });
 dotenv.config({ path: '.env' });
 
 const BASE_URL = 'https://flare-u-taiwan.vercel.app';
+const COMEBACK_DATE = '2026-10-14';
 
 function getTaipeiDateKey(date) {
   const parts = new Intl.DateTimeFormat('en', {
@@ -69,12 +70,22 @@ async function redisRequest(path, options = {}) {
 
 function buildNotificationBody(events, votes, dateKey) {
   const dateLabel = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Taipei',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(new Date(`${dateKey}T12:00:00+08:00`));
+  timeZone: 'Asia/Taipei',
+  month: '2-digit',
+  day: '2-digit',
+}).format(new Date(`${dateKey}T12:00:00+08:00`));
+
+const countdown =
+  Math.ceil(
+    (
+      new Date(`${COMEBACK_DATE}T00:00:00+08:00`) -
+      new Date(`${dateKey}T00:00:00+08:00`)
+    ) /
+    (24 * 60 * 60 * 1000)
+  );
 
   const lines = [`🌟 FLARE U Taiwan｜明日 ${dateLabel} 提醒`];
+lines.push(`💙 LOVEHOOD 回歸倒數 ${countdown} 天`);
 
   // 明日行程：只顯示第一個行程，避免通知過長
   if (events.length > 0) {
