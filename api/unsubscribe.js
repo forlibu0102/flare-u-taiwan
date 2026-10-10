@@ -74,6 +74,8 @@ export default async function handler(req, res) {
       }
     }
 
+    console.log('Push subscription removed:', matches.length);
+
     return res.status(200).json({
       success: true,
       removed: matches.length,
