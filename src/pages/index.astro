@@ -1231,64 +1231,200 @@ if (noticeCard) {
   
 
   
-      const notificationButtons = document.querySelectorAll(
+const notificationButtons = document.querySelectorAll(
   '#enable-notifications, #enable-notifications-mobile'
 );
+
+const notificationButtonStates = {
+  enabled: '✓ 關閉每日提醒',
+  disabled: '開啟每日提醒',
+  loading: '處理中⋯',
+};
+
+function updateNotificationButtons(enabled) {
+  notificationButtons.forEach((button) => {
+    const label = button.querySelector('.notification-button-label');
+
+    if (label) {
+      label.textContent = enabled
+        ? notificationButtonStates.enabled
+        : notificationButtonStates.disabled;
+    } else {
+      button.textContent = enabled
+        ? notificationButtonStates.enabled
+        : notificationButtonStates.disabled;
+    }
+
+    button.dataset.notificationEnabled = String(enabled);
+    button.disabled = false;
+    button.setAttribute('aria-pressed', String(enabled));
+  });
+}
+
+function setNotificationButtonsLoading(loading) {
+  notificationButtons.forEach((button) => {
+    button.disabled = loading;
+  });
+}
+
+async function getCurrentPushSubscription() {
+  if (!('serviceWorker' in navigator)) {
+    return null;
+  }
+
+  const registration = await navigator.serviceWorker.ready;
+
+  return registration.pushManager.getSubscription();
+}
+
+// 載入時檢查目前的推播訂閱狀態
+async function initializeNotificationButtons() {
+  try {
+    if (!('serviceWorker' in navigator)) {
+      updateNotificationButtons(false);
+      return;
+    }
+
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+
+    updateNotificationButtons(
+  Boolean(subscription) &&
+    'Notification' in window &&
+    Notification.permission === 'granted'
+);
+
+  } catch (error) {
+    console.error('Unable to check notification status:', error);
+    updateNotificationButtons(false);
+  }
+}
+
+async function enableDailyNotifications() {
+  if (!('Notification' in window)) {
+    alert('此瀏覽器不支援通知功能');
+    return;
+  }
+
+  if (!('serviceWorker' in navigator)) {
+    alert('此瀏覽器不支援背景通知功能');
+    return;
+  }
+
+  let permission = Notification.permission;
+
+  if (permission === 'default') {
+    permission = await Notification.requestPermission();
+  }
+
+  if (permission !== 'granted') {
+    if (permission === 'denied') {
+      alert('通知權限已封鎖，請到瀏覽器或裝置設定中允許通知。');
+    }
+    return;
+  }
+
+  const registration = await navigator.serviceWorker.ready;
+
+  const vapidPublicKey =
+    'BISE5M1-ULbvMy5HoDra5KJi35IcFkrqSfc_7e7VjscS1TmE7XLRKCQ2eW0yA8EBMT8EgyFiAlXzneIos8Qf4yI';
+
+  const applicationServerKey = urlBase64ToUint8Array(vapidPublicKey);
+
+  // 優先取得現有訂閱，避免重複建立
+  let subscription = await registration.pushManager.getSubscription();
+
+  if (!subscription) {
+    subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey,
+    });
+  }
+
+  const response = await fetch('/api/subscribe', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(subscription),
+  });
+
+  if (!response.ok) {
+    throw new Error('Subscription upload failed');
+  }
+
+  updateNotificationButtons(true);
+}
+
+async function disableDailyNotifications() {
+  const subscription = await getCurrentPushSubscription();
+
+  if (!subscription) {
+    updateNotificationButtons(false);
+    return;
+  }
+
+  // 先取消瀏覽器端的推播訂閱
+  const unsubscribed = await subscription.unsubscribe();
+
+  if (!unsubscribed) {
+    throw new Error('Browser unsubscribe failed');
+  }
+
+  // 再通知後端刪除目前的訂閱資料
+  const response = await fetch('/api/unsubscribe', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      endpoint: subscription.endpoint,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Unable to remove subscription from server');
+  }
+
+  updateNotificationButtons(false);
+}
+
 notificationButtons.forEach((notificationButton) => {
   notificationButton.addEventListener('click', async () => {
+    setNotificationButtonsLoading(true);
+
     try {
-      if (!('Notification' in window)) {
-        alert('此瀏覽器不支援通知功能');
-        return;
+      const subscription = await getCurrentPushSubscription();
+
+      if (subscription && Notification.permission === 'granted') {
+        await disableDailyNotifications();
+      } else {
+        await enableDailyNotifications();
       }
-
-      if (!('serviceWorker' in navigator)) {
-        alert('此瀏覽器不支援背景通知功能');
-        return;
-      }
-
-      const permission = await Notification.requestPermission();
-
-      if (permission !== 'granted') {
-        if (permission === 'denied') {
-          notificationButton.textContent = '通知權限已封鎖';
-        }
-        return;
-      }
-
-      const registration = await navigator.serviceWorker.ready;
-      const vapidPublicKey =
-        'BISE5M1-ULbvMy5HoDra5KJi35IcFkrqSfc_7e7VjscS1TmE7XLRKCQ2eW0yA8EBMT8EgyFiAlXzneIos8Qf4yI';
-
-      const applicationServerKey = urlBase64ToUint8Array(vapidPublicKey);
-
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey,
-      });
-
-      const response = await fetch('/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(subscription),
-      });
-
-      if (!response.ok) {
-        throw new Error('Subscription upload failed');
-      }
-
-      notificationButton.textContent = '✓ 通知已開啟';
-      notificationButton.disabled = true;
-
-      console.log('Push subscription created:', subscription);
     } catch (error) {
-      console.error('Notification setup failed:', error);
-      alert('通知設定失敗，請稍後再試');
+      console.error('Notification setting failed:', error);
+
+      alert('通知設定失敗，請稍後再試。');
+
+      // 重新讀取瀏覽器實際狀態
+      try {
+        const subscription = await getCurrentPushSubscription();
+
+        updateNotificationButtons(
+          Boolean(subscription) &&
+          'Notification' in window &&
+          Notification.permission === 'granted'
+        );
+      } catch {
+        updateNotificationButtons(false);
+      }
+    } finally {
+      setNotificationButtonsLoading(false);
     }
-   });
+  });
 });
+
+void initializeNotificationButtons();
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
