@@ -197,6 +197,7 @@ export default async function handler(request, response) {
         }
       })
       .filter(Boolean);
+      console.log('Current push subscription count:', subscriptions.length);
 
     if (subscriptions.length === 0) {
       console.log('No push subscriptions found.');
