@@ -75,17 +75,25 @@ function buildNotificationBody(events, votes, dateKey) {
   day: '2-digit',
 }).format(new Date(`${dateKey}T12:00:00+08:00`));
 
-const countdown =
-  Math.ceil(
-    (
-      new Date(`${COMEBACK_DATE}T00:00:00+08:00`) -
-      new Date(`${dateKey}T00:00:00+08:00`)
-    ) /
-    (24 * 60 * 60 * 1000)
-  );
+// 以通知發送當天為基準計算回歸倒數
+const notificationDate = new Date(`${dateKey}T00:00:00+08:00`);
+notificationDate.setDate(notificationDate.getDate() - 1);
 
-  const lines = [`🌟 FLARE U Taiwan｜明日 ${dateLabel} 提醒`];
-lines.push(`💙 LOVEHOOD 回歸倒數 ${countdown} 天`);
+const comebackDate = new Date(`${COMEBACK_DATE}T00:00:00+08:00`);
+
+const countdown = Math.ceil(
+  (comebackDate - notificationDate) / (24 * 60 * 60 * 1000)
+);
+
+const lines = [`🌟 FLARE U Taiwan｜明日 ${dateLabel} 提醒`];
+
+if (countdown > 1) {
+  lines.push(`💙 LOVEHOOD 回歸倒數 ${countdown} 天`);
+} else if (countdown === 1) {
+  lines.push('💙 LOVEHOOD 明天回歸！');
+} else if (countdown === 0) {
+  lines.push('💙 LOVEHOOD 今天回歸！');
+}
 
   // 明日行程：只顯示第一個行程，避免通知過長
   if (events.length > 0) {
