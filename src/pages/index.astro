@@ -1357,21 +1357,15 @@ async function enableDailyNotifications() {
 }
 
 async function disableDailyNotifications() {
-  const subscription = await getCurrentPushSubscription();
+  const registration = await navigator.serviceWorker.ready;
+  const subscription = await registration.pushManager.getSubscription();
 
   if (!subscription) {
     updateNotificationButtons(false);
     return;
   }
 
-  // 先取消瀏覽器端的推播訂閱
-  const unsubscribed = await subscription.unsubscribe();
-
-  if (!unsubscribed) {
-    throw new Error('Browser unsubscribe failed');
-  }
-
-  // 再通知後端刪除目前的訂閱資料
+  // 先通知後端刪除 Redis 中的訂閱資料
   const response = await fetch('/api/unsubscribe', {
     method: 'POST',
     headers: {
@@ -1384,6 +1378,22 @@ async function disableDailyNotifications() {
 
   if (!response.ok) {
     throw new Error('Unable to remove subscription from server');
+  }
+
+  const result = await response.json();
+
+  // A missing Redis entry is already the desired server state. Continue to
+  // unsubscribe locally so stale or previously removed records cannot leave
+  // this browser subscribed.
+  if (!result.success) {
+    throw new Error('Unable to remove subscription from server');
+  }
+
+  // 後端確認刪除成功後，再取消瀏覽器端訂閱
+  const unsubscribed = await subscription.unsubscribe();
+
+  if (!unsubscribed) {
+    throw new Error('Browser unsubscribe failed');
   }
 
   updateNotificationButtons(false);

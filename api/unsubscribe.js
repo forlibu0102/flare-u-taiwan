@@ -6,6 +6,7 @@ dotenv.config({ path: '.env' });
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({
+      success: false,
       error: 'Method not allowed',
     });
   }
@@ -15,6 +16,7 @@ export default async function handler(req, res) {
 
     if (!endpoint || typeof endpoint !== 'string') {
       return res.status(400).json({
+        success: false,
         error: 'Invalid subscription endpoint',
       });
     }
@@ -26,9 +28,11 @@ export default async function handler(req, res) {
       throw new Error('Redis environment variables are missing');
     }
 
+    const setKey = 'push:subscriptions';
+
     // 讀取目前所有訂閱
     const response = await fetch(
-      `${redisUrl}/smembers/${encodeURIComponent('push:subscriptions')}`,
+      `${redisUrl}/smembers/${encodeURIComponent(setKey)}`,
       {
         headers: {
           Authorization: `Bearer ${redisToken}`,
@@ -37,30 +41,32 @@ export default async function handler(req, res) {
     );
 
     if (!response.ok) {
-      throw new Error('Failed to read subscriptions');
+      throw new Error(`Failed to read subscriptions: ${response.status}`);
     }
 
     const data = await response.json();
     const subscriptions = data.result || [];
 
-    // 找出目前瀏覽器的訂閱並移除
+    // 只比對 endpoint，不輸出完整 endpoint 或其他敏感資料
     const matches = subscriptions.filter((item) => {
       try {
         const subscription =
           typeof item === 'string' ? JSON.parse(item) : item;
 
-        return subscription.endpoint === endpoint;
+        return subscription?.endpoint === endpoint;
       } catch {
         return false;
       }
     });
+
+    let removed = 0;
 
     for (const item of matches) {
       const value =
         typeof item === 'string' ? item : JSON.stringify(item);
 
       const removeResponse = await fetch(
-        `${redisUrl}/srem/${encodeURIComponent('push:subscriptions')}/${encodeURIComponent(value)}`,
+        `${redisUrl}/srem/${encodeURIComponent(setKey)}/${encodeURIComponent(value)}`,
         {
           method: 'POST',
           headers: {
@@ -70,20 +76,33 @@ export default async function handler(req, res) {
       );
 
       if (!removeResponse.ok) {
-        throw new Error('Failed to remove subscription');
+        throw new Error(
+          `Failed to remove subscription: ${removeResponse.status}`
+        );
+      }
+
+      const removeData = await removeResponse.json();
+
+      if (Number(removeData.result) === 1) {
+        removed += 1;
       }
     }
 
-    console.log('Push subscription removed:', matches.length);
+    console.log('Unsubscribe completed:', {
+      matched: matches.length,
+      removed,
+    });
 
     return res.status(200).json({
       success: true,
-      removed: matches.length,
+      matched: matches.length,
+      removed,
     });
   } catch (error) {
-    console.error('Unsubscribe error:', error);
+    console.error('Unsubscribe error:', error.message);
 
     return res.status(500).json({
+      success: false,
       error: 'Unable to unsubscribe',
     });
   }
