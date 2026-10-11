@@ -248,7 +248,10 @@ export default async function handler(request, response) {
       try {
         await webpush.sendNotification(
           subscription,
-          payload
+          payload,
+          // Do not let a missed daily reminder arrive hours or days later,
+          // especially after a user has disabled notifications.
+          { TTL: 300 }
         );
 
         successCount += 1;
