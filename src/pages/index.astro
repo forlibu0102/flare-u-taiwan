@@ -1382,10 +1382,9 @@ async function disableDailyNotifications() {
 
   const result = await response.json();
 
-  // A missing Redis entry is already the desired server state. Continue to
-  // unsubscribe locally so stale or previously removed records cannot leave
-  // this browser subscribed.
-  if (!result.success) {
+  // Do not report the setting as disabled unless the server removed the
+  // subscription that daily notifications would otherwise continue to use.
+  if (!result.success || result.removed < 1) {
     throw new Error('Unable to remove subscription from server');
   }
 

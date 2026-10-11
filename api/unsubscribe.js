@@ -88,6 +88,20 @@ export default async function handler(req, res) {
       }
     }
 
+    if (matches.length === 0 || removed === 0) {
+      console.warn('Unsubscribe found no removable subscription:', {
+        matched: matches.length,
+        removed,
+      });
+
+      return res.status(409).json({
+        success: false,
+        matched: matches.length,
+        removed,
+        error: 'Subscription was not found on the server',
+      });
+    }
+
     console.log('Unsubscribe completed:', {
       matched: matches.length,
       removed,
