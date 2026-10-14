@@ -40,6 +40,15 @@ const platforms = [
 <script>
   type Album = { name:string; albumType:string; releaseDate:string; coverUrl:string; description:string[]; links:[string,string][]; tracks:{number:string;title:string;badge:string;description:string}[] };
   const page = document.querySelector<HTMLElement>('[data-album-page]');
+  const coverSources:Record<string,string>={'youth-error':'/images/albums/youth-error.jpg','youth-error-japan-edition':'/images/albums/youth-error-japan-edition-800.webp','lovehood':'/images/albums/lovehood-800.webp'};
+  const requestedName=new URLSearchParams(location.search).get('album');
+  const requestedSlug=requestedName?.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const initialCover=page?.querySelector<HTMLImageElement>('[data-album-cover]');
+  if(requestedName){
+    const initialTitle=page?.querySelector<HTMLElement>('[data-album-title]');
+    if(initialTitle) initialTitle.textContent=requestedName;
+    if(initialCover){initialCover.alt=`FLARE U ${requestedName} 專輯封面`;if(requestedSlug&&coverSources[requestedSlug]) initialCover.src=coverSources[requestedSlug];}
+  }
   const make = <K extends keyof HTMLElementTagNameMap>(tag:K, className='', text='') => { const el=document.createElement(tag); if(className) el.className=className; if(text) el.textContent=text; return el; };
   function renderAlbum(album:Album) {
     if (!page) return;
@@ -49,31 +58,31 @@ if(title) title.textContent=album.name;
 if(release) release.textContent=`${album.releaseDate} RELEASE`;
 
 if(cover){
-  const imageBase=`/images/albums/${album.name.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}`;
+  const albumSlug=album.name.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+  const imageBase=`/images/albums/${albumSlug}`;
   const imageExtensions=['.jpg','.jpeg','.png'];
   let imageIndex=0;
-
   const loadAlbumImage=()=>{
-    if(imageIndex>=imageExtensions.length){
-      cover.src='/images/albums/youth-error.jpg';
-      return;
-    }
-
-    cover.src=`${imageBase}${imageExtensions[imageIndex]}`;
-    imageIndex++;
+    if(imageIndex>=imageExtensions.length){cover.src='/images/albums/youth-error.jpg';return;}
+    cover.src=`${imageBase}${imageExtensions[imageIndex++]}`;
   };
-
   cover.onerror=loadAlbumImage;
   cover.alt=`FLARE U ${album.name} 專輯封面`;
-  loadAlbumImage();
+  cover.decoding='async';
+  if(coverSources[albumSlug]) cover.src=coverSources[albumSlug];
+  else loadAlbumImage();
 }
     if(intro){intro.replaceChildren(...album.description.map(text=>make('p','intro',text)));}
     if(platforms){platforms.replaceChildren(...album.links.map(([name,url])=>{const a=make('a');a.href=url;a.target='_blank';a.rel='noreferrer';a.append(make('span','',name),make('b','','↗'));return a;}));}
     if(trackList){trackList.replaceChildren(...album.tracks.map((track,index)=>{const details=make('details');details.open=index===0;const summary=make('summary');summary.append(make('span','',track.number),make('strong','',track.title));if(track.badge)summary.append(make('em','',track.badge));summary.append(make('b','','+'));details.append(summary,make('p','',track.description));return details;}));}
   }
+  try{
+    const cachedAlbums=JSON.parse(localStorage.getItem('flare-u-albums-v1')||'null') as Album[]|null;
+    if(Array.isArray(cachedAlbums)&&cachedAlbums.length&&page) renderAlbum(cachedAlbums.find(album=>album.name===requestedName)||cachedAlbums[0]);
+  }catch{}
   fetch('/api/albums').then(result=>result.ok?result.json():[]).then((albums:Album[])=>{
     if(!Array.isArray(albums)||!albums.length||!page)return;
-    const requestedName=new URLSearchParams(location.search).get('album');
+    try{localStorage.setItem('flare-u-albums-v1',JSON.stringify(albums));}catch{}
     renderAlbum(albums.find(album=>album.name===requestedName)||albums[0]);
   }).catch(()=>{});
 </script>

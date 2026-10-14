@@ -183,28 +183,26 @@ import Layout from '../layouts/Layout.astro';
   type Album = {name:string;albumType:string;releaseDate:string;coverUrl:string};
   const grid=document.querySelector<HTMLElement>('[data-album-grid]');
   const make=<K extends keyof HTMLElementTagNameMap>(tag:K,className='',text='')=>{const el=document.createElement(tag);if(className)el.className=className;if(text)el.textContent=text;return el;};
+  const coverSources:Record<string,string>={'youth-error':'/images/albums/youth-error.jpg','youth-error-japan-edition':'/images/albums/youth-error-japan-edition-800.webp','lovehood':'/images/albums/lovehood-800.webp'};
   fetch('/api/albums').then(response=>response.ok?response.json():[]).then((albums:Album[])=>{
     if(!grid||!Array.isArray(albums)||!albums.length)return;
+    try{localStorage.setItem('flare-u-albums-v1',JSON.stringify(albums));}catch{}
     grid.replaceChildren(...albums.map(album=>{
       const card=make('a','album-card');card.href=`/albums/detail?album=${encodeURIComponent(album.name)}`;
       const image=make('img');
-const imageBase=`/images/albums/${album.name.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}`;
+const albumSlug=album.name.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const imageBase=`/images/albums/${albumSlug}`;
 const imageExtensions=['.jpg','.jpeg','.png'];
 let imageIndex=0;
-
 const loadAlbumImage=()=>{
-  if(imageIndex>=imageExtensions.length){
-    image.src='/images/albums/youth-error.jpg';
-    return;
-  }
-
-  image.src=`${imageBase}${imageExtensions[imageIndex]}`;
-  imageIndex++;
+  if(imageIndex>=imageExtensions.length){image.src='/images/albums/youth-error.jpg';return;}
+  image.src=`${imageBase}${imageExtensions[imageIndex++]}`;
 };
-
 image.onerror=loadAlbumImage;
 image.alt=`FLARE U ${album.name} 專輯封面`;
-loadAlbumImage();
+image.loading='lazy';
+image.decoding='async';
+image.src=coverSources[albumSlug]||`${imageBase}${imageExtensions[imageIndex++]}`;
       const copy=make('div');copy.append(make('p','card-label',album.albumType||'ALBUM'),make('h2','',album.name),make('p','',album.releaseDate),make('span','','查看專輯資訊 →'));card.append(image,copy);return card;
     }));
   }).catch(()=>{});
