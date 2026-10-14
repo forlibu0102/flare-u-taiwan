@@ -113,7 +113,7 @@ export default async function handler(request, response) {
           );
         }
 
-        return (!start || start <= now) && end > now;
+        return end > now;
       })
       .sort((a, b) => new Date(a.end) - new Date(b.end));
 
