@@ -234,9 +234,10 @@ import Layout from '../layouts/Layout.astro';
   :global(.platform-list) { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 26px; padding:0; list-style:none; }
   :global(.platform-list li) { padding:8px 12px; border:1px solid #dbe8fa; border-radius:999px; background:#eef5ff; color:#367fd2; font-size:.76rem; font-weight:750; }
   :global(.vote-meta) { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
-  :global(.vote-metric) { min-height:108px; padding:20px; border:1px solid #e1e8f1; border-radius:20px; background:rgba(250,252,255,.9); }
+  :global(.vote-metric) { min-width:0; min-height:100px; padding:16px; border:1px solid #e1e8f1; border-radius:20px; background:rgba(250,252,255,.9); }
   :global(.vote-metric span) { display:block; margin-bottom:12px; color:#7d899c; font-size:.68rem; font-weight:750; letter-spacing:.1em; }
-  :global(.vote-metric strong) { color:#0d1b3d; font-size:clamp(1.15rem,1.8vw,1.55rem); letter-spacing:-.03em; }
+  :global(.vote-metric strong) { color:#0d1b3d; font-size:clamp(1rem,1.55vw,1.3rem); line-height:1.3; letter-spacing:-.03em; overflow-wrap:anywhere; }
+  :global(.vote-metric--compact strong) { font-size:clamp(.82rem,1.1vw,.98rem); letter-spacing:-.02em; }
   :global(.vote-details) { display:grid; gap:7px; margin-top:22px; padding-top:20px; border-top:1px solid #e5ebf3; color:#667085; line-height:1.65; }
   :global(html[data-theme="dark"] main .vote-group-heading h3) { color:#f3f7fc!important; }
   :global(.vote-actions) { display:flex; align-self:flex-start; flex-wrap:wrap; gap:10px; margin-top:auto; padding-top:24px; }
@@ -284,21 +285,21 @@ import Layout from '../layouts/Layout.astro';
     hour: 'numeric', minute: '2-digit', hour12: true,
   });
 
-  function countdown(target: string, finishedLabel = '已截止') {
+  function countdown(target: string, finishedLabel = '已截止', prefix = '剩下') {
     const remaining = new Date(target).getTime() - Date.now();
     if (remaining <= 0) return finishedLabel;
     const totalMinutes = Math.floor(remaining / 60000);
     const days = Math.floor(totalMinutes / 1440);
     const hours = Math.floor((totalMinutes % 1440) / 60);
     const minutes = totalMinutes % 60;
-    if (days > 0) return `剩下 ${days} 天 ${hours} 小時`;
-    if (hours > 0) return `剩下 ${hours} 小時 ${minutes} 分`;
-    return `剩下 ${minutes} 分`;
+    if (days > 0) return `${prefix} ${days} 天 ${hours} 小時`;
+    if (hours > 0) return `${prefix} ${hours} 小時 ${minutes} 分`;
+    return `${prefix} ${minutes} 分`;
   }
 
   function metric(label: string, value: string) {
     const item = document.createElement('div');
-    item.className = 'vote-metric';
+    item.className = value.length > 8 ? 'vote-metric vote-metric--compact' : 'vote-metric';
     const caption = document.createElement('span');
     caption.textContent = label;
     const data = document.createElement('strong');
@@ -348,7 +349,8 @@ import Layout from '../layouts/Layout.astro';
     timer.className = 'vote-countdown';
     timer.dataset.countdown = isUpcoming ? vote.start! : vote.end;
     timer.dataset.countdownComplete = isUpcoming ? '即將開始' : '已截止';
-    timer.textContent = countdown(timer.dataset.countdown, timer.dataset.countdownComplete);
+    timer.dataset.countdownPrefix = isUpcoming ? '距離開始' : '剩下';
+    timer.textContent = countdown(timer.dataset.countdown, timer.dataset.countdownComplete, timer.dataset.countdownPrefix);
     top.append(status, timer);
 
     const heading = document.createElement('h4');
@@ -428,7 +430,8 @@ import Layout from '../layouts/Layout.astro';
       if (deadlineVote && deadlineTitle) deadlineTitle.textContent = deadlineVote.title;
       if (deadlineVote && deadlineTime) {
         const timerTarget = activeDeadline ? deadlineVote.end : deadlineVote.start!;
-        deadlineTime.textContent = `${countdown(timerTarget)} · ${dateTimeFormatter.format(new Date(timerTarget))}`;
+        const countdownPrefix = activeDeadline ? '剩下' : '距離開始';
+        deadlineTime.textContent = `${countdown(timerTarget, activeDeadline ? '已截止' : '即將開始', countdownPrefix)} · ${dateTimeFormatter.format(new Date(timerTarget))}`;
       }
       if (deadlineGap) {
         const gapText = activeDeadline ? deadlineGapText(activeDeadline) : '';
@@ -439,7 +442,7 @@ import Layout from '../layouts/Layout.astro';
       upcomingEntries.forEach(({ vote, index }) => upcomingList?.append(renderVote(vote, index)));
       window.setInterval(() => {
         document.querySelectorAll<HTMLElement>('[data-countdown]').forEach((element) => {
-          if (element.dataset.countdown) element.textContent = countdown(element.dataset.countdown, element.dataset.countdownComplete);
+          if (element.dataset.countdown) element.textContent = countdown(element.dataset.countdown, element.dataset.countdownComplete, element.dataset.countdownPrefix);
         });
       }, 60000);
     } catch {
